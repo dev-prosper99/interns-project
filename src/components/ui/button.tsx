@@ -1,4 +1,3 @@
-import { Button as ButtonPrimitive } from "@base-ui/react/button"
 import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
@@ -45,14 +44,36 @@ function Button({
   variant = "default",
   size = "default",
   ...props
-}: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {
+}: React.ButtonHTMLAttributes<HTMLButtonElement> & VariantProps<typeof buttonVariants>) {
   return (
-    <ButtonPrimitive
-      data-slot="button"
+    <button
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
     />
   )
 }
+
+// Navbar Button Components
+interface NavButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  children: React.ReactNode;
+}
+
+export const LoginButton: React.FC<NavButtonProps> = ({ children, className, ...props }) => (
+  <button 
+    className={cn("px-5 py-2 border border-purple-500 text-white rounded-md hover:bg-purple-500/10 transition", className)}
+    {...props}
+  >
+    {children}
+  </button>
+);
+
+export const PrimaryButton: React.FC<NavButtonProps> = ({ children, className, ...props }) => (
+  <button 
+    className={cn("px-5 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700 transition", className)}
+    {...props}
+  >
+    {children}
+  </button>
+);
 
 export { Button, buttonVariants }
