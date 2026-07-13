@@ -1,6 +1,7 @@
 import React from "react";
 import { LoginButton, PrimaryButton } from "../ui/button";
 import logo from "@/assets/logo.png";
+import { NavLink } from "react-router-dom";
 
 const Navbar: React.FC = () => {
   return (
@@ -15,26 +16,26 @@ const Navbar: React.FC = () => {
         
         <ul className="hidden md:flex items-center gap-8 text-sm text-white">
           <li>
-            <a href="#discover" className="hover:text-purple-400">
+            <NavLink to="/discover" className="hover:text-purple-400">
               Discover
-            </a>
+            </NavLink>
           </li>
           <li>
-            <a href="#about" className="hover:text-purple-400">
+            <NavLink to="/about-us" className="hover:text-purple-400">
               About Us
-            </a>
+            </NavLink>
           </li>
           <li>
-            <a href="#contact" className="hover:text-purple-400">
+            <NavLink to="/contact-us" className="hover:text-purple-400">
               Contact Us
-            </a>
+            </NavLink>
           </li>
         </ul>
         
     
         <div className="flex items-center gap-4">
-          <LoginButton>Log In</LoginButton>
-          <PrimaryButton>Get Started</PrimaryButton>
+          <LoginButton><NavLink to="/login">Log In</NavLink></LoginButton>
+          <PrimaryButton><NavLink to="/sign-up">Get Started</NavLink></PrimaryButton>
         </div>
 
       </div>
