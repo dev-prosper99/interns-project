@@ -1,5 +1,5 @@
 import React from "react";
-import { LoginButton, PrimaryButton } from "./button";
+import { LoginButton, PrimaryButton } from "../ui/button";
 import logo from "@/assets/logo.png";
 
 const Navbar: React.FC = () => {
