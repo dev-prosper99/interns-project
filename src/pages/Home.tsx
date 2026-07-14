@@ -1,8 +1,10 @@
+import Navbar from "@/components/layouts/Navbar";
+
 const Home = () => {
     return (
-        <>
-        <div>home</div>
-        </>
+        <div>
+        <Navbar />
+        </div>
     )
 }
 export default Home;

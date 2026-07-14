@@ -1,19 +1,23 @@
 import React from "react";
 import { LoginButton, PrimaryButton } from "../ui/button";
 import logo from "@/assets/logo.png";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const Navbar: React.FC = () => {
+  const navigate = useNavigate()
+  const navigateToLogin = (pageLink: string) => {
+    navigate(`/${pageLink}`, { replace: true })
+  }
   return (
     <nav className="w-full bg-black border-t-2 border-purple-600">
       <div className="max-w-7xl mx-auto h-16 px-6 flex items-center justify-between">
-        
-        
+
+
         <div>
           <img src={logo} alt="Logo" className="h-8 w-auto" />
         </div>
 
-        
+
         <ul className="hidden md:flex items-center gap-8 text-sm text-white">
           <li>
             <NavLink to="/discover" className="hover:text-purple-400">
@@ -31,11 +35,11 @@ const Navbar: React.FC = () => {
             </NavLink>
           </li>
         </ul>
-        
-    
+
+
         <div className="flex items-center gap-4">
-          <LoginButton><NavLink to="/login">Log In</NavLink></LoginButton>
-          <PrimaryButton><NavLink to="/sign-up">Get Started</NavLink></PrimaryButton>
+          <LoginButton onClick={() => navigateToLogin("login")}>Log In</LoginButton>
+          <PrimaryButton onClick={() => navigateToLogin("sign-up")}>Get Started</PrimaryButton>
         </div>
 
       </div>
