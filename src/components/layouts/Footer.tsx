@@ -1,6 +1,5 @@
-import logo from '@/assets/logo.png'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFacebookF, faXTwitter, faInstagram, faLinkedinIn } from '@fortawesome/free-brands-svg-icons'
+import { InstagramIcon } from "@/assets/icons";
+import logo from "@/assets/images/logo.png";
 
 const Footer = () => {
   return (
@@ -10,8 +9,9 @@ const Footer = () => {
           <div className="max-w-[240px]">
             <img src={logo} alt="Tix logo" className="mb-3 h-8 w-auto" />
             <p className="text-[10px] leading-5 text-neutral-300 sm:text-[11px]">
-              Nigeria&apos;s premier ticketing platform. Discover events, create unforgettable
-              experiences, and connect communities, one ticket at a time.
+              Nigeria premier ticketing platform. Discover events, create
+              unforgettable experiences, and connect communities, one ticket at
+              a time.
             </p>
           </div>
 
@@ -35,7 +35,9 @@ const Footer = () => {
           </div>
 
           <div>
-            <h3 className="mb-3 text-sm font-medium text-white">Useful Links</h3>
+            <h3 className="mb-3 text-sm font-medium text-white">
+              Useful Links
+            </h3>
             <ul className="space-y-2 text-[10px] text-neutral-300 sm:text-[11px]">
               <li>Privacy Policy</li>
               <li>Terms of Use</li>
@@ -58,38 +60,35 @@ const Footer = () => {
             <a
               href="#"
               aria-label="Instagram"
-              className="grid h-5 w-5 place-items-center rounded-full border border-neutral-500 text-neutral-300"
+              className="grid h-8 w-8 place-items-center rounded-full border border-neutral-500 text-neutral-300"
             >
-              <FontAwesomeIcon icon={faInstagram} className="h-2.5 w-2.5" />
+              <InstagramIcon className="h-5 w-5" />
             </a>
+
             <a
               href="#"
               aria-label="X"
               className="grid h-5 w-5 place-items-center rounded-full border border-neutral-500 text-neutral-300"
-            >
-              <FontAwesomeIcon icon={faXTwitter} className="h-2.5 w-2.5" />
-            </a>
+            ></a>
             <a
               href="#"
               aria-label="LinkedIn"
               className="grid h-5 w-5 place-items-center rounded-full border border-neutral-500 text-neutral-300"
-            >
-              <FontAwesomeIcon icon={faLinkedinIn} className="h-2.5 w-2.5" />
-            </a>
+            ></a>
             <a
               href="#"
               aria-label="Facebook"
               className="grid h-5 w-5 place-items-center rounded-full border border-neutral-500 text-neutral-300"
-            >
-              <FontAwesomeIcon icon={faFacebookF} className="h-2.5 w-2.5" />
-            </a>
+            ></a>
           </div>
 
-          <p className="text-[10px] text-neutral-300 sm:text-[11px]">© Tix 2026</p>
+          <p className="text-[10px] text-neutral-300 sm:text-[11px]">
+            © Tix 2026
+          </p>
         </div>
       </div>
     </footer>
-  )
-}
+  );
+};
 
 export default Footer;
