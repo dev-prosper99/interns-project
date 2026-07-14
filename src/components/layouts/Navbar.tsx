@@ -1,8 +1,14 @@
 import React from "react";
 import { LoginButton, PrimaryButton } from "../ui/button";
+
+import { NavLink, useNavigate } from "react-router-dom";
 import logo from "@/assets/images/logo.png";
 
 const Navbar: React.FC = () => {
+  const navigate = useNavigate()
+  const navigateToLogin = (pageLink: string) => {
+    navigate(`/${pageLink}`, { replace: true })
+  }
   return (
     <nav className="w-full bg-black border-t-2 border-purple-600">
       <div className="max-w-7xl mx-auto h-16 px-6 flex items-center justify-between">
@@ -12,25 +18,25 @@ const Navbar: React.FC = () => {
 
         <ul className="hidden md:flex items-center gap-8 text-sm text-white">
           <li>
-            <a href="#discover" className="hover:text-purple-400">
+            <NavLink to="/discover" className="hover:text-purple-400">
               Discover
-            </a>
+            </NavLink>
           </li>
           <li>
-            <a href="#about" className="hover:text-purple-400">
+            <NavLink to="/about-us" className="hover:text-purple-400">
               About Us
-            </a>
+            </NavLink>
           </li>
           <li>
-            <a href="#contact" className="hover:text-purple-400">
+            <NavLink to="/contact-us" className="hover:text-purple-400">
               Contact Us
-            </a>
+            </NavLink>
           </li>
         </ul>
 
         <div className="flex items-center gap-4">
-          <LoginButton>Log In</LoginButton>
-          <PrimaryButton>Get Started</PrimaryButton>
+          <LoginButton onClick={() => navigateToLogin("login")}>Log In</LoginButton>
+          <PrimaryButton onClick={() => navigateToLogin("sign-up")}>Get Started</PrimaryButton>
         </div>
       </div>
     </nav>
