@@ -1,22 +1,19 @@
 import React from "react";
-import { LoginButton, PrimaryButton } from "../ui/button";
+import { Button } from "../ui/button";
 import logo from "@/assets/logo.png";
 import { NavLink, useNavigate } from "react-router-dom";
 
 const Navbar: React.FC = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const navigateToLogin = (pageLink: string) => {
-    navigate(`/${pageLink}`, { replace: true })
-  }
+    navigate(`/${pageLink}`, { replace: true });
+  };
   return (
     <nav className="w-full bg-black border-t-2 border-purple-600">
       <div className="max-w-7xl mx-auto h-16 px-6 flex items-center justify-between">
-
-
         <div>
           <img src={logo} alt="Logo" className="h-8 w-auto" />
         </div>
-
 
         <ul className="hidden md:flex items-center gap-8 text-sm text-white">
           <li>
@@ -36,17 +33,17 @@ const Navbar: React.FC = () => {
           </li>
         </ul>
 
-
         <div className="flex items-center gap-4">
-          <LoginButton onClick={() => navigateToLogin("login")}>Log In</LoginButton>
-          <PrimaryButton onClick={() => navigateToLogin("sign-up")}>Get Started</PrimaryButton>
+          <Button variant="outline" onClick={() => navigateToLogin("login")}>
+            Log In
+          </Button>
+          <Button variant="primary" onClick={() => navigateToLogin("sign-up")}>
+            Get Started
+          </Button>
         </div>
-
       </div>
     </nav>
   );
 };
 
 export default Navbar;
-
-
