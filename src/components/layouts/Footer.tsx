@@ -1,4 +1,4 @@
-import { InstagramIcon } from "@/assets/icons";
+import { InstagramIcon, TiktokIcon, XIcon , FacebookIcon} from "@/assets/icons";
 import logo from "@/assets/images/logo.png";
 
 const Footer = () => {
@@ -68,18 +68,24 @@ const Footer = () => {
             <a
               href="#"
               aria-label="X"
-              className="grid h-5 w-5 place-items-center rounded-full border border-neutral-500 text-neutral-300"
-            ></a>
+              className="grid h-8 w-8 place-items-center rounded-full border border-neutral-500 text-neutral-300"
+            >
+              <XIcon className="h-5 w-5" />
+            </a>
             <a
               href="#"
-              aria-label="LinkedIn"
-              className="grid h-5 w-5 place-items-center rounded-full border border-neutral-500 text-neutral-300"
-            ></a>
+              aria-label="Tiktok"
+              className="grid h-8 w-8 place-items-center rounded-full border border-neutral-500 text-neutral-300"
+            >
+              <TiktokIcon className="h-5 w-5" />
+            </a>
             <a
               href="#"
               aria-label="Facebook"
-              className="grid h-5 w-5 place-items-center rounded-full border border-neutral-500 text-neutral-300"
-            ></a>
+              className="grid h-8 w-8 place-items-center rounded-full border border-neutral-500 text-neutral-300"
+            >
+              <FacebookIcon className="h-5 w-5" />
+            </a>
           </div>
 
           <p className="text-[10px] text-neutral-300 sm:text-[11px]">
