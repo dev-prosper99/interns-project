@@ -1,5 +1,5 @@
 import React from "react";
-import { LoginButton, PrimaryButton } from "../ui/button";
+import { Button } from "../ui/button";
 import logo from "@/assets/logo.png";
 
 const Navbar: React.FC = () => {
@@ -33,8 +33,8 @@ const Navbar: React.FC = () => {
         
     
         <div className="flex items-center gap-4">
-          <LoginButton>Log In</LoginButton>
-          <PrimaryButton>Get Started</PrimaryButton>
+          <Button variant="outline">Log In</Button>
+          <Button variant="primary">Get Started</Button>
         </div>
 
       </div>
