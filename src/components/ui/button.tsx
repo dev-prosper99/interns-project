@@ -1,6 +1,6 @@
-import { cva, type VariantProps } from "class-variance-authority"
+import { cva, type VariantProps } from "class-variance-authority";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center whitespace-nowrap font-medium transition-colors outline-none select-none disabled:pointer-events-none",
@@ -22,21 +22,22 @@ const buttonVariants = cva(
       variant: "primary",
       size: "sm",
     },
-  }
-)
+  },
+);
 
 function Button({
   className,
   variant = "primary",
   size = "sm",
   ...props
-}: React.ButtonHTMLAttributes<HTMLButtonElement> & VariantProps<typeof buttonVariants>) {
+}: React.ButtonHTMLAttributes<HTMLButtonElement> &
+  VariantProps<typeof buttonVariants>) {
   return (
     <button
       className={cn(buttonVariants({ variant, size, className }))}
       {...props}
     />
-  )
+  );
 }
 
-export { Button, buttonVariants }
+export { Button, buttonVariants };

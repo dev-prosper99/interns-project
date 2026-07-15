@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "../ui/button";
-import logo from "@/assets/logo.png";
 import { NavLink, useNavigate } from "react-router-dom";
+import logo from "@/assets/images/logo.png";
 
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
