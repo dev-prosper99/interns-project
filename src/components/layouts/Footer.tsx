@@ -8,7 +8,7 @@ const Footer = () => {
         <div className="grid gap-6 border-b border-neutral-600 pb-6 md:grid-cols-5 lg:gap-8">
           <div className="max-w-[240px]">
             <img src={logo} alt="Tix logo" className="mb-3 h-8 w-auto" />
-            <p className="text-[10px] leading-5 text-neutral-300 sm:text-[11px]">
+            <p className="text-[14px] leading-5 text-neutral-300 sm:text-[11px]">
               Nigeria premier ticketing platform. Discover events, create
               unforgettable experiences, and connect communities, one ticket at
               a time.
@@ -17,7 +17,7 @@ const Footer = () => {
 
           <div>
             <h3 className="mb-3 text-sm font-medium text-white">Company</h3>
-            <ul className="space-y-2 text-[10px] text-neutral-300 sm:text-[11px]">
+            <ul className="space-y-2 text-[14px] text-neutral-300 sm:text-[11px]">
               <li>Home</li>
               <li>Discover</li>
               <li>About</li>
@@ -27,7 +27,7 @@ const Footer = () => {
 
           <div>
             <h3 className="mb-3 text-sm font-medium text-white">Organizer</h3>
-            <ul className="space-y-2 text-[10px] text-neutral-300 sm:text-[11px]">
+            <ul className="space-y-2 text-[14px] text-neutral-300 sm:text-[11px]">
               <li>Create an Event</li>
               <li>FAQ</li>
               <li>Help Center</li>
