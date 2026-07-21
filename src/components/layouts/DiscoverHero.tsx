@@ -1,4 +1,3 @@
-import discover from "@/assets/images/Discover.png";
 import { Input } from "@/components/ui/input";
 import { SearchIcon } from "@/assets/icons";
 import Categories from "@/components/layouts/Categories";
@@ -27,34 +26,32 @@ const filters = [
 
 const Discover = () => {
   return (
-    <div className="h-full w-full bg-black">
-      <div className="relative">
-        <img
-          src={discover}
-          alt="Discover"
-          className="h-[450px] w-full object-cover"
-        />
+    <div className="h-full w-full ">
+      <div className="h-[70vh] bg-[url('/src/assets/images/discover.png')] bg-center bg-cover">
+        <div className="bg-black/70 w-full h-full flex flex-col items-center justify-center">
+          <div className="space-y-6">
+            <h1 className="lg:text-7xl text-4xl font-extrabold font-jakarta text-center text-white">
+              Discover Events
+            </h1>
 
-        <div className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center">
-          <h1 className="text-7xl font-bold text-white">Discover Events</h1>
-
-          <p className="mt-3 text-base text-white">
-            Find your next unforgettable experience
-          </p>
+            <p className="text-base font-medium text-center text-white">
+              Find your next unforgettable experience
+            </p>
+          </div>
 
           <div className="mt-25 h-10 flex w-full  max-w-7xl flex-col items-center lg:flex-row justify-center gap-4">
-            <div className="relative  w-full max-w-3xl lg:flex-1">
+            <div className="relative  w-full max-w-3xl lg:flex-1 bg-">
               <SearchIcon className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
               <Input
                 type="search"
                 placeholder="Search events..."
-                className="h-10 rounded-xl border border-gray-200 bg-white text-black pl-12"
+                className="h-10 rounded-xl border border-gray-200 text-black bg-white pl-12"
               />
             </div>
 
             {filters.map((filter) => (
               <Select key={filter.placeholder}>
-                <SelectTrigger className=" h-10 rounded-xl text-gray-500 border border-gray-200 bg-white px-4 w-full max-w-56">
+                <SelectTrigger className=" h-10 rounded-xl bg-white text-gray-500 border border-gray-200 px-4 w-full max-w-56">
                   <SelectValue placeholder={filter.placeholder} />
                 </SelectTrigger>
 
