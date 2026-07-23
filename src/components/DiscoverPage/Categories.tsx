@@ -15,7 +15,7 @@ const filterCategories = [
 const Categories = () => {
   return (
     <div className="flex flex-wrap gap-2 h-[1866px] bg-black/90">
-      <div className="gap-2 h-[80px] space-y-6 mx-4 mt-4">
+      <div className="gap-2 h-20 space-y-6 mx-4 mt-4">
         <p className="text-white text-xl font-medium ">Categories </p>
         {filterCategories.map((category) => (
           <button
