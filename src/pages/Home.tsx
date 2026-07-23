@@ -3,6 +3,7 @@ import Footer from "@/components/layouts/Footer";
 // import { CardTextValues } from "@/constants";
 // import { SmallCards } from "@/components/cards";
 import EventDetail from "./EventDetail";
+import ForgotPassword from "./Authentication/ForgotPassword";
 
 const Home = () => {
   return (
@@ -17,7 +18,8 @@ const Home = () => {
           />
         ))}
       </div> */}
-      <EventDetail />
+      {/* <EventDetail /> */}
+      <ForgotPassword />
       <Footer />
     </div>
   );

@@ -50,7 +50,7 @@ const EventDetail = ({ EventsIndex = 0 }) => {
                   <LocationIcon />
                 </div>
                 <div>
-                  <p className="text-[14px]">Venue</p>
+                  <p className="text-sm">Venue</p>
                   <p className="font-medium">{venue}</p>
                   <p className="text-orange-500">View on map</p>
                 </div>
@@ -60,7 +60,7 @@ const EventDetail = ({ EventsIndex = 0 }) => {
                   <CalenderIcon />
                 </div>
                 <div>
-                  <p className="text-[14px]">Date & Time</p>
+                  <p className="text-sm">Date & Time</p>
                   <p className="font-medium">
                     {startDate} {startTime}
                   </p>
@@ -71,7 +71,7 @@ const EventDetail = ({ EventsIndex = 0 }) => {
                   <LocationIcon />
                 </div>
                 <div>
-                  <p className="text-[14px]">Attendance</p>
+                  <p className="text-sm">Attendance</p>
                   <p className="font-medium">{numberAttending} Attending</p>
                 </div>
               </div>
@@ -87,7 +87,7 @@ const EventDetail = ({ EventsIndex = 0 }) => {
           </div>
           <div className="bg-neutral-500/24 border border-neutral-500/24 rounded-2xl py-10 px-8 sm:py-10 sm:px-8">
             <p>Location</p>
-            <img src={location} alt="" className="w-[885px] h-117.75 lg:h-[471px] sm:h-72"/>
+            <img src={location} alt="" className="w-221.25 h-117.75 lg:h-117.5 sm:h-72"/>
           </div>
           <div className="bg-neutral-500/24 border border-neutral-500/24 rounded-2xl py-10 px-8 sm:py-10 sm:px-8">
             <p className="text-2xl">Organizer</p>
@@ -135,9 +135,9 @@ const EventDetail = ({ EventsIndex = 0 }) => {
                 </div>
               </div>
               <div className="flex items-center gap-3 mt-4">
-                <button onClick={() => setRegularQty((q) => Math.max(0, q - 1))} className="w-7 h-7 rounded-full bg-neutral-700 flex items-center justify-center"> −</button>
-                <span className="w-4 text-center">{regularQty}</span>
-                <button onClick={() => setRegularQty((q) => q + 1)} className="w-7 h-7 rounded-full bg-purple-600 flex items-center justify-center"> + </button>
+                <button onClick={() => setVipQty((q) => Math.max(0, q - 1))} className="w-7 h-7 rounded-full bg-neutral-700 flex items-center justify-center"> −</button>
+                <span className="w-4 text-center">{vipQty}</span>
+                <button onClick={() => setVipQty((q) => q + 1)} className="w-7 h-7 rounded-full bg-purple-600 flex items-center justify-center"> + </button>
               </div>
             </div>
             <div className="border border-neutral-500/24 rounded-xl p-4">
@@ -152,9 +152,9 @@ const EventDetail = ({ EventsIndex = 0 }) => {
                 </div>
               </div>
               <div className="flex items-center gap-3 mt-4">
-                <button onClick={() => setRegularQty((q) => Math.max(0, q - 1))} className="w-7 h-7 rounded-full bg-neutral-700 flex items-center justify-center"> −</button>
-                <span className="w-4 text-center">{regularQty}</span>
-                <button onClick={() => setRegularQty((q) => q + 1)} className="w-7 h-7 rounded-full bg-purple-600 flex items-center justify-center"> + </button>
+                <button onClick={() => setVvipQty((q) => Math.max(0, q - 1))} className="w-7 h-7 rounded-full bg-neutral-700 flex items-center justify-center"> −</button>
+                <span className="w-4 text-center">{vvipQty}</span>
+                <button onClick={() => setVvipQty((q) => q + 1)} className="w-7 h-7 rounded-full bg-purple-600 flex items-center justify-center"> + </button>
               </div>
             </div>
           </div>
