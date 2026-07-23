@@ -44,7 +44,7 @@ const Footer = () => {
               <h3 className="mb-3 text-sm font-medium text-white">
                 {items.header}
               </h3>
-              <ul className="space-y-2 text-[10px] text-neutral-300 sm:text-[11px]">
+              <ul className="space-y-2 text-[10px] text-neutral-300 sm:text-xs">
                 {items.lists.map((listItem, index) => (
                   <li key={index}>{listItem}</li>
                 ))}

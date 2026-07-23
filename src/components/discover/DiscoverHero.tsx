@@ -1,6 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { SearchIcon } from "@/assets/icons";
-import Categories from "@/components/layouts/Categories";
+import Categories from "@/components/discover/Categories";
 import {
   Select,
   SelectContent,
