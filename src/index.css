@@ -8,6 +8,7 @@
 
 @theme inline {
   --font-poppins: "Poppins", "sans-serif";
+  --font-jakarta: "Plus Jakarta Sans", "sans-serif";
 
   --color-white: #FFFFFF;
   --color-black: #000000;
@@ -86,6 +87,14 @@
 
 @layer base {
   body {
-    font-family: "Poppins", "sans-serif";
+    font-family: var(--font-jakarta);
   }
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
