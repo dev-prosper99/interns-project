@@ -32,7 +32,7 @@ const Footer = () => {
         <div className="grid gap-6 border-b border-neutral-600 pb-6 md:grid-cols-5 lg:gap-8">
           <div className="max-w-60">
             <img src={logo} alt="Tix logo" className="mb-3 h-8 w-auto" />
-            <p className="text-[10px] leading-5 text-neutral-300 sm:text-[11px]">
+            <p className="text-[14px] leading-5 text-neutral-300 sm:text-[11px]">
               Nigeria premier ticketing platform. Discover events, create
               unforgettable experiences, and connect communities, one ticket at
               a time.
@@ -44,7 +44,7 @@ const Footer = () => {
               <h3 className="mb-3 text-sm font-medium text-white">
                 {items.header}
               </h3>
-              <ul className="space-y-2 text-[10px] text-neutral-300 sm:text-[11px]">
+              <ul className="space-y-2 text-[10px] text-neutral-300 sm:text-xs">
                 {items.lists.map((listItem, index) => (
                   <li key={index}>{listItem}</li>
                 ))}
