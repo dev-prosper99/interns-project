@@ -102,7 +102,7 @@ const EventDetail = ({ EventsIndex = 0 }) => {
             </div>
           </div>
         </div>
-        <div className="bg-neutral-500/24 lg:sticky lg:top-6 p-6 rounded-2xl lg:top-6 p-6 rounded-2xl">
+        <div className="bg-neutral-500/24 lg:sticky lg:top-6 p-6 rounded-2xl">
             <p className="text-2xl">Select Ticket</p>
             <p className="text-neutral-400 text-sm mt-1">3 ticket types available</p>
           <div className="flex flex-col gap-4 mt-6">
