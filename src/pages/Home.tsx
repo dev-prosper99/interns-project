@@ -2,6 +2,9 @@ import Navbar from "@/components/layouts/Navbar";
 import Footer from "@/components/layouts/Footer";
 import { CardTextValues } from "@/constants";
 import { SmallCards } from "@/components/cards";
+import EventDetail from "./EventDetail";
+import ForgotPassword from "./Authentication/ForgotPassword";
+
 
 const Home = () => {
   return (
@@ -15,7 +18,9 @@ const Home = () => {
             cardText={values.text}
           />
         ))}
-      </div>
+      </div> *
+      <EventDetail />
+      <ForgotPassword />
       <Footer />
     </div>
   );
