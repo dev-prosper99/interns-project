@@ -2,6 +2,7 @@ import Navbar from "@/components/layouts/Navbar";
 import Footer from "@/components/layouts/Footer";
 import { EventCard } from "@/components/cards/EventCard";
 import { SmallCards } from "@/components/cards";
+import EventDetail from "./EventDetail";
 import { Events } from "@/constants/events";
 import event1 from "@/assets/event-1.png";
 import event2 from "@/assets/event-2.png";
@@ -363,6 +364,16 @@ const Home = () => {
   return (
     <div>
       <Navbar />
+      <div className="bg-[#9EA0A91A] border border-purple-500 flex gap-32">
+        {CardTextValues.map((values, index) => (
+          <SmallCards
+            cardNumber={index}
+            cardHeader={values.header}
+            cardText={values.text}
+          />
+        ))}
+      </div> *
+      <EventDetail />
       <Hero />
       <StatsBar />
 
