@@ -9,10 +9,10 @@ import event3 from "@/assets/event-3.png";
 import event4 from "@/assets/event-4.png";
 import event5 from "@/assets/event-5.png";
 import event6 from "@/assets/event-6.png";
-import { Icon6ChevronRight, SearchIcon } from "@/assets/icons";
-import { Icon5ChevronLeft } from "@/assets/icons";
+import {RightArrow, SearchIcon } from "@/assets/icons";
+import { LeftArrow } from "@/assets/icons";
 import organizerImg from "@/assets/organizer.png"
-import {Icon1, Icon2, Icon3, Icon4, Icon7, Icon8, Icon9, Icon10, Icon11, Icon12, Icon13} from "@/assets/icons";
+import {ticketicon, buildingicon, usergroupicon, star01icon, flashicon, knighticon, globeicon, RightIcon, StarIcon, Ticket02Icon, HugeIcons} from "@/assets/icons";
 
 const images = [event1, event2, event3, event4, event5, event6];
 
@@ -72,10 +72,10 @@ function Hero() {
 
 function StatsBar() {
   const stats = [
-    { Icon: Icon1, label: "Tickets Sold", value: "2M+" },
-    { Icon: Icon2, label: "Events", value: "10,000+" },
-    { Icon: Icon3, label: "Organizers", value: "2,000+" },
-    { Icon: Icon4, label: "Happy Attendees", value: "98%" },
+    { Icon: ticketicon, label: "Tickets Sold", value: "2M+" },
+    { Icon: buildingicon, label: "Events", value: "10,000+" },
+    { Icon: usergroupicon, label: "Organizers", value: "2,000+" },
+    { Icon: star01icon, label: "Happy Attendees", value: "98%" },
   ];
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 bg-neutral-925 py-8 gap-4 text-center">
@@ -99,10 +99,10 @@ function SectionHeader({ title, subtitle }: { title: string; subtitle: string })
       </div>
       <div className="flex gap-2">
         <button className="w-12.5 h-12.5 rounded-lg bg-neutral-900 flex items-center justify-center hover:bg-neutral-800">
-          <Icon5ChevronLeft className="w-5 h-5 text-white" />
+          <LeftArrow className="w-5 h-5 text-white" />
         </button>
         <button className="w-12.5 h-12.5 rounded-lg bg-neutral-900 flex items-center justify-center hover:bg-neutral-800">
-          <Icon6ChevronRight className="w-5 h-5 text-white" />
+          <RightArrow className="w-5 h-5 text-white" />
         </button>
       </div>
     </div>
@@ -150,17 +150,17 @@ function TicketSteps() {
 function BuiltForNigerians() {
   const features = [
     {
-      icon: Icon7,
+      icon: flashicon,
       header: "Instant Ticket Delivery",
       text: "Receive your tickets instantly via email with a unique QR code — no printing, no waiting, no stress.",
     },
     {
-      icon: Icon8,
+      icon: knighticon,
       header: "Safe & Secure Payments",
       text: "Every transaction is protected with bank-grade encryption. We support Paystack, Stripe, bank transfers, and USSD.",
     },
     {
-      icon: Icon9,
+      icon: globeicon,
       header: "Events Across Nigeria",
       text: "From Lagos to Abuja, Ibadan to Jos — discover what's happening in your city and beyond.",
     },
@@ -212,7 +212,7 @@ function OrganizerPitch() {
         <ul className="flex flex-col gap-4 w-full">
           {bullets.map((bullet, i) => (
             <li key={i} className="flex flex-row items-center gap-2 text-neutral-200 text-sm">
-              <Icon10 className="w-5 h-5 shrink-0"/>
+              <RightIcon className="w-5 h-5 shrink-0"/>
               <span>{bullet}</span>
             </li>
           ))}
@@ -267,7 +267,7 @@ function Testimonials() {
           >
             <div className="flex gap-1">
              {Array.from({ length: 5 }).map((_, i) => (
-              <Icon11 key={i} className="w-3.5 h-3.5 -mx-1" />
+              <StarIcon key={i} className="w-3.5 h-3.5 -mx-1" />
             ))}
             </div>
             <p className="text-neutral-200 text-sm">"{r.text}"</p>
@@ -312,7 +312,7 @@ function CtaBanner() {
 function Newsletter() {
   return (
     <div className="relative bg-purple-500 py-16 px-6 w-full flex justify-center overflow-hidden">
-      <Icon12
+      <Ticket02Icon
         className="absolute pointer-events-none"
         style={{
           width: "34%",
@@ -323,7 +323,7 @@ function Newsletter() {
           opacity: 0.6,
         }}
       />
-      <Icon13
+      <HugeIcons
         className="absolute pointer-events-none"
         style={{
           width: "34%",
