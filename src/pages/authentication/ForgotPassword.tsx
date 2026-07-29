@@ -1,10 +1,10 @@
 import { useState} from "react";
 import type{ SubmitEvent} from "react";
 import logo from "@/assets/images/logo.png"
-import crowd from "@/assets/images/crowd.jpg"
-import avatar1 from "@/assets/images/avatar1.jpg"
-import avatar2 from "@/assets/images/avatar2.jpg"
-import avatar3 from "@/assets/images/avatar3.jpg"
+import crowd from "@/assets/images/discover.png"
+import avatar1 from "@/assets/images/PhotoIcon1.png"
+import avatar2 from "@/assets/images/PhotoIcon2.png"
+import avatar3 from "@/assets/images/PhotoIcon3.png"
 import { BackIcon } from "@/assets/icons";
 import { LockIcon } from "@/assets/icons";
 
@@ -53,7 +53,7 @@ const ForgotPassword = ({ onSubmit, onBackToLogin }: ForgotPasswordProps) => {
         </div>
       </div>
 
-      {/* ===== Right panel — form (all breakpoints) ===== */}
+      {/* ===== Right panel  ===== */}
       <div className="flex-1 flex flex-col">
         {/* Tix logo — mobile header only */}
         <div className="lg:hidden flex items-center gap-2 p-6">

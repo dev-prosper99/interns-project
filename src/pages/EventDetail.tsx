@@ -26,8 +26,7 @@ const EventDetail = ({ EventsIndex = 0 }) => {
     const [regularQty, setRegularQty] = useState(0);
     const [vipQty, setVipQty] = useState(0);
     const [vvipQty, setVvipQty] = useState(0);
-    
-  
+
   return (
     
     <div className="min-h-screen bg-black text-white">

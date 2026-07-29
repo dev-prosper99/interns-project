@@ -6,7 +6,9 @@ export const Events = [
     numberAttending: "1000",
     startDate: "16-06-2026",
     startTime: "07:00PM",
-    ticketPrice: "5000"
+    regular_ticketPrice: "5000",
+    vip_ticketPrice: "10000",
+    vvip_ticketPrice: "15000",
   },
   {
     eventTitle: "Afrobeats Live Concert",
@@ -15,7 +17,9 @@ export const Events = [
     numberAttending: "3500",
     startDate: "25-07-2026",
     startTime: "08:00PM",
-    ticketPrice: "12000"
+    regular_ticketPrice: "12000",
+    vip_ticketPrice: "24000",
+    vvip_ticketPrice: "36000",
   },
   {
     eventTitle: "Tech Innovators Summit",
@@ -24,7 +28,9 @@ export const Events = [
     numberAttending: "1200",
     startDate: "05-08-2026",
     startTime: "09:00AM",
-    ticketPrice: "15000"
+    regular_ticketPrice: "15000",
+    vip_ticketPrice: "30000",
+    vvip_ticketPrice: "45000",
   },
   {
     eventTitle: "Startup Pitch Fest",
@@ -33,7 +39,9 @@ export const Events = [
     numberAttending: "800",
     startDate: "12-08-2026",
     startTime: "10:00AM",
-    ticketPrice: "10000"
+    regular_ticketPrice: "10000",
+    vip_ticketPrice: "20000",
+    vvip_ticketPrice: "30000",
   },
   {
     eventTitle: "Port Harcourt Food Carnival",
@@ -42,7 +50,9 @@ export const Events = [
     numberAttending: "2500",
     startDate: "20-08-2026",
     startTime: "01:00PM",
-    ticketPrice: "3000"
+    regular_ticketPrice: "3000",
+    vip_ticketPrice: "6000",
+    vvip_ticketPrice: "9000",
   },
   {
     eventTitle: "Fashion Week Nigeria",
@@ -51,7 +61,9 @@ export const Events = [
     numberAttending: "1800",
     startDate: "02-09-2026",
     startTime: "05:00PM",
-    ticketPrice: "8000"
+    regular_ticketPrice: "8000",
+    vip_ticketPrice: "16000",
+    vvip_ticketPrice: "24000",
   },
   {
     eventTitle: "Basketball Championship",
@@ -60,7 +72,9 @@ export const Events = [
     numberAttending: "5000",
     startDate: "10-09-2026",
     startTime: "04:00PM",
-    ticketPrice: "4000"
+    regular_ticketPrice: "4000",
+    vip_ticketPrice: "8000",
+    vvip_ticketPrice: "12000",
   },
   {
     eventTitle: "Art & Culture Expo",
@@ -69,7 +83,9 @@ export const Events = [
     numberAttending: "600",
     startDate: "15-09-2026",
     startTime: "11:00AM",
-    ticketPrice: "2500"
+    regular_ticketPrice: "2500",
+    vip_ticketPrice: "5000",
+    vvip_ticketPrice: "7500",
   },
   {
     eventTitle: "Digital Marketing Masterclass",
@@ -78,7 +94,9 @@ export const Events = [
     numberAttending: "450",
     startDate: "18-09-2026",
     startTime: "09:00AM",
-    ticketPrice: "20000"
+    regular_ticketPrice: "20000",
+    vip_ticketPrice: "40000",
+    vvip_ticketPrice: "60000",
   },
   {
     eventTitle: "Youth Leadership Conference",
@@ -87,7 +105,9 @@ export const Events = [
     numberAttending: "1500",
     startDate: "25-09-2026",
     startTime: "10:00AM",
-    ticketPrice: "7000"
+    regular_ticketPrice: "7000",
+    vip_ticketPrice: "14000",
+    vvip_ticketPrice: "21000",
   },
   {
     eventTitle: "Gospel Praise Festival",
@@ -96,7 +116,9 @@ export const Events = [
     numberAttending: "4000",
     startDate: "01-10-2026",
     startTime: "06:00PM",
-    ticketPrice: "2000"
+    regular_ticketPrice: "2000",
+    vip_ticketPrice: "4000",
+    vvip_ticketPrice: "6000",
   },
   {
     eventTitle: "Movie Premiere Night",
@@ -105,7 +127,9 @@ export const Events = [
     numberAttending: "700",
     startDate: "08-10-2026",
     startTime: "07:30PM",
-    ticketPrice: "6000"
+    regular_ticketPrice: "6000",
+    vip_ticketPrice: "12000",
+    vvip_ticketPrice: "18000",
   },
   {
     eventTitle: "Crypto & Blockchain Meetup",
@@ -114,7 +138,9 @@ export const Events = [
     numberAttending: "500",
     startDate: "12-10-2026",
     startTime: "03:00PM",
-    ticketPrice: "5000"
+    regular_ticketPrice: "5000",
+    vip_ticketPrice: "10000",
+    vvip_ticketPrice: "15000",
   },
   {
     eventTitle: "Women in Tech Forum",
@@ -123,7 +149,9 @@ export const Events = [
     numberAttending: "850",
     startDate: "18-10-2026",
     startTime: "09:30AM",
-    ticketPrice: "7500"
+    regular_ticketPrice: "7500",
+    vip_ticketPrice: "15000",
+    vvip_ticketPrice: "22500",
   },
   {
     eventTitle: "Beach Party Experience",
@@ -132,7 +160,9 @@ export const Events = [
     numberAttending: "2200",
     startDate: "24-10-2026",
     startTime: "08:00PM",
-    ticketPrice: "10000"
+    regular_ticketPrice: "10000",
+    vip_ticketPrice: "20000",
+    vvip_ticketPrice: "30000",
   },
   {
     eventTitle: "Photography Workshop",
@@ -141,7 +171,9 @@ export const Events = [
     numberAttending: "300",
     startDate: "30-10-2026",
     startTime: "10:00AM",
-    ticketPrice: "4500"
+    regular_ticketPrice: "4500",
+    vip_ticketPrice: "9000",
+    vvip_ticketPrice: "13500",
   },
   {
     eventTitle: "Health & Wellness Fair",
@@ -150,7 +182,9 @@ export const Events = [
     numberAttending: "900",
     startDate: "05-11-2026",
     startTime: "08:00AM",
-    ticketPrice: "1500"
+    regular_ticketPrice: "1500",
+    vip_ticketPrice: "3000",
+    vvip_ticketPrice: "4500",
   },
   {
     eventTitle: "E-Sports Championship",
@@ -159,7 +193,9 @@ export const Events = [
     numberAttending: "1400",
     startDate: "12-11-2026",
     startTime: "02:00PM",
-    ticketPrice: "3500"
+    regular_ticketPrice: "3500",
+    vip_ticketPrice: "7000",
+    vvip_ticketPrice: "10500",
   },
   {
     eventTitle: "Black Friday Shopping Expo",
@@ -168,7 +204,9 @@ export const Events = [
     numberAttending: "3000",
     startDate: "27-11-2026",
     startTime: "09:00AM",
-    ticketPrice: "1000"
+    regular_ticketPrice: "1000",
+    vip_ticketPrice: "2000",
+    vvip_ticketPrice: "3000",
   },
   {
     eventTitle: "New Year Countdown Concert",
@@ -177,6 +215,8 @@ export const Events = [
     numberAttending: "10000",
     startDate: "31-12-2026",
     startTime: "09:00PM",
-    ticketPrice: "15000"
-  }
+    regular_ticketPrice: "15000",
+    vip_ticketPrice: "30000",
+    vvip_ticketPrice: "45000",
+  },
 ];
