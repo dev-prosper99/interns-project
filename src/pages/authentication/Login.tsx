@@ -13,7 +13,7 @@ return (
  <div className="relative h-screen flex flex-col lg:flex-row bg-neutral-1000">
  
  <div
- className="relative hidden lg:block lg:w-1/2 sticky top-0 h-screen bg-cover bg-center"
+ className="relative hidden lg:block lg:w-1/2  top-0 h-screen bg-cover bg-center"
  style={{ backgroundImage: `url(${Discover})` }}
  >
  <div className="absolute inset-0 bg-linear-to-b from-[rgba(94,38,167,0.45)] to-[rgba(16,2,39,0.85)]" />
@@ -98,6 +98,14 @@ return (
  <label htmlFor="remember" className="text-sm text-gray-400">
  Remember me
  </label>
+ <p>
+  <Link
+   to="/forgot-password"
+   className="text-purple-500 hover:text-purple-400"
+  >
+   Forgot Password?
+  </Link>
+ </p>
  </div>
  </div>
  
