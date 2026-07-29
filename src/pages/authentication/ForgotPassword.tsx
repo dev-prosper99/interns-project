@@ -42,10 +42,10 @@ const ForgotPassword = ({ onSubmit, onBackToLogin }: ForgotPasswordProps) => {
               never miss a moment that matters.
             </p>
             <div className="flex items-center gap-2">
-              <div className="flex -space-x-3">
-                <img src={avatar1} alt="" className="w-9 h-9 rounded-full border-2 border-black object-cover"/>
-                <img src={avatar2} alt="" className="w-9 h-9 rounded-full border-2 border-black object-cover"/>
-                <img src={avatar3} alt="" className="w-9 h-9 rounded-full border-2 border-black object-cover"/>
+              <div className="flex space-x-3">
+                <img src={avatar1} alt="" className="w-9 h-9 rounded-full border-2 border-orange-500 object-cover"/>
+                <img src={avatar2} alt="" className="w-9 h-9 rounded-full border-2 border-orange-500 object-cover"/>
+                <img src={avatar3} alt="" className="w-9 h-9 rounded-full border-2 border-orange-500 object-cover"/>
               </div>
               <p className="text-sm font-medium">1M+ people already on TixO</p>
             </div>
