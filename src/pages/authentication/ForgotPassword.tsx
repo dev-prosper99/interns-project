@@ -31,7 +31,7 @@ const ForgotPassword = ({ onSubmit, onBackToLogin }: ForgotPasswordProps) => {
         <div className="absolute inset-0 bg-linear-to-b from-purple-900/70 via-purple-950/60 to-black/90" />
         <div className="relative z-10 flex flex-col justify-between p-10 w-full">
           <div className="flex items-center gap-2">
-            <img src={logo} alt="" />
+            <img src={logo} alt="" className="w-[162.5px] h-16.25"/>
           </div>
           <div>
             <p className="text-4xl font-bold leading-tight mb-4">
