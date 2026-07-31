@@ -7,8 +7,37 @@ import { Input } from "@/components/ui/input";
 import { GoogleIcon, AppleIcon } from "@/assets/icons";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
- 
+import { useState } from "react";
+import Alert from "@/assets/alert";
 const Login = () => {
+  
+const [email, setEmail] = useState("");
+const [password, setPassword] = useState("");
+const [alert, setAlert] = useState<{
+  type: "success" | "error";
+  title: string;
+  message: string;
+} | null>(null);
+const handleLogin = () => {
+  if (!email.trim() || !password.trim()) {
+    setAlert({
+      type: "error",
+      title: "Error Alert",
+      message: "Please input your email and password",
+    });
+    return;
+  }
+
+  setAlert({
+    type: "success",
+    title: "Success Alert",
+    message: "Login successful",
+  });
+
+  console.log("Login successful");
+};
+ 
+
 return (
  <div className="relative h-screen flex flex-col lg:flex-row bg-neutral-1000">
  
@@ -75,12 +104,26 @@ return (
  </p>
  
  <div className="mt-8 space-y-5">
+  {alert && (
+  <Alert
+    type={alert.type}
+    title={alert.title}
+    message={alert.message}
+    onClose={() => setAlert(null)}
+  />
+)}
  <div>
+  
  <label htmlFor="email" className="mb-2 block text-white">
  Email
  </label>
  
- <Input id="email" placeholder="Email" />
+<Input
+  id="email"
+  placeholder="Email"
+  value={email}
+  onChange={(e) => setEmail(e.target.value)}
+/>
  </div>
  
  <div>
@@ -88,7 +131,13 @@ return (
  Password
  </label>
  
- <Input id="password" type="password" placeholder="Password" />
+ <Input
+  id="password"
+  type="password"
+  placeholder="Password"
+  value={password}
+  onChange={(e) => setPassword(e.target.value)}
+/>
  </div>
  
  <div className="flex items-center justify-between">
@@ -109,7 +158,7 @@ return (
  </div>
  </div>
  
- <Button variant="primary" className="w-full">
+ <Button onClick={handleLogin} variant="primary" className="w-full">
  Login
  </Button>
  
