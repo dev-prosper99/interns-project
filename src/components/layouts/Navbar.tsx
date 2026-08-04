@@ -9,7 +9,7 @@ const Navbar: React.FC = () => {
     navigate(`/${pageLink}`, { replace: true });
   };
   return (
-    <nav className="w-full bg-black/90 border-t-2 ">
+    <nav className="w-full bg-black/90 ">
       <div className="max-w-6xl mx-auto h-16  flex items-center justify-between">
         <div>
           <img src={logo} alt="Logo" className="h-8 w-auto flex justify-center" />
