@@ -1,25 +1,33 @@
 import Navbar from "@/components/layouts/Navbar";
 import Footer from "@/components/layouts/Footer";
-import { CardTextValues } from "@/constants";
-import { SmallCards } from "@/components/cards";
-import EventDetail from "./EventDetail";
-
+import Hero from "@/components/HomePage/Hero";
+import UpcomingEvents from "@/components/HomePage/UpcomingEvents";
+import EventsNearYou from "@/components/HomePage/EventsNearYou";
+import BuiltForNigerians from "@/components/HomePage/BuiltForNigerians";
+import OrganizerPitch from "@/components/HomePage/OrganizerPitch";
+import Testimonials from "@/components/HomePage/Testimonials";
+import StatsBar from "@/components/HomePage/StatsBar";
+import TicketSteps from "@/components/HomePage/TicketSteps";
+import Newsletter from "@/components/HomePage/NewsLetter";
+import CtaBanner from "@/components/HomePage/CtaBanner";
+ 
 const Home = () => {
   return (
     <div>
       <Navbar />
-      <div className="bg-[#9EA0A91A] border border-purple-500 flex gap-32">
-        {CardTextValues.map((values, index) => (
-          <SmallCards
-            cardNumber={index}
-            cardHeader={values.header}
-            cardText={values.text}
-          />
-        ))}
-      </div> *
-      <EventDetail />
+      <Hero />
+      <StatsBar />
+      <UpcomingEvents />
+      <TicketSteps />
+      <EventsNearYou />
+      <BuiltForNigerians />
+      <OrganizerPitch />    
+      <Testimonials />
+      <Newsletter />
+      <CtaBanner />
       <Footer />
     </div>
   );
 };
+ 
 export default Home;
