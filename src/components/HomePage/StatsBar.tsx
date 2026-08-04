@@ -10,7 +10,8 @@ const stats = [
 export default function StatsBar() {
   
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 bg-neutral-925 py-8 gap-4 text-center">
+   <div className="bg-neutral-925 px-6 md:px-30">
+    <div className="max-w-6xl w-full mx-auto flex flex-col md:flex-row flex-wrap md:justify-between items-center py-8 gap-4 ">
       {stats.map((s) => (
         <div key={s.label} className="flex flex-col items-center gap-2">
           <s.Icon className="w-12 h-12" />
@@ -19,5 +20,6 @@ export default function StatsBar() {
         </div>
       ))}
     </div>
+   </div>
   );
 }

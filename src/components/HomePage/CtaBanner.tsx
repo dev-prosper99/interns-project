@@ -5,7 +5,7 @@ export default function CtaBanner() {
       style={{ backgroundImage: `url(/src/assets/backview.jpg)` }}
     >
       <div className="absolute inset-0 bg-black/60" />
-      <div className="relative z-10 flex flex-col items-center gap-4">
+      <div className="relative z-10 max-w-6xl mx-auto flex flex-col items-center gap-4">
         <h2 className="text-white text-3xl font-bold">
           Ready to create your first event?
         </h2>
