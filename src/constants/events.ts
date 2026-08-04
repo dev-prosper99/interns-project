@@ -1,5 +1,16 @@
 export const Events = [
   {
+    eventTitle: "Party Night",
+    eventCategory: "Comedy",
+    venue: "Eko Hotel & Suites, Lagos",
+    numberAttending: "1000",
+    startDate: "16-06-2026",
+    startTime: "07:00PM",
+    regular_ticketPrice: "15000",
+    vip_ticketPrice: "30000",
+    vvip_ticketPrice: "50000",
+  },
+  {
     eventTitle: "Lagos Comedy Night",
     eventCategory: "Comedy",
     venue: "Eko Hotel & Suites, Lagos",

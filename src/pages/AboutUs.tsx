@@ -1,8 +1,12 @@
 const AboutUs = () => {
     return (
         <>
-        <div>about us</div>
+        <div>About Us</div>
         </>
     )
 }
 export default AboutUs;
+        
+        
+
+
