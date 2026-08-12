@@ -141,21 +141,17 @@ return (
  </div>
  
  <div className="flex items-center justify-between">
- <div className="flex items-center">
- <input type="checkbox" id="remember" className="mr-2" />
- 
- <label htmlFor="remember" className="text-sm text-gray-400">
- Remember me
- </label>
- <p>
-  <Link
-   to="/forgot-password"
-   className="text-purple-500 hover:text-purple-400"
-  >
-   Forgot Password?
-  </Link>
- </p>
- </div>
+   <div className="flex items-center">
+     <input type="checkbox" id="remember" className="mr-2" />
+
+     <label htmlFor="remember" className="text-sm text-gray-400">
+       Remember me
+     </label>
+   </div>
+
+   <Link to="/forgot-password" className="text-purple-500 hover:text-purple-400">
+     Forgot Password?
+   </Link>
  </div>
  
  <Button onClick={handleLogin} variant="primary" className="w-full">

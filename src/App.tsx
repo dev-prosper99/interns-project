@@ -3,15 +3,15 @@ import Home from "./pages/Home";
 import Discover from "./pages/Discover";
 import ContactUs from "./pages/ContactUs";
 import AboutUs from "./pages/AboutUs";
-import SignUp from "./pages/Authentication/SignUp";
-import Login from "./pages/Authentication/Login";
-
+import SignUp from "./pages/authentication/SignUp"
+import Login from "./pages/authentication/Login";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Dashboard />} />
         <Route path="/discover" element={<Discover />} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/about-us" element={<AboutUs />} />
