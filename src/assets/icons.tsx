@@ -263,6 +263,7 @@ export const AppleIcon = (props: SVGProps<SVGSVGElement>) => {
     </svg>
   );
 };
+
 export const TickIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
     <svg
