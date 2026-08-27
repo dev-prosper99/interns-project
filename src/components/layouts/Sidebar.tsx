@@ -47,11 +47,7 @@ export default function Sidebar() {
     .join("") || "U";
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("firstName");
-    localStorage.removeItem("fullName");
-    localStorage.removeItem("email");
+    localStorage.clear();
     setShowLogoutMenu(false);
     navigate("/login");
   };

@@ -19,7 +19,11 @@ const SignUp = () => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [alert, setAlert] = useState<{
+    type: "success" | "error";
+    title: string;
+    message: string;
+  } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -27,19 +31,21 @@ const SignUp = () => {
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    setError("");
+    setAlert(null);
     setIsLoading(true);
 
     try {
-      
       const nameParts = fullName.trim().split(/\s+/);
 
       const firstname = nameParts[0];
       const lastname = nameParts.slice(1).join(" ");
 
-      
       if (!firstname || !lastname) {
-        setError("Please enter your first and last name.");
+        setAlert({
+          type: "error",
+          title: "Registration failed",
+          message: "Please enter your first and last name.",
+        });
         return;
       }
 
@@ -67,8 +73,6 @@ const SignUp = () => {
         throw new Error(data.message || "Registration failed");
       }
 
-      console.log("Registration successful:", data);
-
       const registeredFullName = fullName.trim();
       const registeredFirstName = String(firstname || "").trim();
       const normalizedEmail = email.trim().toLowerCase();
@@ -85,14 +89,28 @@ const SignUp = () => {
         localStorage.setItem("firstName", registeredFirstName);
       }
 
-      navigate("/login");
-    } catch (error) {
-      console.error("Signup error:", error);
+      setAlert({
+        type: "success",
+        title: "Registration successful",
+        message: "Your account has been created. Redirecting to login...",
+      });
 
+      window.setTimeout(() => {
+        navigate("/login");
+      }, 1200);
+    } catch (error) {
       if (error instanceof Error) {
-        setError(error.message);
+        setAlert({
+          type: "error",
+          title: "Registration failed",
+          message: error.message,
+        });
       } else {
-        setError("Something went wrong. Please try again.");
+        setAlert({
+          type: "error",
+          title: "Registration failed",
+          message: "Something went wrong. Please try again.",
+        });
       }
     } finally {
       setIsLoading(false);
@@ -237,12 +255,12 @@ const SignUp = () => {
               </div>
             </div>
 
-            {error && (
+            {alert && (
               <Alert
-                type="error"
-                title="Registration failed"
-                message={error}
-                onClose={() => setError("")}
+                type={alert.type}
+                title={alert.title}
+                message={alert.message}
+                onClose={() => setAlert(null)}
               />
             )}
 
