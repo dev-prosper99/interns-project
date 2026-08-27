@@ -55,6 +55,9 @@ const stats = [
 
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const firstName = (localStorage.getItem("firstName") || "there")
+    .trim()
+    .replace(/\s+/g, " ") || "there";
 
   return (
     <div className="flex ">
@@ -92,7 +95,7 @@ const Dashboard = () => {
         <div className="p-6">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
             <p className="text-white text-[24px] font-medium">
-              Welcome back, Michael. Here's what's happening.
+              Welcome back, {firstName}. Here's what's happening.
             </p>
 
             <Button variant="yellow" className=" md:w-auto w-1/2">
