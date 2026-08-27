@@ -27,7 +27,7 @@ const categorySales = [
     category: "Art",
     tickets: 150,
     percentage: 28,
-    color: "bg-yellow-500",
+    color: "bg-yellow-5 00",
   },
 ];
 const CategoryChart = () => {

@@ -271,16 +271,17 @@ export const TickIcon = (props: SVGProps<SVGSVGElement>) => {
       viewBox="0 0 19 19"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      className="text-success-500"
       {...props}
     >
       <path
         d="M17.4167 9.08335C17.4167 4.48098 13.6857 0.750021 9.08333 0.750021C4.48096 0.750021 0.75 4.48098 0.75 9.08335C0.75 13.6857 4.48096 17.4167 9.08333 17.4167C13.6857 17.4167 17.4167 13.6857 17.4167 9.08335Z"
-        stroke="#0F973D"
+        stroke="currentColor"
         stroke-width="1.5"
       />
       <path
         d="M5.75 9.70833C5.75 9.70833 7.08333 10.4688 7.75 11.5833C7.75 11.5833 9.75 7.20833 12.4167 5.75"
-        stroke="#0F973D"
+        stroke="currentColor"
         stroke-width="1.5"
         stroke-linecap="round"
         stroke-linejoin="round"
@@ -736,4 +737,11 @@ export const RevenueIcon = (props: SVGProps<SVGSVGElement>) => {
 
   );
 };
+
+export const uploadIcon = (props: SVGProps<SVGSVGElement>) => {
+  return(<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+<path d="M2.57918 8.3335C2.52701 8.71433 2.5 9.10388 2.5 9.50016C2.5 13.9184 5.85786 17.5002 10 17.5002C14.1421 17.5002 17.5 13.9184 17.5 9.50016C17.5 9.10388 17.473 8.71433 17.4208 8.3335" stroke="#7135D8" stroke-width="1.5" stroke-linecap="round"/>
+<path d="M9.99935 2.50016L9.99935 10.8335M9.99935 2.50016C9.41583 2.50016 8.32562 4.16208 7.91602 4.5835M9.99935 2.50016C10.5829 2.50016 11.6731 4.16208 12.0827 4.5835" stroke="#7135D8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+  );};
 

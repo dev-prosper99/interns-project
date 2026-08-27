@@ -27,6 +27,7 @@ export interface InputProps
   leadingIcon?: React.ReactNode;
   trailingIcon?: React.ReactNode;
   label?: string;
+  required?: boolean;
   helperText?: string;
 }
 
@@ -38,6 +39,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       leadingIcon,
       trailingIcon,
       label,
+      required,
       helperText,
       ...props
     },
@@ -46,7 +48,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="flex flex-col gap-1.5">
         {label && (
-          <label className="text-sm font-medium text-white">{label}</label>
+          <label className="text-sm font-medium text-white">
+            {label}
+            {required && <span className="ml-0.5 text-orange-500">*</span>}
+          </label>
         )}
         <div className={cn(inputVariants({ state, className }))}>
           {leadingIcon}

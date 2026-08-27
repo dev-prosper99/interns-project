@@ -6,13 +6,15 @@ import AboutUs from "./pages/AboutUs";
 import SignUp from "./pages/Authentication/SignUp"
 import Login from "./pages/Authentication/Login";
 import Dashboard from "./pages/Dashboard";
-
+import CreateEventModal from "./components/DashBoard/AdminDashboard/CreateEvent/CreateEventModal.jsx";
 
 function App() {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<Dashboard />} />
+        <Route path="/" element={<CreateEventModal />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/discover" element={<Discover />} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/about-us" element={<AboutUs />} />
