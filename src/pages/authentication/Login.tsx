@@ -8,7 +8,7 @@ import { GoogleIcon, AppleIcon } from "@/assets/icons";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import Alert from "@/assets/alert";
+import Alert from "@/components/ui/alert";
 const Login = () => {
   
 const [email, setEmail] = useState("");
