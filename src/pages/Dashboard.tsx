@@ -5,6 +5,9 @@ import DashboardOverview from "@/components/DashBoard/AdminDashboard/overview/Da
 
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const firstName = (localStorage.getItem("firstName") || "there")
+    .trim()
+    .replace(/\s+/g, " ") || "there";
 
   return (
     <div className="flex ">
@@ -41,6 +44,63 @@ const Dashboard = () => {
         )}
 
         <DashboardOverview />
+        <div className="p-6">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+            <p className="text-white text-[24px] font-medium">
+              Welcome back, {firstName}. Here's what's happening.
+            </p>
+
+            <Button variant="yellow" className=" md:w-auto w-1/2">
+              + Create New Event
+            </Button>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4  gap-6">
+            {stats.map((stat, idx) => {
+              const Icon = stat.icon;
+              return (
+                <div key={idx} className="bg-neutral-1000  rounded-xl p-6">
+                  <div className="flex items-center  gap-2 mb-6">
+                    <div
+                      className={`w-8 h-8 rounded-lg flex items-center justify-center ${stat.iconBg}`}
+                    >
+                      <Icon className={`w-4 h-4 ${stat.iconColor}`} />
+                    </div>
+
+                    <span className="text-sm font-medium text-gray-300">
+                      {stat.title}
+                    </span>
+                  </div>
+
+                  <h2 className="text-4xl font-bold text-white tracking-tight">
+                    {stat.value}
+                  </h2>
+
+                  <div className="flex items-center gap-2 mt-6 text-sm">
+                    <span
+                      className={`font-semibold ${stat.trend === "up" ? "text-green-500" : "text-red-500"}`}
+                    >
+                      {stat.change}
+                    </span>
+
+                    <span className="text-gray-500">from last month</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6 items-stretch">
+            <RevenueChart />
+            <CategoryChart />
+          </div>
+        </div>
+        <div className="p-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+            <RecentEvents />
+            <RecentTransactions />
+          </div>
+        </div>
       </div>
     </div>
   );

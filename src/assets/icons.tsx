@@ -263,6 +263,7 @@ export const AppleIcon = (props: SVGProps<SVGSVGElement>) => {
     </svg>
   );
 };
+
 export const TickIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
     <svg
@@ -361,7 +362,454 @@ export const ArrowIcon = (props: SVGProps<SVGSVGElement>) => {
       />
     </svg>
   );
+  return (
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M19 12H5M12 5L5 12L12 19"
+        stroke="#7C3AED"
+        stroke-width="1.25"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  );
 };
+
+export const BuildingIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    viewBox="0 0 48 48"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    {
+      <svg
+        width="48"
+        height="48"
+        viewBox="0 0 48 48"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M32 20L36.2988 21.2896C39.0452 22.1135 40.4183 22.5255 41.2092 23.5884C42 24.6513 42 26.0849 42 28.9522L42 44"
+          stroke="#EA580C"
+          stroke-width="2.5"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M16 18L22 18M16 26L22 26"
+          stroke="#EA580C"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M24 44V38C24 36.1144 24 35.1716 23.4142 34.5858C22.8284 34 21.8856 34 20 34H18C16.1144 34 15.1716 34 14.5858 34.5858C14 35.1716 14 36.1144 14 38V44"
+          stroke="#EA580C"
+          stroke-width="2.5"
+          stroke-linejoin="round"
+        />
+        <path
+          d="M4 44H44"
+          stroke="#EA580C"
+          stroke-width="2.5"
+          stroke-linecap="round"
+        />
+        <path
+          d="M6 44L6 13.4345C6 8.41298 6 5.90223 7.58237 4.65649C9.16473 3.41075 11.4948 4.0871 16.155 5.43979L26.155 8.34244C28.9673 9.15873 30.3734 9.56688 31.1867 10.6793C32 11.7917 32 13.3069 32 16.3371L32 44"
+          stroke="#EA580C"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    }
+  </svg>
+);
+
+export const UserGroupIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    viewBox="0 0 48 48"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    {
+      <svg
+        width="48"
+        height="48"
+        viewBox="0 0 48 48"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <g clip-path="url(#clip0_2038_2778)">
+          <path
+            d="M41.5481 36C43.0467 36 44.2387 35.0569 45.3089 33.7383C47.4998 31.0389 43.9027 28.8817 42.5307 27.8252C41.1361 26.7512 39.5788 26.1428 38 26M36 22C38.7614 22 41 19.7614 41 17C41 14.2386 38.7614 12 36 12"
+            stroke="#EA580C"
+            stroke-width="2.5"
+            stroke-linecap="round"
+          />
+          <path
+            d="M6.45192 36C4.95331 36 3.76134 35.0569 2.69109 33.7383C0.500177 31.0389 4.09734 28.8817 5.46929 27.8252C6.86395 26.7512 8.42116 26.1428 10 26M11 22C8.23858 22 6 19.7614 6 17C6 14.2386 8.23858 12 11 12"
+            stroke="#EA580C"
+            stroke-width="2.5"
+            stroke-linecap="round"
+          />
+          <path
+            d="M16.1676 30.2224C14.1241 31.486 8.76597 34.0662 12.0294 37.2948C13.6236 38.872 15.399 40 17.6313 40H30.3687C32.601 40 34.3764 38.872 35.9706 37.2948C39.234 34.0662 33.8759 31.486 31.8324 30.2224C27.0403 27.2592 20.9597 27.2592 16.1676 30.2224Z"
+            stroke="#EA580C"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M31 15C31 18.866 27.866 22 24 22C20.134 22 17 18.866 17 15C17 11.134 20.134 8 24 8C27.866 8 31 11.134 31 15Z"
+            stroke="#EA580C"
+            stroke-width="2.5"
+          />
+        </g>
+        <defs>
+          <clipPath id="clip0_2038_2778">
+            <rect width="48" height="48" fill="white" />
+          </clipPath>
+        </defs>
+      </svg>
+    }
+  </svg>
+);
+
+export const Star01Icon = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    viewBox="0 0 48 48"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    {
+      <svg
+        width="48"
+        height="48"
+        viewBox="0 0 48 48"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M27.4553 6.88836L30.9749 13.9858C31.4548 14.9737 32.7347 15.9214 33.8146 16.1029L40.1939 17.1715C44.2734 17.8571 45.2333 20.8412 42.2936 23.785L37.3342 28.7854C36.4943 29.6323 36.0343 31.2655 36.2943 32.4349L37.7141 38.625C38.834 43.5246 36.2543 45.4199 31.9548 42.8592L25.9754 39.2904C24.8956 38.6452 23.1158 38.6452 22.0159 39.2904L16.0365 42.8592C11.757 45.4199 9.15729 43.5044 10.2772 38.625L11.697 32.4349C11.957 31.2655 11.497 29.6323 10.6571 28.7854L5.69768 23.785C2.778 20.8412 3.7179 17.8571 7.79745 17.1715L14.1767 16.1029C15.2366 15.9214 16.5165 14.9737 16.9964 13.9858L20.516 6.88836C22.4358 3.03721 25.5555 3.03721 27.4553 6.88836Z"
+          stroke="#EA580C"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    }
+  </svg>
+);
+
+export const LeftArrow = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    {...props}
+  >
+    <svg
+      width="10"
+      height="18"
+      viewBox="0 0 10 18"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M8.74994 0.750061C8.74994 0.750061 0.750017 6.64197 0.75 8.75012C0.749982 10.8583 8.75 16.7501 8.75 16.7501"
+        stroke="#F2F2F3"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </svg>
+);
+
+export const RightArrow = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    {...props}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <svg
+      width="10"
+      height="18"
+      viewBox="0 0 10 18"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M0.750063 0.750061C0.750063 0.750061 8.74998 6.64197 8.75 8.75012C8.75002 10.8583 0.75 16.7501 0.75 16.7501"
+        stroke="#F2F2F3"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </svg>
+);
+
+export const FlashIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    {...props}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <svg
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M5.22576 11.3294L12.224 2.34651C12.7713 1.64397 13.7972 2.08124 13.7972 3.01707V9.96994C13.7972 10.5305 14.1995 10.985 14.6958 10.985H18.0996C18.8729 10.985 19.2851 12.0149 18.7742 12.6706L11.776 21.6535C11.2287 22.356 10.2028 21.9188 10.2028 20.9829V14.0301C10.2028 13.4695 9.80048 13.015 9.3042 13.015H5.90035C5.12711 13.015 4.71494 11.9851 5.22576 11.3294Z"
+        stroke="#BB98F6"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </svg>
+);
+
+export const KnightIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    {...props}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <svg
+      width="20"
+      height="22"
+      viewBox="0 0 20 22"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M9.74707 0.75C6.8976 0.75 5.05001 2.76899 2.86493 3.5049C1.97646 3.80413 1.53223 3.95374 1.35244 4.16465C1.17266 4.37556 1.12002 4.68375 1.01473 5.30013C-0.111967 11.896 2.35068 17.994 8.22379 20.3675C8.85483 20.6225 9.17034 20.75 9.75018 20.75C10.33 20.75 10.6455 20.6225 11.2765 20.3675C17.1492 17.9939 19.6096 11.896 18.4825 5.30013C18.3772 4.68364 18.3245 4.3754 18.1447 4.16449C17.9649 3.95358 17.5207 3.80405 16.6323 3.50499C14.4463 2.76915 12.5967 0.75 9.74707 0.75Z"
+        stroke="#BB98F6"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M17.2791 4.28033C17.572 3.98744 17.572 3.51256 17.2791 3.21967C16.9862 2.92678 16.5113 2.92678 16.2184 3.21967L16.7488 3.75L17.2791 4.28033ZM3.21845 16.2197C2.92556 16.5126 2.92556 16.9874 3.21845 17.2803C3.51134 17.5732 3.98622 17.5732 4.27911 17.2803L3.74878 16.75L3.21845 16.2197ZM16.7488 3.75L16.2184 3.21967L3.21845 16.2197L3.74878 16.75L4.27911 17.2803L17.2791 4.28033L16.7488 3.75Z"
+        fill="#BB98F6"
+      />
+    </svg>
+  </svg>
+);
+
+export const GlobeIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    {...props}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <svg
+      width="19"
+      height="22"
+      viewBox="0 0 19 22"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M9.75 17.75L9.75 20.75"
+        stroke="#BB98F6"
+        stroke-width="1.5"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M7.25 20.75H12.25"
+        stroke="#BB98F6"
+        stroke-width="1.5"
+        stroke-linejoin="round"
+      />
+      <circle
+        cx="7"
+        cy="7"
+        r="7"
+        transform="matrix(-1 0 0 1 17.75 0.75)"
+        stroke="#BB98F6"
+        stroke-width="1.5"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M5.75 2.75C6.40431 2.7885 6.74236 3.10899 7.32347 3.72301C8.37308 4.83206 9.42269 4.9246 10.1224 4.55492C11.172 4.0004 10.29 3.10221 11.5219 2.61409C12.3248 2.29595 12.4368 1.43026 11.9899 0.75"
+        stroke="#BB98F6"
+        stroke-width="1.5"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M17.25 8.75C15.75 8.75 15.4838 9.99677 14.25 9.75C11.75 9.25 11.0416 9.80895 11.0416 11.0011C11.0416 12.1932 11.0416 12.1932 10.5217 13.0873C10.1835 13.6689 10.0653 14.2504 10.7394 14.75"
+        stroke="#BB98F6"
+        stroke-width="1.5"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M3.75 0.75C1.89864 2.54995 0.75 5.0582 0.75 7.83251C0.75 13.3098 5.22715 17.75 10.75 17.75C13.4755 17.75 15.9462 16.6687 17.75 14.915"
+        stroke="#BB98F6"
+        stroke-width="1.5"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </svg>
+);
+
+export const RightIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    {...props}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <g clip-path="url(#clip0_2483_27627)">
+        <path
+          d="M18.3334 9.99992C18.3334 5.39755 14.6025 1.66659 10.0001 1.66659C5.39771 1.66659 1.66675 5.39755 1.66675 9.99992C1.66675 14.6023 5.39771 18.3333 10.0001 18.3333C14.6025 18.3333 18.3334 14.6023 18.3334 9.99992Z"
+          stroke="#0F973D"
+          stroke-width="1.5"
+        />
+        <path
+          d="M6.66675 10.6248C6.66675 10.6248 8.00008 11.3853 8.66675 12.4998C8.66675 12.4998 10.6667 8.12484 13.3334 6.6665"
+          stroke="#0F973D"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0_2483_27627">
+          <rect width="20" height="20" fill="white" />
+        </clipPath>
+      </defs>
+    </svg>
+  </svg>
+);
+
+export const StarIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    {...props}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 18 18"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M10.2957 2.58313L11.6156 5.24466C11.7956 5.61515 12.2755 5.97053 12.6805 6.03858L15.0727 6.43932C16.6025 6.69639 16.9625 7.81544 15.8601 8.91937L14.0003 10.7945C13.6854 11.1121 13.5129 11.7246 13.6104 12.1631L14.1428 14.4844C14.5628 16.3217 13.5954 17.0325 11.983 16.0722L9.74079 14.7339C9.33583 14.4919 8.66841 14.4919 8.25595 14.7339L6.0137 16.0722C4.40888 17.0325 3.43399 16.3142 3.85394 14.4844L4.38638 12.1631C4.48387 11.7246 4.31139 11.1121 3.99642 10.7945L2.13663 8.91937C1.04175 7.81544 1.39421 6.69639 2.92404 6.43932L5.31628 6.03858C5.71373 5.97053 6.19368 5.61515 6.37366 5.24466L7.69352 2.58313C8.41344 1.13896 9.58331 1.13896 10.2957 2.58313Z"
+        fill="#EA580C"
+        stroke="#EA580C"
+        stroke-width="1.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+  </svg>
+);
+
+export const Ticket02Icon = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    {...props}
+    width="690"
+    height="569"
+    viewBox="0 0 671 569"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g opacity="0.3" clip-path="url(#clip0_2053_8591)">
+      <path
+        d="M-40.4026 365.476C-45.9535 369.374 -54.1789 368.432 -58.0543 362.372C-80.7476 326.881 -92.3068 301.52 -93.0316 275.544C-93.4485 260.6 -91.2978 245.838 -86.6768 231.923C-74.1864 194.314 -37.4327 168.502 36.0747 116.878L125.739 53.9063C199.246 2.28189 236 -23.5303 275.616 -22.5157C290.272 -22.1403 304.889 -19.1531 318.805 -13.6893C342.99 -4.19311 362.921 15.284 388.599 48.6683C392.99 54.377 391.082 62.4433 385.524 66.3462C354.574 88.0826 348.138 132.264 371.148 165.028C394.159 197.792 437.902 206.732 468.852 184.996C474.41 181.093 482.645 182.035 486.525 188.103C509.213 223.587 520.77 248.946 521.494 274.918C521.911 289.862 519.761 304.625 515.139 318.539C502.649 356.148 465.895 381.96 392.388 433.585L302.724 496.556C229.216 548.181 192.463 573.993 152.847 572.978C138.19 572.603 123.574 569.616 109.658 564.152C85.4704 554.654 65.5369 535.174 39.8547 501.783C35.4688 496.081 37.3743 488.024 42.9253 484.125C73.8754 462.389 80.3119 418.208 57.3015 385.443C34.2912 352.679 -9.45243 343.74 -40.4026 365.476Z"
+        stroke="#FDEBE3"
+        stroke-width="3.72159"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M13.9045 132.448L280.554 512.126"
+        stroke="#FDEBE3"
+        stroke-width="3.72159"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </g>
+    <defs>
+      <clipPath id="clip0_2053_8591">
+        <rect
+          width="655"
+          height="655"
+          fill="white"
+          transform="translate(-242 195.446) rotate(-35.0805)"
+        />
+      </clipPath>
+    </defs>
+  </svg>
+);
+
+export const HugeIcons = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    {...props}
+    width="690"
+    height="569"
+    viewBox="0 0 690 569"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <g opacity="0.3" clip-path="url(#clip0_2053_8608)">
+      <path
+        d="M295.971 233.545L398.063 47.2656C421.486 4.48556 433.242 -16.8661 457.951 -24.4437C482.649 -32.0565 499.771 -22.6035 533.948 -3.73412L534.017 -3.69634C580.172 21.5436 620.051 56.8537 650.694 99.6136C681.337 142.373 701.956 191.485 711.023 243.304C717.916 281.784 721.362 301.024 706.222 322.002C691.111 342.957 667.092 347.185 619.106 355.632L619.053 355.642L409.861 392.471C394.007 395.154 379.562 403.218 368.956 415.303C364.567 420.504 359.917 425.479 355.025 430.21C315.826 465.702 264.991 450.956 237.156 412.114L221.863 390.774C194.011 351.908 196.402 299.054 242.577 273.296C248.653 270.229 254.862 267.434 261.187 264.918C276.042 258.768 288.326 247.689 295.971 233.545Z"
+        stroke="#FDEBE3"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+      <path
+        d="M385.678 396.982L285.068 256.588M616.965 524.123L602.702 577.906C479.33 571.899 467.634 535.267 382.737 416.797L409.271 397.782C467.992 456.99 516.118 470.526 567.619 468.361C599.321 467.034 625.079 493.588 616.965 524.123Z"
+        stroke="#FDEBE3"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </g>
+    <defs>
+      <clipPath id="clip0_2053_8608">
+        <rect
+          width="690.888"
+          height="690.888"
+          fill="white"
+          transform="translate(0 229.438) rotate(-35.6262)"
+        />
+      </clipPath>
+    </defs>
+  </svg>
+);
 
 export const TickIcon2 = (props: SVGProps<SVGSVGElement>) => {
   return (
@@ -512,8 +960,8 @@ export const AnalyticsIcon = (props: SVGProps<SVGSVGElement>) => {
 export const TransactionIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
     <svg
-      width="24"
-      height="24"
+      width="1em"
+      height="1em"
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -521,14 +969,14 @@ export const TransactionIcon = (props: SVGProps<SVGSVGElement>) => {
     >
       <path
         d="M2 12C2 8.46252 2 6.69377 3.0528 5.5129C3.22119 5.32403 3.40678 5.14935 3.60746 4.99087C4.86213 4 6.74142 4 10.5 4H13.5C17.2586 4 19.1379 4 20.3925 4.99087C20.5932 5.14935 20.7788 5.32403 20.9472 5.5129C22 6.69377 22 8.46252 22 12C22 15.5375 22 17.3062 20.9472 18.4871C20.7788 18.676 20.5932 18.8506 20.3925 19.0091C19.1379 20 17.2586 20 13.5 20H10.5C6.74142 20 4.86213 20 3.60746 19.0091C3.40678 18.8506 3.22119 18.676 3.0528 18.4871C2 17.3062 2 15.5375 2 12Z"
-        stroke="#A2A4A9"
+        stroke="currentColor"
         stroke-width="1.5"
         stroke-linecap="round"
         stroke-linejoin="round"
       />
       <path
         d="M10 16H11.5"
-        stroke="#A2A4A9"
+        stroke="currentColor"
         stroke-width="1.5"
         stroke-miterlimit="10"
         stroke-linecap="round"
@@ -536,7 +984,7 @@ export const TransactionIcon = (props: SVGProps<SVGSVGElement>) => {
       />
       <path
         d="M14.5 16L18 16"
-        stroke="#A2A4A9"
+        stroke="currentColor"
         stroke-width="1.5"
         stroke-miterlimit="10"
         stroke-linecap="round"
@@ -544,7 +992,7 @@ export const TransactionIcon = (props: SVGProps<SVGSVGElement>) => {
       />
       <path
         d="M2 9H22"
-        stroke="#A2A4A9"
+        stroke="currentColor"
         stroke-width="1.5"
         stroke-linejoin="round"
       />
@@ -555,8 +1003,8 @@ export const TransactionIcon = (props: SVGProps<SVGSVGElement>) => {
 export const AttendeeIcon = (props: SVGProps<SVGSVGElement>) => {
   return (
     <svg
-      width="24"
-      height="24"
+      width="1em"
+      height="1em"
       viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -564,26 +1012,26 @@ export const AttendeeIcon = (props: SVGProps<SVGSVGElement>) => {
     >
       <path
         d="M20.774 18C21.5233 18 22.1193 17.5285 22.6545 16.8691C23.7499 15.5194 21.9513 14.4408 21.2654 13.9126C20.568 13.3756 19.7894 13.0714 19 13M18 11C19.3807 11 20.5 9.88071 20.5 8.5C20.5 7.11929 19.3807 6 18 6"
-        stroke="#A2A4A9"
+        stroke="currentColor"
         stroke-width="1.5"
         stroke-linecap="round"
       />
       <path
         d="M3.22596 18C2.47666 18 1.88067 17.5285 1.34555 16.8691C0.250089 15.5194 2.04867 14.4408 2.73465 13.9126C3.43197 13.3756 4.21058 13.0714 5 13M5.5 11C4.11929 11 3 9.88071 3 8.5C3 7.11929 4.11929 6 5.5 6"
-        stroke="#A2A4A9"
+        stroke="currentColor"
         stroke-width="1.5"
         stroke-linecap="round"
       />
       <path
         d="M8.0838 15.1112C7.06203 15.743 4.38299 17.0331 6.0147 18.6474C6.81178 19.436 7.69952 20 8.81563 20H15.1844C16.3005 20 17.1882 19.436 17.9853 18.6474C19.617 17.0331 16.938 15.743 15.9162 15.1112C13.5201 13.6296 10.4799 13.6296 8.0838 15.1112Z"
-        stroke="#A2A4A9"
+        stroke="currentColor"
         stroke-width="1.5"
         stroke-linecap="round"
         stroke-linejoin="round"
       />
       <path
         d="M15.5 7.5C15.5 9.433 13.933 11 12 11C10.067 11 8.5 9.433 8.5 7.5C8.5 5.567 10.067 4 12 4C13.933 4 15.5 5.567 15.5 7.5Z"
-        stroke="#A2A4A9"
+        stroke="currentColor"
         stroke-width="1.5"
       />
     </svg>
@@ -735,6 +1183,22 @@ export const RevenueIcon = (props: SVGProps<SVGSVGElement>) => {
 <path d="M3.375 6.75H3.36826" stroke="#7C3AED" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
 
+  );
+};
+export const LogoutIcon = (props: SVGProps<SVGSVGElement>) => {
+  return(
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+<path d="M15 17.625C14.9264 19.4769 13.3831 21.0494 11.3156 20.9988C10.8346 20.987 10.2401 20.8194 9.05112 20.484C6.18961 19.6768 3.70555 18.3203 3.10956 15.2815C3 14.723 3 14.0944 3 12.8373L3 11.1627C3 9.90561 3 9.27705 3.10956 8.71846C3.70555 5.67965 6.18961 4.32316 9.05112 3.51603C10.2401 3.18064 10.8346 3.01295 11.3156 3.00119C13.3831 2.95061 14.9264 4.52307 15 6.37501" stroke="#D42620" stroke-width="1.5" stroke-linecap="round"/>
+<path d="M21 12H10M21 12C21 11.2998 19.0057 9.99153 18.5 9.5M21 12C21 12.7002 19.0057 14.0085 18.5 14.5" stroke="#D42620" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
+  );
+};
+export const DownarrowIcon = (props: SVGProps<SVGSVGElement>) => {
+  return(
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+<path d="M6 9L12 15L18 9" stroke="#A2A4A9" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
   );
 };
 
