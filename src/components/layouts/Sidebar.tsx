@@ -24,7 +24,7 @@ export default function Sidebar() {
   const [active, setActive] = useState<string>("Dashboard");
 
   return (
-    <div className="h-screen w-56 bg-[#0e0e11] flex flex-col justify-between px-3 py-5">
+    <div className="h-full  w-56 bg-neutral-1000 flex flex-col justify-between px-3 py-5">
     
       <div>
         <div className="flex items-center gap-2 px-2 mb-8">

@@ -16,6 +16,7 @@ const buttonVariants = cva(
         dark: "flex w-full items-center justify-center gap-2 rounded-lg bg-neutral-900 py-3 text-white h-11 transition-colors  focus-visible:bg-[#1D1E20]/90 disabled:bg-neutral-900 disabled:text-neutral-500 disabled:border-neutral-800",
         inactive:
           "bg-transparent text-neutral-400 hover:bg-transparent hover:text-white",
+        yellow: "bg-orange-500 text-white hover:bg-orange-400 focus-visible:bg-orange-600 focus-visible:ring-2 focus-visible:ring-orange-300 disabled:bg-neutral-900 disabled:text-neutral-500"
       },
       size: {
         sm: "rounded-[10px] px-4 py-1.5 gap-2.5 text-sm",

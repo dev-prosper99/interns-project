@@ -8,6 +8,7 @@ const Discover = () => {
       <Navbar />
 
       <DiscoverHero />
+    
       <Footer />
     </div>
   );

@@ -3,13 +3,14 @@ import { Button } from "../ui/button";
 import { NavLink, useNavigate } from "react-router-dom";
 import logo from "@/assets/images/logo.png";
 
+
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const navigateToLogin = (pageLink: string) => {
     navigate(`/${pageLink}`, { replace: true });
   };
   return (
-    <nav className="w-full bg-black/90 ">
+    <nav className="w-full bg-black/90 border-t-2 fixed px-4 px-20 z-50">
       <div className="max-w-6xl mx-auto h-16  flex items-center justify-between">
         <div>
           <img
