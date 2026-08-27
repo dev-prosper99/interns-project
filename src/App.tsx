@@ -3,9 +3,9 @@ import Home from "./pages/Home";
 import Discover from "./pages/Discover";
 import ContactUs from "./pages/ContactUs";
 import AboutUs from "./pages/AboutUs";
-import SignUp from "./pages/Authentication/SignUp"
+import SignUp from "./pages/Authentication/SignUp";
 import Login from "./pages/Authentication/Login";
-
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
@@ -17,6 +17,7 @@ function App() {
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/Dashboard" element={<Dashboard />} />
       </Routes>
     </div>
   );

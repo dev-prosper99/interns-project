@@ -69,7 +69,22 @@ const SignUp = () => {
 
       console.log("Registration successful:", data);
 
-    
+      const registeredFullName = fullName.trim();
+      const registeredFirstName = String(firstname || "").trim();
+      const normalizedEmail = email.trim().toLowerCase();
+
+      if (registeredFullName) {
+        localStorage.setItem("fullName", registeredFullName);
+      }
+
+      if (normalizedEmail) {
+        localStorage.setItem("email", normalizedEmail);
+      }
+
+      if (registeredFirstName) {
+        localStorage.setItem("firstName", registeredFirstName);
+      }
+
       navigate("/login");
     } catch (error) {
       console.error("Signup error:", error);

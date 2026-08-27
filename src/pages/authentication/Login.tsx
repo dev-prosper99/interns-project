@@ -9,7 +9,57 @@ import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Alert from "@/components/ui/alert";
- 
+
+const getAuthToken = (payload: any): string | null => {
+  const candidates = [
+    payload?.token,
+    payload?.accessToken,
+    payload?.authToken,
+    payload?.jwt,
+    payload?.data?.token,
+    payload?.data?.accessToken,
+    payload?.data?.authToken,
+    payload?.data?.jwt,
+    payload?.user?.token,
+    payload?.user?.accessToken,
+  ];
+
+  const token = candidates.find(
+    (value) => typeof value === "string" && value.trim().length > 0,
+  );
+
+  return typeof token === "string" ? token : null;
+};
+
+const getDisplayFirstName = (payload: any, fallback = ""): string => {
+  const rawName =
+    payload?.user?.firstname ||
+    payload?.user?.firstName ||
+    payload?.firstname ||
+    payload?.firstName ||
+    payload?.name ||
+    payload?.fullName ||
+    payload?.user?.name ||
+    fallback;
+
+  const cleaned = String(rawName || "").trim().replace(/\s+/g, " ");
+
+  if (!cleaned) return fallback;
+
+  return cleaned.split(" ")[0];
+};
+
+const fullNameFromEmail = (email: string): string => {
+  if (!email || !email.includes("@")) return "";
+
+  const localPart = email.split("@")[0];
+  return localPart
+    .split(/[._-]+/)
+    .filter(Boolean)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+};
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -57,29 +107,49 @@ const Login = () => {
       );
  
       const data = await response.json();
- 
+
       console.log("Login response:", data);
- 
-    
+
       if (!response.ok) {
         throw new Error(data.message || "Invalid email or password");
       }
- 
-      
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("refreshToken", data.refreshToken);
- 
-      
+
+      const authToken = getAuthToken(data);
+
+      if (!authToken) {
+        throw new Error("Authentication token was not returned by the server.");
+      }
+
+      const savedFirstName = localStorage.getItem("firstName") || "";
+      const savedFullName = localStorage.getItem("fullName") || "";
+      const responseFirstName = getDisplayFirstName(data, savedFirstName);
+      const finalFirstName =
+        (responseFirstName || savedFirstName || email.split("@")[0]).trim();
+      const normalizedEmail = email.trim().toLowerCase();
+      const finalFullName =
+        (data?.user?.name || data?.user?.fullName || savedFullName || fullNameFromEmail(normalizedEmail)).trim();
+
+      localStorage.setItem("token", authToken);
+      localStorage.setItem("refreshToken", data.refreshToken || data.refresh_token || "");
+      localStorage.setItem("email", normalizedEmail);
+
+      if (finalFirstName) {
+        localStorage.setItem("firstName", finalFirstName);
+      }
+
+      if (finalFullName) {
+        localStorage.setItem("fullName", finalFullName);
+      }
+
       setAlert({
         type: "success",
         title: "Login Successful",
         message: "Welcome back!",
       });
- 
+
       console.log("Login successful:", data);
- 
-    
-      navigate("/dashboard");
+
+      navigate("/Dashboard");
     } catch (error) {
       console.error("Login error:", error);
  
