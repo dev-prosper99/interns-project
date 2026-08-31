@@ -1,5 +1,5 @@
 import React from "react";
-import { Plus, Trash2 } from "lucide-react";
+import { DeleteIcon, PlusIcon } from "@/assets/icons";
 import { TextInput } from "./FormControls";
 import { emptyTier } from "../../../../constants/eventOptions";
 import { Button } from "@/components/ui/button";
@@ -28,7 +28,7 @@ export default function StepTickets({ form, update }: StepTicketsProps) {
           variant="secondary"
           className="h-9 px-3 text-sm gap-1.5"
         >
-          <Plus size={15} /> Add Tier
+          <PlusIcon /> Add Tier
         </Button>
       </div>
 
@@ -43,7 +43,7 @@ export default function StepTickets({ form, update }: StepTicketsProps) {
                 className="absolute top-2 right-2 h-8 w-8 rounded-full p-0 text-neutral-500 hover:text-red-400"
                 aria-label="Remove tier"
               >
-                <Trash2 size={14} />
+                < DeleteIcon/>
               </Button>
             )}
             <p className="text-xs text-neutral-500 mb-3">Tier {i + 1}</p>
