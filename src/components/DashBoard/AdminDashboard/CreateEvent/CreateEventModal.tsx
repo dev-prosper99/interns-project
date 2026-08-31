@@ -5,13 +5,14 @@ import StepBasics from "./StepBasics";
 import StepTickets from "./StepTickets";
 import StepSettings from "./StepSettings";
 import StepReview from "./StepReview";
-import { STEPS, emptyForm } from "../constants/eventOptions";
+import { STEPS, emptyForm } from "../../../../constants/eventOptions";
 import Alert from "@/assets/alert";
 import { Button } from "@/components/ui/button";
+import type { AlertState, AlertType } from "./types";
 
 const API_URL = "https://ticketing-management-system-be.onrender.com/api/Events";
 
-const getStoredToken = () => {
+const getStoredToken = (): string => {
   if (typeof window === "undefined") return "";
 
   const tokenKeys = ["token", "accessToken", "authToken", "jwt", "bearerToken"];
@@ -24,7 +25,7 @@ const getStoredToken = () => {
   return "";
 };
 
-const toIsoDateTime = (date, time) => {
+const toIsoDateTime = (date: string, time: string): string => {
   if (!date) return "";
 
   const timePart = time || "00:00";
@@ -33,18 +34,23 @@ const toIsoDateTime = (date, time) => {
   return Number.isNaN(parsed.getTime()) ? "" : parsed.toISOString();
 };
 
-export default function CreateEventModal() {
+interface CreateEventModalProps {
+  isOpen: boolean;
+  onClose?: () => void;
+}
+
+const CreateEventModal = ({ onClose }: CreateEventModalProps) => {
   const [stepIndex, setStepIndex] = useState(0);
   const [form, setForm] = useState(emptyForm);
-  const [alert, setAlert] = useState(null);
+  const [alert, setAlert] = useState<AlertState | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const update = (patch) => setForm((f) => ({ ...f, ...patch }));
+  const update = (patch: Partial<typeof emptyForm>) => setForm((f) => ({ ...f, ...patch }));
 
   const goNext = () => setStepIndex((i) => Math.min(i + 1, STEPS.length - 1));
   const goBack = () => setStepIndex((i) => Math.max(i - 1, 0));
 
-  const showAlert = (type, title, message) => {
+  const showAlert = (type: AlertType, title: string, message: string) => {
     setAlert({ type, title, message });
     window.setTimeout(() => setAlert(null), 4500);
   };
@@ -67,7 +73,7 @@ export default function CreateEventModal() {
       state: form.state,
       city: form.city,
       eventDate: toIsoDateTime(form.startDate, form.startTime),
-      bannerUrl: form.bannerPreview || "",
+      bannerUrl: form.bannerUrl || "",
       eventPolicy: form.refundPolicy,
       availabilityStart: toIsoDateTime(form.startDate, form.startTime),
       availabilityEnd: toIsoDateTime(form.endDate || form.startDate, form.startTime),
@@ -93,6 +99,17 @@ export default function CreateEventModal() {
       });
 
       const responseText = await response.text();
+      console.log("Token:", token);
+console.log("Status:", response.status);
+console.log("Response:", responseText);
+
+
+
+console.log(
+  "Payload JSON:",
+  JSON.stringify(payload, null, 2)
+);
+
       const responseBody = responseText ? JSON.parse(responseText) : null;
 
       if (!response.ok) {
@@ -135,9 +152,10 @@ export default function CreateEventModal() {
             message={alert.message}
             onClose={() => setAlert(null)}
           />
+          
         </div>
       )}
-
+        
       <div className="w-full max-w-xl bg-neutral-1000 rounded-2xl border border-neutral-800 shadow-2xl p-6">
         <div className="flex items-start justify-between mb-5">
           <div>
@@ -147,6 +165,7 @@ export default function CreateEventModal() {
           <Button
             type="button"
             variant="inactive"
+            onClick={onClose}
             className="h-9 w-9 rounded-full p-0 text-neutral-500 hover:text-neutral-300"
             aria-label="Close"
           >
@@ -190,3 +209,5 @@ export default function CreateEventModal() {
     </div>
   );
 }
+
+export default CreateEventModal;

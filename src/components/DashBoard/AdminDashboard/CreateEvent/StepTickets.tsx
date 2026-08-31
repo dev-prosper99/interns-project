@@ -1,15 +1,21 @@
 import React from "react";
 import { Plus, Trash2 } from "lucide-react";
 import { TextInput } from "./FormControls";
-import { emptyTier } from "../constants/eventOptions";
+import { emptyTier } from "../../../../constants/eventOptions";
 import { Button } from "@/components/ui/button";
+import type { EventFormData, FormUpdater, Tier } from "./types";
 
-export default function StepTickets({ form, update }) {
-  const setTier = (id, patch) =>
+interface StepTicketsProps {
+  form: EventFormData;
+  update: FormUpdater;
+}
+
+export default function StepTickets({ form, update }: StepTicketsProps) {
+  const setTier = (id: string, patch: Partial<Tier>) =>
     update({ tiers: form.tiers.map((t) => (t.id === id ? { ...t, ...patch } : t)) });
 
   const addTier = () => update({ tiers: [...form.tiers, emptyTier()] });
-  const removeTier = (id) =>
+  const removeTier = (id: string) =>
     update({ tiers: form.tiers.length > 1 ? form.tiers.filter((t) => t.id !== id) : form.tiers });
 
   return (

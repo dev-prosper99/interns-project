@@ -1,9 +1,4 @@
-const statesByCity = {
-  Lagos: ["Ikeja", "Surulere", "Lekki", "Victoria Island", "Yaba"],
-  Abuja: ["Garki", "Maitama", "Wuse", "Asokoro", "Gwarinpa"],
-  Rivers: ["Port Harcourt", "Obio-Akpor", "Eleme", "Oyigbo"],
-  Oyo: ["Ibadan North", "Ibadan South-West", "Akinyele", "Egbeda"],
-};
+import type { EventFormData } from "../components/DashBoard/AdminDashboard/CreateEvent/types";
 
 export const CATEGORIES = [
   { label: "Music", value: "Music" },
@@ -13,30 +8,19 @@ export const CATEGORIES = [
   { label: "Art", value: "Art" },
 ];
 
-export const STATES = Object.keys(statesByCity).map((state) => ({
-  label: state,
-  value: state,
-}));
-
-export const CITIES = Object.fromEntries(
-  Object.entries(statesByCity).map(([state, cities]) => [
-    state,
-    cities.map((city) => ({ label: city, value: city })),
-  ]),
-);
 
 export const REFUND_POLICIES = [
   {
-    key: "no-refund",
-    label: "No refunds",
+    key: "full-refund",
+    label: "Full refund up to 48 hours before the event",
   },
   {
     key: "partial",
-    label: "Partial refunds",
+    label: "Full refund up to 7 days before the event",
   },
   {
     key: "full",
-    label: "Full refunds",
+    label: "No refunds (all sales final)",
   },
   {
     key: "custom",
@@ -75,7 +59,7 @@ export const emptyTier = () => ({
   description: "",
 });
 
-export const emptyForm = {
+export const emptyForm: EventFormData = {
   title: "",
   description: "",
   category: "",
@@ -85,7 +69,7 @@ export const emptyForm = {
   venue: "",
   state: "",
   city: "",
-  bannerImage: null,
+  bannerUrl: null,
   bannerPreview: "",
   tiers: [emptyTier()],
   promoCode: "",

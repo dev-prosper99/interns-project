@@ -1,8 +1,11 @@
-import React from "react";
-import { STEPS } from "../constants/eventOptions";
+import { STEPS } from "../../../../constants/eventOptions";
 import { TickIcon } from "@/assets/icons";
 
-export default function Stepper({ currentIndex }) {
+interface StepperProps {
+  currentIndex: number;
+}
+
+export default function Stepper({ currentIndex }: StepperProps) {
   return (
     <div className="grid grid-cols-4 overflow-hidden rounded-xl border border-white/10 bg-[#121212] mb-7">
       {STEPS.map((step, i) => {

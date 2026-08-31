@@ -1,7 +1,13 @@
 import React from "react";
-import { REFUND_POLICIES } from "../constants/eventOptions";
+import { REFUND_POLICIES } from "../../../../constants/eventOptions";
+import type { EventFormData } from "./types";
 
-function SummaryField({ label, value }) {
+interface SummaryFieldProps {
+  label: string;
+  value: React.ReactNode;
+}
+
+function SummaryField({ label, value }: SummaryFieldProps) {
   return (
     <div>
       <p className="text-xs text-neutral-500 mb-1">{label}</p>
@@ -10,7 +16,11 @@ function SummaryField({ label, value }) {
   );
 }
 
-export default function StepReview({ form }) {
+interface StepReviewProps {
+  form: EventFormData;
+}
+
+export default function StepReview({ form }: StepReviewProps) {
   const refundLabel = REFUND_POLICIES.find((p) => p.key === form.refundPolicy)?.label;
   const totalTickets = form.tiers.reduce((sum, t) => sum + (Number(t.quantity) || 0), 0);
 

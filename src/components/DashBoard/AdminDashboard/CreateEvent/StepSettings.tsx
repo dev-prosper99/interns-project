@@ -1,8 +1,14 @@
 import React from "react";
 import { TextInput, TextArea, RadioOption } from "./FormControls";
-import { REFUND_POLICIES } from "../constants/eventOptions";
+import { REFUND_POLICIES } from "../../../../constants/eventOptions";
+import type { EventFormData, FormUpdater } from "./types";
 
-export default function StepSettings({ form, update }) {
+interface StepSettingsProps {
+  form: EventFormData;
+  update: FormUpdater;
+}
+
+export default function StepSettings({ form, update }: StepSettingsProps) {
   return (
     <div className="space-y-7">
       <div>

@@ -1,11 +1,11 @@
-import type { SVGProps } from "react";
+import type { ReactElement, SVGProps } from "react";
 
 export type DashboardStat = {
   title: string;
   value: string;
   change: string;
   trend: "up" | "down";
-  icon: (props: SVGProps<SVGSVGElement>) => JSX.Element;
+  icon: (props: SVGProps<SVGSVGElement>) => ReactElement;
   iconBg: string;
   iconColor: string;
 };
@@ -49,3 +49,4 @@ const DashboardStatCard = ({ stat }: Props) => {
 };
 
 export default DashboardStatCard;
+export { DashboardStatCard };
