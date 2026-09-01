@@ -99,9 +99,7 @@ const CreateEventModal = ({ onClose }: CreateEventModalProps) => {
       });
 
       const responseText = await response.text();
-      console.log("Token:", token);
-console.log("Status:", response.status);
-console.log("Response:", responseText);
+     
 
 
 
