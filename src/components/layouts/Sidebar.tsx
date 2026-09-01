@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   DashboardIcon,
   EventIcon,
@@ -12,60 +12,60 @@ import {
   DownarrowIcon
 } from "@/assets/icons";
 import logo from "@/assets/images/logo.png";
-
+ 
 const navItems = [
-  { label: "Dashboard", icon: DashboardIcon },
-  { label: "Events", icon: EventIcon },
-  { label: "Tickets", icon: TicketIcon },
-  { label: "Analytics", icon: AnalyticsIcon },
-  { label: "Transactions", icon: TransactionIcon },
-  { label: "Attendees", icon: AttendeeIcon },
-  { label: "Settings", icon: SettingsIcon },
+  { label: "Dashboard", icon: DashboardIcon, path: "/dashboard" },
+  { label: "Events", icon: EventIcon, path: "/events" },
+  { label: "Tickets", icon: TicketIcon, path: "/tickets" },
+  { label: "Analytics", icon: AnalyticsIcon, path: "/analytics" },
+  { label: "Transactions", icon: TransactionIcon, path: "/transactions" },
+  { label: "Attendees", icon: AttendeeIcon, path: "/attendees" },
+  { label: "Settings", icon: SettingsIcon, path: "/settings" },
 ];
-
+ 
 export default function Sidebar() {
-  const [active, setActive] = useState<string>("Dashboard");
   const [showLogoutMenu, setShowLogoutMenu] = useState(false);
   const navigate = useNavigate();
-
+  const location = useLocation();
+ 
   const displayName =
     (localStorage.getItem("fullName") ||
       localStorage.getItem("firstName") ||
       "User")
       .trim()
       .replace(/\s+/g, " ") || "User";
-
+ 
   const userEmail =
     (localStorage.getItem("email") || "your@email.com").trim() ||
     "your@email.com";
-
+ 
   const initials = displayName
     .split(" ")
     .filter(Boolean)
     .slice(0, 2)
     .map((part) => part[0]?.toUpperCase())
     .join("") || "U";
-
+ 
   const handleLogout = () => {
     localStorage.clear();
     setShowLogoutMenu(false);
     navigate("/login");
   };
-
+ 
   return (
     <aside className="h-screen w-56 bg-neutral-1000 flex flex-col px-3 py-5 sticky top-0">
       <div className="flex-1">
         <div className="flex items-center gap-2 px-2 mb-8">
           <img src={logo} alt="Logo" className="h-8 w-auto" />
         </div>
-
+ 
         <nav className="flex flex-col gap-1">
-          {navItems.map(({ label, icon: Icon }) => {
-            const isActive = active === label;
+          {navItems.map(({ label, icon: Icon, path }) => {
+            const isActive = location.pathname.startsWith(path);
             return (
               <button
                 key={label}
-                onClick={() => setActive(label)}
+                onClick={() => navigate(path)}
                 className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-left
                   ${
                     isActive
@@ -77,14 +77,13 @@ export default function Sidebar() {
                   color={isActive ? "white" : "#A2A4A9"}
                   style={{ fontWeight: isActive ? 700 : 400 }}
                 />
-
                 {label}
               </button>
             );
           })}
         </nav>
       </div>
-
+ 
       <div className="mt-auto pt-4 border-t border-white/5 relative">
         <button
           type="button"
@@ -110,7 +109,7 @@ export default function Sidebar() {
             <DownarrowIcon />
           </span>
         </button>
-
+ 
         {showLogoutMenu && (
           <div className="absolute bottom-full left-0 right-0 mb-2 rounded-xl bg-neutral-800 overflow-hidden shadow-lg">
             <button
@@ -127,3 +126,4 @@ export default function Sidebar() {
     </aside>
   );
 }
+ 

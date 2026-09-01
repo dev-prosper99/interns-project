@@ -8,20 +8,22 @@ import Login from "./pages/Authentication/Login";
 
 
 import Dashboard from "./pages/Dashboard";
+import TicketsPage from "./components/DashBoard/Tickets/TicketsPage";
 
 function App() {
   return (
     <div>
       <Routes>
         
-        <Route path="/home" element={<Home />} />
+        <Route path="/" element={<Home />} />
+        <Route path="/tickets" element={<TicketsPage />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/discover" element={<Discover />} />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/Dashboard" element={<Dashboard />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </div>
   );
