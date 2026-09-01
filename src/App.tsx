@@ -5,10 +5,11 @@ import ContactUs from "./pages/ContactUs";
 import AboutUs from "./pages/AboutUs";
 import SignUp from "./pages/Authentication/SignUp";
 import Login from "./pages/Authentication/Login";
+import Analytics from "./components/DashBoard/AdminDashboard/Analytics/AnalyticsPage";
 
 
 import Dashboard from "./pages/Dashboard";
-import TicketsPage from "./components/DashBoard/Tickets/TicketsPage";
+import TicketsPage from "./components/DashBoard/AdminDashboard/Tickets/TicketsPage";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/analytics" element={<Analytics />} />
       </Routes>
     </div>
   );
