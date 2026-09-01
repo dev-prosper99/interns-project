@@ -1128,3 +1128,13 @@ export const WalletIcon = (props: SVGProps<SVGSVGElement>) => {
 </svg>
   );
 } 
+
+export const ExportIcon = (props: SVGProps<SVGSVGElement>) => {
+  return(
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"{...props}>
+<path d="M2.57918 8.33301C2.52701 8.71385 2.5 9.1034 2.5 9.49967C2.5 13.918 5.85786 17.4997 10 17.4997C14.1421 17.4997 17.5 13.918 17.5 9.49967C17.5 9.10339 17.473 8.71385 17.4208 8.33301" stroke="white" stroke-width="1.25" stroke-linecap="round"/>
+<path d="M9.99935 2.49967L9.99935 10.833M9.99935 2.49967C9.41583 2.49967 8.32562 4.16159 7.91602 4.58301M9.99935 2.49967C10.5829 2.49967 11.6731 4.16159 12.0827 4.58301" stroke="white" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+
+  );
+};

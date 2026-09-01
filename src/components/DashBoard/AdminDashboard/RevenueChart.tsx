@@ -27,10 +27,16 @@ const fallbackData = [
 ];
 
 type Props = {
-  data?: Array<{ name?: string; value?: number; month?: string; revenue?: number }>;
+  range?: string;
+  data?: Array<{
+    name?: string;
+    value?: number;
+    month?: string;
+    revenue?: number;
+  }>;
 };
 
-const RevenueChart: React.FC<Props> = ({ data }) => {
+const RevenueChart: React.FC<Props> = ({ data, range }) => {
   const chartData = (data ?? fallbackData).map((d) => {
     const month = 'month' in d && typeof d.month === 'string' ? d.month : (d as any).name ?? '';
     const revenue = 'revenue' in d && typeof d.revenue === 'number' ? d.revenue : (d as any).value ?? 0;
@@ -40,7 +46,7 @@ const RevenueChart: React.FC<Props> = ({ data }) => {
   return (
     <div className="bg-[#111111] border border-[#262626] rounded-2xl p-6 h-full flex flex-col">
       <h2 className="text-2xl font-semibold text-white mb-8">Monthly revenue performance</h2>
-
+     <div className="h-100  pt-4 ">
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart data={chartData}>
           <defs>
@@ -82,6 +88,7 @@ const RevenueChart: React.FC<Props> = ({ data }) => {
           />
         </AreaChart>
       </ResponsiveContainer>
+      </div>
     </div>
   );
 };
