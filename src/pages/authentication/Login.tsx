@@ -107,6 +107,8 @@ const Login = () => {
       );
  
       const data = await response.json();
+      
+      
 
       if (!response.ok) {
         throw new Error(data.message || "Invalid email or password");
@@ -144,10 +146,23 @@ const Login = () => {
         title: "Login Successful",
         message: "Welcome back!",
       });
+      const payload = JSON.parse(atob(authToken.split(".")[1]));
 
-      navigate("/Dashboard");
+const role =
+  payload[
+    "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+  ];
+
+localStorage.setItem("role", role);
+      
+
+    
+      if (role === "Organizer") {
+        navigate("/dashboard");
+      }
+      else navigate("atendee-dashboard");
     } catch (error) {
-      console.error("Login error:", error);
+
  
       if (error instanceof Error) {
         setAlert({
