@@ -1,4 +1,3 @@
-import React from "react";
 import { TextInput, TextArea, RadioOption } from "./FormControls";
 import { REFUND_POLICIES } from "../../../../constants/eventOptions";
 import type { EventFormData, FormUpdater } from "./types";

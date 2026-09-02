@@ -14,7 +14,7 @@ const images = [event1, event2, event3, event4, event5, event6];
 
 function SectionHeader({ title, subtitle }: { title: string; subtitle: string }) {
   return (
-    <div className="flex items-center justify-between mb-8">
+    <div className="flex items-center max-w-6xl mx-auto justify-between mb-8">
       <div>
         <h2 className="text-white text-2xl font-bold">{title}</h2>
         <p className="text-neutral-400 text-sm mt-1">{subtitle}</p>
@@ -34,6 +34,7 @@ function SectionHeader({ title, subtitle }: { title: string; subtitle: string })
 export default function UpcomingEvents() {
     return (
       <div className="pl-6 md:pl-30 py-16 bg-neutral-950">
+        <div className="max-w-6xl mx-auto">
         <div className="pr-6 md:pr-30">
         <SectionHeader
          title="Upcoming Events"
@@ -57,6 +58,7 @@ export default function UpcomingEvents() {
            </div>
          ))}
         </div>
+        </div>      
       </div>
  );
 }
