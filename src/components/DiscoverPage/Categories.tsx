@@ -20,7 +20,7 @@ const Categories = () => {
         {filterCategories.map((category) => (
           <button
             key={category.value}
-            className="  border-gray-700 rounded-[10px] m-2 radius-10px p-2  text-white  border-2 hover:bg-[#7C3AED]"
+            className="  border-gray-700 rounded-[10px] m-2 radius-10px p-2  text-white  border-2 hover:bg-purple-500"
           >
             {category.label}
           </button>

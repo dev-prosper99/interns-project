@@ -909,3 +909,47 @@ export const BellIcon = (props: SVGProps<SVGSVGElement>) => (
 </svg>
   </svg>
 );
+
+export const DeleteIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    {...props}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <svg width="20" height="22" viewBox="0 0 20 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M17.25 4.25L16.6303 14.2751C16.4719 16.8364 16.3928 18.1171 15.7508 19.0379C15.4333 19.4931 15.0247 19.8773 14.5507 20.166C13.5921 20.75 12.309 20.75 9.74274 20.75C7.17312 20.75 5.8883 20.75 4.92905 20.1649C4.4548 19.8757 4.046 19.4908 3.72868 19.0348C3.08688 18.1126 3.00945 16.8301 2.85461 14.2652L2.25 4.25" stroke="#D42620" stroke-width="1.5" stroke-linecap="round"/>
+<path d="M0.75 4.25H18.75M13.8057 4.25L13.1231 2.84173C12.6696 1.90626 12.4428 1.43852 12.0517 1.14681C11.965 1.0821 11.8731 1.02454 11.777 0.974701C11.3439 0.75 10.8241 0.75 9.78453 0.75C8.71883 0.75 8.18598 0.75 7.74568 0.98412C7.6481 1.03601 7.55498 1.0959 7.46729 1.16317C7.07164 1.4667 6.85063 1.95155 6.40861 2.92126L5.80292 4.25" stroke="#D42620" stroke-width="1.5" stroke-linecap="round"/>
+<path d="M7.25 15.25L7.25 9.25" stroke="#D42620" stroke-width="1.5" stroke-linecap="round"/>
+<path d="M12.25 15.25L12.25 9.25" stroke="#D42620" stroke-width="1.5" stroke-linecap="round"/>
+</svg>
+  </svg>
+);
+
+export const ToggleOffIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    {...props}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <svg width="22" height="14" viewBox="0 0 22 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M9.75 6.75C9.75 8.40685 8.40685 9.75 6.75 9.75C5.09315 9.75 3.75 8.40685 3.75 6.75C3.75 5.09315 5.09315 3.75 6.75 3.75C8.40685 3.75 9.75 5.09315 9.75 6.75Z" stroke="#A2A4A9" stroke-width="1.5"/>
+<path d="M14.75 0.75H6.75C3.43629 0.75 0.75 3.43629 0.75 6.75C0.75 10.0637 3.43629 12.75 6.75 12.75H14.75C18.0637 12.75 20.75 10.0637 20.75 6.75C20.75 3.43629 18.0637 0.75 14.75 0.75Z" stroke="#A2A4A9" stroke-width="1.5"/>
+</svg>
+  </svg>
+);
+
+export const CancelCircleIcon = (props: SVGProps<SVGSVGElement>) => (
+  <svg
+    {...props}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M15.9991 16L8 8M8.00085 16L16 8" stroke="white" stroke-width="1.5" stroke-linejoin="round"/>
+<path d="M22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12Z" stroke="white" stroke-width="1.5" stroke-linejoin="round"/>
+</svg>
+  </svg>
+);

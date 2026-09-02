@@ -1,7 +1,7 @@
 import { cva, type VariantProps } from "class-variance-authority";
-
+ 
 import { cn } from "@/lib/utils";
-
+ 
 const buttonVariants = cva(
   "inline-flex items-center justify-center whitespace-nowrap font-medium transition-colors outline-none select-none disabled:pointer-events-none",
   {
@@ -13,9 +13,20 @@ const buttonVariants = cva(
           "bg-purple-500/10 text-purple-500 border border-purple-500/24 hover:bg-purple-500/24 focus-visible:border-[1.5px] focus-visible:border-purple-500/24 disabled:bg-neutral-900 disabled:text-neutral-500 disabled:border-neutral-800",
         outline:
           "bg-transparent text-orange-600 border border-orange-600 hover:bg-orange-600/16 focus-visible:border-[1.5px] focus-visible:border-orange-600 disabled:bg-neutral-900 disabled:text-neutral-500 disabled:border-neutral-800",
+        // New: red Confirm button for destructive actions (Delete Event modal)
+        destructive:
+          "bg-[#D42620] text-white hover:bg-[#B91F1A] focus-visible:ring-2 focus-visible:ring-[#DD514D]/40 disabled:bg-neutral-900 disabled:text-neutral-500",
+        // New: gray Cancel button used alongside primary/destructive in modals
+        neutral:
+          "bg-[#282A2D] text-neutral-300 hover:bg-neutral-800 focus-visible:ring-2 focus-visible:ring-neutral-700 disabled:bg-neutral-900 disabled:text-neutral-600",
+        // New: solid brand-orange CTA (Edit button, Create Event button)
+        accent:
+          "bg-[#EA580C] text-white hover:bg-[#C2410C] focus-visible:ring-2 focus-visible:ring-orange-300 disabled:bg-neutral-900 disabled:text-neutral-500",
       },
       size: {
         sm: "rounded-[10px] px-4 py-1.5 gap-2.5 text-sm",
+        // New: 44px-tall size used by modal Confirm/Cancel buttons
+        lg: "rounded-[10px] px-6 py-2.5 gap-2.5 text-sm",
       },
     },
     defaultVariants: {
@@ -24,7 +35,7 @@ const buttonVariants = cva(
     },
   },
 );
-
+ 
 function Button({
   className,
   variant = "primary",
@@ -39,5 +50,6 @@ function Button({
     />
   );
 }
-
+ 
 export { Button, buttonVariants };
+ 
