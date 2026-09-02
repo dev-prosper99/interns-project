@@ -2,7 +2,7 @@ import { SearchIcon } from "@/assets/icons";
 
 export default function Hero() {
   return (
-    <div className="relative min-h-screen bg-cover bg-center flex flex-col  items-center justify-center text-center bg-[url('/src/assets/hero-bg.png')]">
+    <div className="relative min-h-screen bg-cover bg-center flex flex-col items-center justify-center text-center bg-[url('/src/assets/hero-bg.png')]">
       <div className="pt-20 pb-12 sm:pb-20 px:6 min-h-screen z-10 w-full h-full flex flex-col items-center justify-center gap-6 px-4 md:px-0 bg-linear-to-b from-[rgba(63,15,145,0.48)] to-[rgba(16,2,39,0.8)]">
         {/* Badge */}
         <div className=" flex items-center gap-2 border border-neutral-400 rounded-full px-3 py-3 text-neutral-50 text-sm font-medium">

@@ -22,6 +22,7 @@ export default function Testimonials() {
 
   return (
     <div className="bg-neutral-950 py-16 px-6 md:px-30">
+      <div className="max-w-6xl mx-auto">
       <h2 className="text-white text-2xl font-bold mb-2">
         What people are saying about us
       </h2>
@@ -46,6 +47,7 @@ export default function Testimonials() {
             </div>
           </div>
         ))}
+      </div>
       </div>
     </div>
   );

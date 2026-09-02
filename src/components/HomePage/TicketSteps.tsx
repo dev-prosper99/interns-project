@@ -19,6 +19,7 @@ export default function TicketSteps() {
   
   return (
     <div className="bg-neutral-950 py-16 px-6 md:px-30 ">
+      <div className="max-w-6xl mx-auto">
       <h2 className="text-white text-2xl font-bold mb-2">
         Your ticket in 3 simple steps
       </h2>
@@ -35,6 +36,7 @@ export default function TicketSteps() {
             cardText={s.text}
           />
         ))}
+      </div>
       </div>
     </div>
   );

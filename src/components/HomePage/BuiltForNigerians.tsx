@@ -23,6 +23,7 @@ export default function BuiltForNigerians() {
   
   return (
     <div className="bg-neutral-950 py-16 px-6 md:px-30">
+      <div className="max-w-6xl mx-auto">
       <h2 className="text-white text-2xl font-bold mb-2">
         Built for Nigerians, loved globally
       </h2>
@@ -39,6 +40,7 @@ export default function BuiltForNigerians() {
             cardText={f.text}
           />
         ))}
+      </div>
       </div>
     </div>
   );
