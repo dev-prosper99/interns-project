@@ -57,13 +57,13 @@ export default function Analytics() {
   }
 
   return (
-    <div className="flex min-h-screen bg-neutral-900">
+    <div className="flex min-h-screen bg-neutral-950">
       <Sidebar />
 
-      <main className="flex-1">
+      <main className="flex-1" >
         <AnalyticsHeader />
 
-        <div className="px-6 flex items-center justify-between">
+        <div className="p-6 flex items-center justify-between">
           <p className="text-white text-[24px] font-medium">
             Insights across all your events
           </p>

@@ -13,7 +13,7 @@ function formatNaira(value: number) {
 
 export function TicketsTable({ tickets, onEdit }: TicketsTableProps) {
   return (
-    <div className="overflow-x-auto rounded-lg border border-neutral-800">
+    <div className="overflow-x-auto rounded-lg border border-neutral-800 p-6">
       <table className="w-full text-sm">
         <thead>
           <tr className="border-b border-neutral-800 text-left text-neutral-400">

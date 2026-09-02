@@ -19,7 +19,7 @@ const RecentEvents = () => {
     const fetchEvents = async () => {
       try {
         const response = await fetch(
-  "https://ticketing-management-system-be.onrender.com/api/Events/published"
+  "https://ticketing-management-system-be.onrender.com/api/Events"
 );
         const data = await response.json();
         console.log(data);

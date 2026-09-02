@@ -84,6 +84,7 @@ export default function TicketsPage() {
   const goToNextPage = () => setPage((p) => Math.min(totalPages, p + 1));
 
   return (
+    
 
     <div className="flex bg-neutral-950 min-h-screen text-white">
       
@@ -91,12 +92,14 @@ export default function TicketsPage() {
       
       <div className="flex-1">
         <TicketHeader />
+        <div className="p-6">
     
-      <div className="rounded-xl border border-neutral-800 bg-neutral-900/50 p-6">
+      <div className="rounded-xl border border-neutral-800 bg-neutral-900/50 p-6 ">
         <h2 className="text-lg font-medium mb-5">Ticket Management</h2>
 
         {/* Stats */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+        
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6  ">
           <StatCard
             icon={TicketIcon}
             iconColor="text-orange-400"
@@ -193,9 +196,13 @@ export default function TicketsPage() {
           </Select>
         </div>
         </div>
+        </div>
+        
 
-        {/* Table */}
+        <div className="p-6">
         <TicketsTable tickets={paginatedTickets} onEdit={handleEditClick} />
+        </div>
+        
 
         {/* Pagination */}
         <div className="flex items-center justify-between mt-5">

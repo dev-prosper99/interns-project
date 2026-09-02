@@ -12,7 +12,7 @@ import Newsletter from "@/components/HomePage/NewsLetter";
 import CtaBanner from "@/components/HomePage/CtaBanner";
  
 
-import EventDetail from "./EventDetail";
+
 
 const Home = () => {
   return (

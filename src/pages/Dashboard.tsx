@@ -24,7 +24,7 @@ const Dashboard = () => {
         <Sidebar />
       </div>
  
-      <div className="flex-1 bg-neutral-900">
+      <div className="flex-1 bg-neutral-950">
         <DashboardHeader onMenuClick={() => setIsSidebarOpen(true)} />
  
         {isSidebarOpen && (
