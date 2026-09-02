@@ -8,11 +8,16 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary:
-          "bg-purple-500 text-white hover:bg-purple-400 focus-visible:bg-purple-600 focus-visible:ring-2 focus-visible:ring-purple-300 disabled:bg-neutral-900 disabled:text-neutral-500",
+          "bg-purple-500 text-white hover:bg-purple-400 focus-visible:bg-purple-600 focus-visible:ring-2 focus-visible:ring-purple-300 disabled:bg-neutral-900 disabled:text-neutral-500 h-11",
         secondary:
           "bg-purple-500/10 text-purple-500 border border-purple-500/24 hover:bg-purple-500/24 focus-visible:border-[1.5px] focus-visible:border-purple-500/24 disabled:bg-neutral-900 disabled:text-neutral-500 disabled:border-neutral-800",
         outline:
           "bg-transparent text-orange-600 border border-orange-600 hover:bg-orange-600/16 focus-visible:border-[1.5px] focus-visible:border-orange-600 disabled:bg-neutral-900 disabled:text-neutral-500 disabled:border-neutral-800",
+        dark: "flex w-full items-center justify-center gap-2 rounded-lg bg-neutral-900 py-3 text-white h-11 transition-colors focus-visible:bg-[#1D1E20]/90 disabled:bg-neutral-900 disabled:text-neutral-500 disabled:border-neutral-800",
+        inactive:
+          "bg-transparent text-neutral-400 hover:bg-transparent hover:text-white",
+        yellow:
+          "bg-orange-500 text-white hover:bg-orange-400 focus-visible:bg-orange-600 focus-visible:ring-2 focus-visible:ring-orange-300 disabled:bg-neutral-900 disabled:text-neutral-500",
         // New: red Confirm button for destructive actions (Delete Event modal)
         destructive:
           "bg-[#D42620] text-white hover:bg-[#B91F1A] focus-visible:ring-2 focus-visible:ring-[#DD514D]/40 disabled:bg-neutral-900 disabled:text-neutral-500",

@@ -4,7 +4,18 @@ import partynight2 from "../assets/images/partynight2.png";
 import { CalenderIcon, LocationIcon } from "@/assets/icons";
 import location from "../assets/images/location.png";
 import organizer from "../assets/images/organizer.jpg";
+const about = [
+    "Get ready for the most electrifying night of the year. Afrobeats & Vibes Festival 2026 brings together Africa's hottest acts for one unforgettable evening of music, dance, and culture. From Afrobeats to Amapiano, Highlife to Afropop — every beat tells a story.",
+    "Join thousands of music lovers under the stars at the iconic Eko Hotel grounds as we celebrate the global phenomenon that is African music. World-class production, celebrity appearances, and non-stop entertainment from 6pm till dawn.",
+    "Featuring: Burna Boy, Davido,Tiwa Savage, Wizkid, Ayra Starr, and many surprise guests. Getready for the most electrifying night of the year. Afrobeats & Vibes Festival 2026 brings together Africa's hottest acts for one unforgettable evening of music, dance, and culture. From Afrobeats to Amapiano, Highlife to Afropop — every beat tells a story.",
+    "Join thousands of music lovers under the stars at the iconic Eko Hotel grounds as we celebrate the global phenomenon that is African music. World-class production, celebrity appearances, and non-stop entertainment from 6pm till dawn. Featuring: Burna Boy, Davido, Tiwa Savage, Wizkid, Ayra Starr, and many surprise guests.",
+  ];
+
 const EventDetail = ({ EventsIndex = 0 }) => {
+  const [regularQty, setRegularQty] = useState(0);
+  const [vipQty, setVipQty] = useState(0);
+  const [vvipQty, setVvipQty] = useState(0);
+  
   const events = Events[EventsIndex] ?? Events[0];
   const {
     eventTitle,
@@ -17,19 +28,8 @@ const EventDetail = ({ EventsIndex = 0 }) => {
     vip_ticketPrice,
     vvip_ticketPrice,
   } = events;
-  const about = [
-    "Get ready for the most electrifying night of the year. Afrobeats & Vibes Festival 2026 brings together Africa's hottest acts for one unforgettable evening of music, dance, and culture. From Afrobeats to Amapiano, Highlife to Afropop — every beat tells a story.",
-    "Join thousands of music lovers under the stars at the iconic Eko Hotel grounds as we celebrate the global phenomenon that is African music. World-class production, celebrity appearances, and non-stop entertainment from 6pm till dawn.",
-    "Featuring: Burna Boy, Davido,Tiwa Savage, Wizkid, Ayra Starr, and many surprise guests. Getready for the most electrifying night of the year. Afrobeats & Vibes Festival 2026 brings together Africa's hottest acts for one unforgettable evening of music, dance, and culture. From Afrobeats to Amapiano, Highlife to Afropop — every beat tells a story.",
-    "Join thousands of music lovers under the stars at the iconic Eko Hotel grounds as we celebrate the global phenomenon that is African music. World-class production, celebrity appearances, and non-stop entertainment from 6pm till dawn. Featuring: Burna Boy, Davido, Tiwa Savage, Wizkid, Ayra Starr, and many surprise guests.",
-  ];
-    const [regularQty, setRegularQty] = useState(0);
-    const [vipQty, setVipQty] = useState(0);
-    const [vvipQty, setVvipQty] = useState(0);
-    
   
   return (
-    
     <div className="min-h-screen bg-black text-white">
       <div className="flex items-center gap-2 bg-neutral-925 py-5 px-4 sm:px-10 lg:px-24 xl:px-60">
         <p className="text-neutral-400 text-sm">Back</p>

@@ -28,7 +28,7 @@ const footerItems = [
 const Footer = () => {
   return (
     <footer className="w-full bg-[#1d1e20] px-4 py-8 text-white">
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-6xl ">
         <div className="grid gap-6 border-b border-neutral-600 pb-6 md:grid-cols-5 lg:gap-8">
           <div className="max-w-60">
             <img src={logo} alt="Tix logo" className="mb-3 h-8 w-auto" />
@@ -53,7 +53,7 @@ const Footer = () => {
           ))}
         </div>
 
-        <div className="mt-6 flex items-center justify-between gap-4">
+        <div className="mt-6 flex flex-wrap w-1/2 items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <Link
               to="#"

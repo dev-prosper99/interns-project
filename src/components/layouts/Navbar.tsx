@@ -3,16 +3,21 @@ import { Button } from "../ui/button";
 import { NavLink, useNavigate } from "react-router-dom";
 import logo from "@/assets/images/logo.png";
 
+
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const navigateToLogin = (pageLink: string) => {
     navigate(`/${pageLink}`, { replace: true });
   };
   return (
-    <nav className="w-full bg-black/90 ">
+    <nav className="w-full bg-black/90 border-t-2 fixed  px-20 z-50">
       <div className="max-w-6xl mx-auto h-16  flex items-center justify-between">
         <div>
-          <img src={logo} alt="Logo" className="h-8 w-auto flex justify-center" />
+          <img
+            src={logo}
+            alt="Logo"
+            className="h-8 w-auto flex justify-center"
+          />
         </div>
 
         <ul className="hidden md:flex items-center gap-8 text-sm text-white">
@@ -21,16 +26,7 @@ const Navbar: React.FC = () => {
               Discover
             </NavLink>
           </li>
-          <li>
-            <NavLink to="/about-us" className="hover:text-purple-400">
-              About Us
-            </NavLink>
-          </li>
-          <li>
-            <NavLink to="/contact-us" className="hover:text-purple-400">
-              Contact Us
-            </NavLink>
-          </li>
+          
         </ul>
 
         <div className="flex items-center gap-4">

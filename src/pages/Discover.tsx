@@ -1,6 +1,7 @@
 import Footer from "@/components/layouts/Footer";
 import Navbar from "@/components/layouts/Navbar";
-import DiscoverHero from "@/components/DiscoverPage/DiscoverHero";
+import DiscoverHero from "@/components/Discover/DiscoverHero";
+
 
 const Discover = () => {
   return (
@@ -8,6 +9,8 @@ const Discover = () => {
       <Navbar />
 
       <DiscoverHero />
+      
+
       <Footer />
     </div>
   );
