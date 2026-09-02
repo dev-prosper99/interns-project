@@ -1,4 +1,3 @@
-import React from "react";
 import { DeleteIcon, PlusIcon } from "@/assets/icons";
 import { TextInput } from "./FormControls";
 import { emptyTier } from "../../../../constants/eventOptions";
