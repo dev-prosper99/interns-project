@@ -160,10 +160,10 @@ localStorage.setItem("role", role);
       if (role === "Organizer") {
         navigate("/dashboard");
       }
-      else navigate("atendee-dashboard");
+      else navigate("/attendee-dashboard");
     } catch (error) {
-
- 
+        
+            
       if (error instanceof Error) {
         setAlert({
           type: "error",

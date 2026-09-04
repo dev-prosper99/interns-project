@@ -19,10 +19,11 @@ interface EventsTableProps {
   onViewClick: (event: EventRowData) => void;
   onDeleteClick: (event: EventRowData) => void;
   onUnpublishClick: (event: EventRowData) => void;
+  onEditClick: (event: EventRowData) => void
 }
  
 // Full table with Date/Category/Revenue/Status columns — desktop only.
-export default function EventsTable({ events, onViewClick, onDeleteClick, onUnpublishClick }: EventsTableProps) {
+export default function EventsTable({ events, onViewClick, onDeleteClick, onUnpublishClick, onEditClick }: EventsTableProps) {
   return (
     <table className="hidden md:table w-full text-left text-sm">
       <thead>
@@ -70,9 +71,12 @@ export default function EventsTable({ events, onViewClick, onDeleteClick, onUnpu
                   <button aria-label="View event" onClick={() => onViewClick(event)}>
                     <ViewIcon className="w-4 h-4 text-neutral-400 hover:text-white" />
                   </button>
-                  <button aria-label="Edit event">
-                    <Edit02Icon className="w-4 h-4 text-neutral-400 hover:text-white" />
-                  </button>
+                 <button
+  aria-label="Edit event"
+  onClick={() => onEditClick(event)}
+>
+  <Edit02Icon className="w-4 h-4 text-neutral-400 hover:text-white" />
+</button>
                   <button
                     aria-label="Publish/unpublish event"
                     onClick={() => onUnpublishClick(event)}
