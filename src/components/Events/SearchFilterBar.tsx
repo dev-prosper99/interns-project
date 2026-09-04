@@ -1,12 +1,15 @@
 import { Input } from "@/components/ui/input";
 import { SearchRightIcon } from "@/assets/icons";
- 
+
 interface SearchFilterBarProps {
   search: string;
   onSearchChange: (value: string) => void;
 }
- 
-export default function SearchFilterBar({ search, onSearchChange }: SearchFilterBarProps) {
+
+export default function SearchFilterBar({
+  search,
+  onSearchChange,
+}: SearchFilterBarProps) {
   return (
     <div className="flex flex-col gap-3 md:flex-row md:items-center md:gap-4 mb-6">
       <Input

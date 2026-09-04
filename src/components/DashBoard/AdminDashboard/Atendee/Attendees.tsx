@@ -269,11 +269,13 @@ export default function AttendeesPage() {
                         </span>
                       </td>
                       <td className="px-4 py-3">
-                        
-                        <div onClick={() => setSelected(a)} className="flex items-center gap-2 cursor-pointer text-sm font-medium">
+                        <div
+                          onClick={() => setSelected(a)}
+                          className="flex items-center gap-2 cursor-pointer text-sm font-medium"
+                        >
                           <EyeIcon />{" "}
                           <p className="text-purple-500 cursor-pointer">
-                            Veiw  details
+                            Veiw details
                           </p>
                         </div>
                       </td>

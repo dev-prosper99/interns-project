@@ -16,15 +16,16 @@ export function FieldLabel({ children, required }: FieldLabelProps) {
   );
 }
 
-interface TextInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "label"> {
+interface TextInputProps extends Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  "label"
+> {
   required?: boolean;
   label?: string;
 }
 
 export function TextInput({ required, label, ...props }: TextInputProps) {
-  return (
-    <Input label={label} required={required} {...props} />
-  );
+  return <Input label={label} required={required} {...props} />;
 }
 
 interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -57,7 +58,15 @@ interface SelectProps {
   disabled?: boolean;
 }
 
-export function Select({ required, label, options, placeholder, value, onChange, disabled }: SelectProps) {
+export function Select({
+  required,
+  label,
+  options,
+  placeholder,
+  value,
+  onChange,
+  disabled,
+}: SelectProps) {
   return (
     <div>
       {label && <FieldLabel required={required}>{label}</FieldLabel>}
@@ -69,13 +78,15 @@ export function Select({ required, label, options, placeholder, value, onChange,
       >
         <option value="">{placeholder}</option>
         {options.map((option) => {
-          const optionValue = typeof option === "string" ? option : option.value;
-          const optionLabel = typeof option === "string" ? option : option.label;
+          const optionValue =
+            typeof option === "string" ? option : option.value;
+          const optionLabel =
+            typeof option === "string" ? option : option.label;
 
           return (
             <option key={optionValue} value={optionValue}>
               {optionLabel}
-          </option>
+            </option>
           );
         })}
       </select>
@@ -90,18 +101,33 @@ interface RadioOptionProps {
   children?: React.ReactNode;
 }
 
-export function RadioOption({ selected, onClick, label, children }: RadioOptionProps) {
+export function RadioOption({
+  selected,
+  onClick,
+  label,
+  children,
+}: RadioOptionProps) {
   return (
     <div>
-      <button type="button" onClick={onClick} className="w-full flex items-start gap-3 text-left group">
+      <button
+        type="button"
+        onClick={onClick}
+        className="w-full flex items-start gap-3 text-left group"
+      >
         <span
           className={`mt-0.5 shrink-0 w-4 h-4 rounded-full border flex items-center justify-center transition-colors ${
-            selected ? "border-purple-500" : "border-neutral-600 group-hover:border-neutral-400"
+            selected
+              ? "border-purple-500"
+              : "border-neutral-600 group-hover:border-neutral-400"
           }`}
         >
           {selected && <span className="w-2 h-2 rounded-full bg-purple-500" />}
         </span>
-        <span className={`text-sm ${selected ? "text-neutral-100" : "text-neutral-400"}`}>{label}</span>
+        <span
+          className={`text-sm ${selected ? "text-neutral-100" : "text-neutral-400"}`}
+        >
+          {label}
+        </span>
       </button>
       {children}
     </div>

@@ -8,7 +8,6 @@ export const CATEGORIES = [
   { label: "Art", value: "Art" },
 ];
 
-
 export const REFUND_POLICIES = [
   {
     key: "full-refund",

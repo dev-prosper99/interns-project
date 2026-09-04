@@ -6,7 +6,9 @@ export default function EventsPagination() {
         <button className="px-3 py-1 rounded-md bg-neutral-900 border border-neutral-800">
           Prev
         </button>
-        <button className="px-3 py-1 rounded-md bg-indigo-600 text-white">1</button>
+        <button className="px-3 py-1 rounded-md bg-indigo-600 text-white">
+          1
+        </button>
         <button className="px-3 py-1 rounded-md bg-neutral-900 border border-neutral-800">
           Next
         </button>

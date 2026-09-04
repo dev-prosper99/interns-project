@@ -26,9 +26,7 @@ const DashboardStatCard = ({ stat }: Props) => {
           <Icon className={`w-4 h-4 ${stat.iconColor}`} />
         </div>
 
-        <span className="text-sm font-medium text-gray-300">
-          {stat.title}
-        </span>
+        <span className="text-sm font-medium text-gray-300">{stat.title}</span>
       </div>
 
       <h2 className="text-4xl font-bold text-white tracking-tight">

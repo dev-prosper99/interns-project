@@ -1,13 +1,13 @@
 import EventCard from "./EventCard";
 import type { EventRowData } from "./Types";
- 
+
 interface EventCardListProps {
   events: EventRowData[];
   onViewClick: (event: EventRowData) => void;
   onDeleteClick: (event: EventRowData) => void;
   onUnpublishClick: (event: EventRowData) => void;
 }
- 
+
 export default function EventCardList({
   events,
   onViewClick,
@@ -32,4 +32,3 @@ export default function EventCardList({
     </div>
   );
 }
- 

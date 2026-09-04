@@ -1,24 +1,33 @@
 import { useMemo, useState } from "react";
 import {
- type Transaction,
- type TransactionStatus,
+  type Transaction,
+  type TransactionStatus,
   SAMPLE_TRANSACTIONS,
   formatNaira,
 } from "./transactions.data";
 import { TransactionsTable, Pagination } from "./TransactionsTable";
-import { TransactionDetailsModal, RefundConfirmModal } from "./TransactionsModals";
+import {
+  TransactionDetailsModal,
+  RefundConfirmModal,
+} from "./TransactionsModals";
 import Sidebar from "@/components/layouts/Sidebar";
 import TransactionHeader from "./TransctionHeader";
- 
-const STATUS_OPTIONS: Array<TransactionStatus | "All"> = ["All", "Completed", "Pending", "Refunded", "Failed"];
- 
+
+const STATUS_OPTIONS: Array<TransactionStatus | "All"> = [
+  "All",
+  "Completed",
+  "Pending",
+  "Refunded",
+  "Failed",
+];
+
 export interface TransactionsPageProps {
   transactions?: Transaction[];
   onRefund?: (transaction: Transaction) => void | Promise<void>;
   onExport?: () => void;
   pageSize?: number;
 }
- 
+
 export default function TransactionsPage({
   transactions = SAMPLE_TRANSACTIONS,
   onRefund,
@@ -26,15 +35,16 @@ export default function TransactionsPage({
   pageSize = 8,
 }: TransactionsPageProps) {
   const [query, setQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState<TransactionStatus | "All">("All");
+  const [statusFilter, setStatusFilter] = useState<TransactionStatus | "All">(
+    "All",
+  );
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(pageSize);
   const [detailsTxn, setDetailsTxn] = useState<Transaction | null>(null);
   const [refundTxn, setRefundTxn] = useState<Transaction | null>(null);
   const [isRefunding, setIsRefunding] = useState(false);
   const [localTransactions, setLocalTransactions] = useState(transactions);
-  
- 
+
   const filtered = useMemo(() => {
     return localTransactions.filter((t) => {
       const matchesQuery =
@@ -46,47 +56,54 @@ export default function TransactionsPage({
       return matchesQuery && matchesStatus;
     });
   }, [localTransactions, query, statusFilter]);
- 
+
   const totalPages = Math.max(1, Math.ceil(filtered.length / rowsPerPage));
   const currentPage = Math.min(page, totalPages);
-  const paginated = filtered.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
- 
+  const paginated = filtered.slice(
+    (currentPage - 1) * rowsPerPage,
+    currentPage * rowsPerPage,
+  );
+
   const revenueTotal = localTransactions
     .filter((t) => t.status === "Completed")
     .reduce((sum, t) => sum + t.amount, 0);
   const refundedTotal = localTransactions
     .filter((t) => t.status === "Refunded")
     .reduce((sum, t) => sum + t.amount, 0);
- 
+
   function requestRefund(t: Transaction) {
     setDetailsTxn(null);
     setRefundTxn(t);
   }
- 
+
   async function confirmRefund() {
     if (!refundTxn) return;
     setIsRefunding(true);
     try {
       await onRefund?.(refundTxn);
       setLocalTransactions((prev) =>
-        prev.map((t) => (t.id === refundTxn.id ? { ...t, status: "Refunded" } : t))
+        prev.map((t) =>
+          t.id === refundTxn.id ? { ...t, status: "Refunded" } : t,
+        ),
       );
       setRefundTxn(null);
     } finally {
       setIsRefunding(false);
     }
   }
- 
+
   return (
     <div className="flex min-h-screen bg-neutral-950">
       <Sidebar />
- 
+
       <main className="min-w-0 flex-1">
         <TransactionHeader />
- 
+
         <div className="px-6 py-6 text-neutral-50">
           <div className="mb-5 flex items-center justify-between">
-            <h1 className="text-lg font-semibold">Overview of your transactions</h1>
+            <h1 className="text-lg font-semibold">
+              Overview of your transactions
+            </h1>
             <button
               type="button"
               onClick={onExport}
@@ -95,29 +112,50 @@ export default function TransactionsPage({
               Export
             </button>
           </div>
- 
+
           <div className="mb-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-4">
               <div className="mb-2 flex items-center gap-2 text-sm text-neutral-400">
                 <span className="h-2 w-2 rounded-full bg-violet-500" />
                 Revenue
               </div>
-              <div className="text-xl font-semibold text-neutral-50">{formatNaira(revenueTotal)}</div>
+              <div className="text-xl font-semibold text-neutral-50">
+                {formatNaira(revenueTotal)}
+              </div>
             </div>
             <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-4">
               <div className="mb-2 flex items-center gap-2 text-sm text-neutral-400">
                 <span className="h-2 w-2 rounded-full bg-rose-500" />
                 Refunded
               </div>
-              <div className="text-xl font-semibold text-rose-400">{formatNaira(refundedTotal)}</div>
+              <div className="text-xl font-semibold text-rose-400">
+                {formatNaira(refundedTotal)}
+              </div>
             </div>
           </div>
- 
+
           <div className="mb-4 flex flex-wrap gap-3">
             <div className="flex min-w-55 flex-1 items-center gap-2 rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-neutral-400">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                <circle cx="7" cy="7" r="5.25" stroke="currentColor" strokeWidth="1.4" />
-                <path d="M11 11L14 14" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 16 16"
+                fill="none"
+                aria-hidden="true"
+              >
+                <circle
+                  cx="7"
+                  cy="7"
+                  r="5.25"
+                  stroke="currentColor"
+                  strokeWidth="1.4"
+                />
+                <path
+                  d="M11 11L14 14"
+                  stroke="currentColor"
+                  strokeWidth="1.4"
+                  strokeLinecap="round"
+                />
               </svg>
               <input
                 type="text"
@@ -145,9 +183,12 @@ export default function TransactionsPage({
               ))}
             </select>
           </div>
- 
-          <TransactionsTable transactions={paginated} onViewDetails={setDetailsTxn} />
- 
+
+          <TransactionsTable
+            transactions={paginated}
+            onViewDetails={setDetailsTxn}
+          />
+
           <div className="mt-4">
             <Pagination
               currentPage={currentPage}
@@ -161,7 +202,7 @@ export default function TransactionsPage({
               }}
             />
           </div>
- 
+
           {detailsTxn && (
             <TransactionDetailsModal
               transaction={detailsTxn}
@@ -169,7 +210,7 @@ export default function TransactionsPage({
               onRefund={requestRefund}
             />
           )}
- 
+
           {refundTxn && (
             <RefundConfirmModal
               isSubmitting={isRefunding}
@@ -182,4 +223,3 @@ export default function TransactionsPage({
     </div>
   );
 }
- 

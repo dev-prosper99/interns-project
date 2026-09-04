@@ -1,33 +1,51 @@
+import {
+  type Transaction,
+  type TransactionStatus,
+  formatDate,
+  formatNaira,
+} from "./transactions.data";
 
-import {type Transaction, type TransactionStatus, formatDate, formatNaira } from "./transactions.data";
- 
 const BADGE_STYLES: Record<TransactionStatus, string> = {
   Completed: "bg-emerald-500/15 text-emerald-400",
   Pending: "bg-yellow-500/15 text-yellow-400",
   Refunded: "bg-rose-500/15 text-rose-400",
   Failed: "bg-rose-500/15 text-rose-400",
 };
- 
+
 export function StatusBadge({ status }: { status: TransactionStatus }) {
   return (
-    <span className={`inline-block rounded-md px-2.5 py-1 text-xs font-medium ${BADGE_STYLES[status]}`}>
+    <span
+      className={`inline-block rounded-md px-2.5 py-1 text-xs font-medium ${BADGE_STYLES[status]}`}
+    >
       {status}
     </span>
   );
 }
- 
+
 interface TransactionsTableProps {
   transactions: Transaction[];
   onViewDetails: (transaction: Transaction) => void;
 }
- 
-export function TransactionsTable({ transactions, onViewDetails }: TransactionsTableProps) {
+
+export function TransactionsTable({
+  transactions,
+  onViewDetails,
+}: TransactionsTableProps) {
   return (
     <div className="w-full min-w-0 overflow-x-auto rounded-xl border border-neutral-1000">
       <table className="w-full min-w-180 border-collapse text-sm">
         <thead>
           <tr>
-            {["Transaction ID", "Buyer", "Event", "Tickets", "Amount", "Date", "Status", "Action"].map((h) => (
+            {[
+              "Transaction ID",
+              "Buyer",
+              "Event",
+              "Tickets",
+              "Amount",
+              "Date",
+              "Status",
+              "Action",
+            ].map((h) => (
               <th
                 key={h}
                 className="whitespace-nowrap border-b border-neutral-800 px-4 py-3 text-left font-medium text-neutral-400"
@@ -40,15 +58,22 @@ export function TransactionsTable({ transactions, onViewDetails }: TransactionsT
         <tbody>
           {transactions.length === 0 && (
             <tr>
-              <td colSpan={8} className="px-4 py-8 text-center text-neutral-500">
+              <td
+                colSpan={8}
+                className="px-4 py-8 text-center text-neutral-500"
+              >
                 No transactions match your search.
               </td>
             </tr>
           )}
           {transactions.map((t) => (
             <tr key={t.id} className="last:[&>td]:border-b-0 hover:bg-white/2">
-              <td className="whitespace-nowrap border-b border-neutral-800 px-4 py-3 text-neutral-50">{t.id}</td>
-              <td className="whitespace-nowrap border-b border-neutral-800 px-4 py-3 text-neutral-50">{t.buyer}</td>
+              <td className="whitespace-nowrap border-b border-neutral-800 px-4 py-3 text-neutral-50">
+                {t.id}
+              </td>
+              <td className="whitespace-nowrap border-b border-neutral-800 px-4 py-3 text-neutral-50">
+                {t.buyer}
+              </td>
               <td className="whitespace-nowrap border-b border-neutral-800 px-4 py-3 text-neutral-50">
                 {t.event || "—"}
               </td>
@@ -80,7 +105,7 @@ export function TransactionsTable({ transactions, onViewDetails }: TransactionsT
     </div>
   );
 }
- 
+
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
@@ -89,7 +114,7 @@ interface PaginationProps {
   onNext: () => void;
   onRowsPerPageChange: (value: number) => void;
 }
- 
+
 export function Pagination({
   currentPage,
   totalPages,
@@ -141,4 +166,3 @@ export function Pagination({
     </div>
   );
 }
- 

@@ -25,7 +25,7 @@ export default function Newsletter() {
           opacity: 0.6,
         }}
       />
- 
+
       <div className="relative z-10 bg-neutral-950 rounded-xl p-8 max-w-lg w-full text-center flex flex-col gap-4">
         <h3 className="text-white text-xl font-bold">
           Never miss an event again

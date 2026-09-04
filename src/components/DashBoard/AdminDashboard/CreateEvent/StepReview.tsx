@@ -21,12 +21,19 @@ interface StepReviewProps {
 }
 
 export default function StepReview({ form }: StepReviewProps) {
-  const refundLabel = REFUND_POLICIES.find((p) => p.key === form.refundPolicy)?.label;
-  const totalTickets = form.tiers.reduce((sum, t) => sum + (Number(t.quantity) || 0), 0);
+  const refundLabel = REFUND_POLICIES.find(
+    (p) => p.key === form.refundPolicy,
+  )?.label;
+  const totalTickets = form.tiers.reduce(
+    (sum, t) => sum + (Number(t.quantity) || 0),
+    0,
+  );
 
   return (
     <div className="space-y-6">
-      <h3 className="text-sm font-semibold text-neutral-200">Review and Publish</h3>
+      <h3 className="text-sm font-semibold text-neutral-200">
+        Review and Publish
+      </h3>
 
       <div className="grid grid-cols-2 gap-x-6 gap-y-4">
         <SummaryField label="Event Title" value={form.title} />
@@ -54,15 +61,26 @@ export default function StepReview({ form }: StepReviewProps) {
         </p>
         <div className="rounded-lg bg-neutral-800/50 divide-y divide-neutral-700/60 overflow-hidden">
           {form.tiers.map((t) => (
-            <div key={t.id} className="flex items-center justify-between px-4 py-3">
+            <div
+              key={t.id}
+              className="flex items-center justify-between px-4 py-3"
+            >
               <div>
-                <p className="text-sm text-neutral-200">{t.name || "Untitled tier"}</p>
-                <p className="text-xs text-neutral-500">{t.description || "Standard Experience"}</p>
+                <p className="text-sm text-neutral-200">
+                  {t.name || "Untitled tier"}
+                </p>
+                <p className="text-xs text-neutral-500">
+                  {t.description || "Standard Experience"}
+                </p>
               </div>
               <p className="text-sm text-orange-400 font-medium">
-                {Number(t.price) > 0 ? `₦${Number(t.price).toLocaleString()}` : "Free"}
+                {Number(t.price) > 0
+                  ? `₦${Number(t.price).toLocaleString()}`
+                  : "Free"}
               </p>
-              <p className="text-sm text-neutral-400">{Number(t.quantity || 0).toLocaleString()} tickets</p>
+              <p className="text-sm text-neutral-400">
+                {Number(t.quantity || 0).toLocaleString()} tickets
+              </p>
             </div>
           ))}
         </div>
@@ -82,7 +100,11 @@ export default function StepReview({ form }: StepReviewProps) {
       {form.bannerPreview && (
         <div>
           <p className="text-xs text-neutral-500 mb-2">Banner Image</p>
-          <img src={form.bannerPreview} alt="Event banner" className="w-full rounded-lg object-cover max-h-56" />
+          <img
+            src={form.bannerPreview}
+            alt="Event banner"
+            className="w-full rounded-lg object-cover max-h-56"
+          />
         </div>
       )}
     </div>

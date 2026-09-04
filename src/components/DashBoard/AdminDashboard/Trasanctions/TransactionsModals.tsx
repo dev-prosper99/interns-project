@@ -1,6 +1,6 @@
 import React from "react";
-import  {  type Transaction, formatDate, formatNaira } from "./transactions.data";
-import  { StatusBadge } from "./TransactionsTable";
+import { type Transaction, formatDate, formatNaira } from "./transactions.data";
+import { StatusBadge } from "./TransactionsTable";
 
 interface TransactionDetailsModalProps {
   transaction: Transaction;
@@ -8,7 +8,11 @@ interface TransactionDetailsModalProps {
   onRefund: (transaction: Transaction) => void;
 }
 
-export function TransactionDetailsModal({ transaction, onClose, onRefund }: TransactionDetailsModalProps) {
+export function TransactionDetailsModal({
+  transaction,
+  onClose,
+  onRefund,
+}: TransactionDetailsModalProps) {
   const fields: Array<[string, React.ReactNode]> = [
     ["Transaction ID", transaction.id],
     ["Buyer", transaction.buyer],
@@ -19,13 +23,18 @@ export function TransactionDetailsModal({ transaction, onClose, onRefund }: Tran
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" onClick={onClose}>
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+      onClick={onClose}
+    >
       <div
         className="w-full max-w-md rounded-2xl border border-neutral-900 bg-neutral-900 p-6"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-5 flex items-center justify-between">
-          <h2 className="text-base font-semibold text-neutral-50">Transaction Details</h2>
+          <h2 className="text-base font-semibold text-neutral-50">
+            Transaction Details
+          </h2>
           <button
             type="button"
             onClick={onClose}
@@ -69,7 +78,11 @@ interface RefundConfirmModalProps {
   onConfirm: () => void;
 }
 
-export function RefundConfirmModal({ isSubmitting, onCancel, onConfirm }: RefundConfirmModalProps) {
+export function RefundConfirmModal({
+  isSubmitting,
+  onCancel,
+  onConfirm,
+}: RefundConfirmModalProps) {
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
@@ -82,8 +95,12 @@ export function RefundConfirmModal({ isSubmitting, onCancel, onConfirm }: Refund
         <div className="mx-auto mb-4 flex h-11 w-11 items-center justify-center rounded-full bg-rose-500/15 text-lg font-bold text-rose-400">
           !
         </div>
-        <h2 className="mb-2 text-base font-semibold text-neutral-50">Refund Attendee?</h2>
-        <p className="mb-5 text-sm text-neutral-400">Are you sure you want to do this action?</p>
+        <h2 className="mb-2 text-base font-semibold text-neutral-50">
+          Refund Attendee?
+        </h2>
+        <p className="mb-5 text-sm text-neutral-400">
+          Are you sure you want to do this action?
+        </p>
         <div className="flex gap-3">
           <button
             type="button"

@@ -29,7 +29,10 @@ export function TicketsTable({ tickets, onEdit }: TicketsTableProps) {
         <tbody>
           {tickets.length === 0 && (
             <tr>
-              <td colSpan={7} className="px-4 py-12 text-center text-neutral-500">
+              <td
+                colSpan={7}
+                className="px-4 py-12 text-center text-neutral-500"
+              >
                 No ticket tiers match your filters.
               </td>
             </tr>
@@ -42,7 +45,9 @@ export function TicketsTable({ tickets, onEdit }: TicketsTableProps) {
             >
               <td className="px-4 py-3">
                 <p className="font-medium">{ticket.ticketTier}</p>
-                <p className="text-xs text-neutral-500">{ticket.tierSubtitle}</p>
+                <p className="text-xs text-neutral-500">
+                  {ticket.tierSubtitle}
+                </p>
               </td>
               <td className="px-4 py-3 text-neutral-300">{ticket.event}</td>
               <td className="px-4 py-3">

@@ -18,7 +18,9 @@ export function StatCard({
   return (
     <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-5">
       <div className="flex items-center gap-2 mb-4">
-        <span className={`flex h-7 w-7 items-center justify-center rounded-md ${iconBg}`}>
+        <span
+          className={`flex h-7 w-7 items-center justify-center rounded-md ${iconBg}`}
+        >
           <Icon className={`h-4 w-4 ${iconColor}`} />
         </span>
         <span className="text-sm text-neutral-400">{label}</span>

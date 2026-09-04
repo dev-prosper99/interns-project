@@ -1,10 +1,10 @@
-import { useState} from "react";
-import type{ SubmitEvent} from "react";
-import logo from "@/assets/images/logo.png"
-import crowd from "@/assets/images/discover.png"
-import avatar1 from "@/assets/images/PhotoIcon1.png"
-import avatar2 from "@/assets/images/PhotoIcon2.png"
-import avatar3 from "@/assets/images/PhotoIcon3.png"
+import { useState } from "react";
+import type { SubmitEvent } from "react";
+import logo from "@/assets/images/logo.png";
+import crowd from "@/assets/images/discover.png";
+import avatar1 from "@/assets/images/PhotoIcon1.png";
+import avatar2 from "@/assets/images/PhotoIcon2.png";
+import avatar3 from "@/assets/images/PhotoIcon3.png";
 import { BackIcon } from "@/assets/icons";
 import { LockIcon } from "@/assets/icons";
 
@@ -27,11 +27,15 @@ const ForgotPassword = ({ onSubmit, onBackToLogin }: ForgotPasswordProps) => {
     <div className="min-h-screen flex flex-col lg:flex-row bg-black text-white">
       {/* ===== Left panel — desktop only ===== */}
       <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden">
-        <img src={crowd} alt="crowd" className="absolute inset-0 w-full h-full object-cover"/>
+        <img
+          src={crowd}
+          alt="crowd"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
         <div className="absolute inset-0 bg-linear-to-b from-purple-900/70 via-purple-950/60 to-black/90" />
         <div className="relative z-10 flex flex-col justify-between p-10 w-full">
           <div className="flex items-center gap-2">
-            <img src={logo} alt="" className="w-[162.5px] h-16.25"/>
+            <img src={logo} alt="" className="w-[162.5px] h-16.25" />
           </div>
           <div>
             <p className="text-4xl font-bold leading-tight mb-4">
@@ -43,9 +47,21 @@ const ForgotPassword = ({ onSubmit, onBackToLogin }: ForgotPasswordProps) => {
             </p>
             <div className="flex items-center gap-2">
               <div className="flex space-x-3">
-                <img src={avatar1} alt="" className="w-9 h-9 rounded-full border-2 border-orange-500 object-cover"/>
-                <img src={avatar2} alt="" className="w-9 h-9 rounded-full border-2 border-orange-500 object-cover"/>
-                <img src={avatar3} alt="" className="w-9 h-9 rounded-full border-2 border-orange-500 object-cover"/>
+                <img
+                  src={avatar1}
+                  alt=""
+                  className="w-9 h-9 rounded-full border-2 border-orange-500 object-cover"
+                />
+                <img
+                  src={avatar2}
+                  alt=""
+                  className="w-9 h-9 rounded-full border-2 border-orange-500 object-cover"
+                />
+                <img
+                  src={avatar3}
+                  alt=""
+                  className="w-9 h-9 rounded-full border-2 border-orange-500 object-cover"
+                />
               </div>
               <p className="text-sm font-medium">1M+ people already on TixO</p>
             </div>
@@ -57,7 +73,7 @@ const ForgotPassword = ({ onSubmit, onBackToLogin }: ForgotPasswordProps) => {
       <div className="flex-1 flex flex-col">
         {/* Tix logo — mobile header only */}
         <div className="lg:hidden flex items-center gap-2 p-6">
-          <img src={logo} alt="" className="w-25 h-9"/>
+          <img src={logo} alt="" className="w-25 h-9" />
         </div>
         <div className="flex-1 flex items-center justify-center px-4 py-10">
           <div className="w-full max-w-md bg-neutral-900 rounded-2xl p-8">

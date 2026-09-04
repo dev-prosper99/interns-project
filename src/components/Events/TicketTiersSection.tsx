@@ -1,11 +1,13 @@
 import TicketTierRow from "./TicketTierRow";
 import type { TicketTier } from "./EventsDetailsTypes";
- 
+
 interface TicketTiersSectionProps {
   ticketTiers: TicketTier[];
 }
- 
-export default function TicketTiersSection({ ticketTiers }: TicketTiersSectionProps) {
+
+export default function TicketTiersSection({
+  ticketTiers,
+}: TicketTiersSectionProps) {
   return (
     <div className="flex flex-col gap-3">
       <p className="text-white text-sm font-medium">Ticket Tiers</p>

@@ -9,7 +9,12 @@ export default function Stepper({ currentIndex }: StepperProps) {
   return (
     <div className="grid grid-cols-4 overflow-hidden rounded-xl border border-white/10 bg-[#121212] mb-7">
       {STEPS.map((step, i) => {
-        const state = i < currentIndex ? "done" : i === currentIndex ? "active" : "upcoming";
+        const state =
+          i < currentIndex
+            ? "done"
+            : i === currentIndex
+              ? "active"
+              : "upcoming";
         const stepNumber = i + 1;
         return (
           <div
@@ -18,8 +23,8 @@ export default function Stepper({ currentIndex }: StepperProps) {
               state === "active"
                 ? "bg-[#3b2466]"
                 : state === "done"
-                ? "bg-[#7c3aed]"
-                : "bg-[#161616]"
+                  ? "bg-[#7c3aed]"
+                  : "bg-[#161616]"
             }`}
           >
             <span
@@ -27,8 +32,8 @@ export default function Stepper({ currentIndex }: StepperProps) {
                 state === "done"
                   ? "bg-white text-violet-700"
                   : state === "active"
-                  ? "bg-white text-violet-700"
-                  : "bg-white/20 text-white/80"
+                    ? "bg-white text-violet-700"
+                    : "bg-white/20 text-white/80"
               }`}
             >
               {state === "done" ? (
@@ -47,7 +52,11 @@ export default function Stepper({ currentIndex }: StepperProps) {
               </span>
               <span
                 className={`block text-[11px] truncate ${
-                  state === "upcoming" ? "text-neutral-500" : state === "done" ? "text-white/85" : "text-white/75"
+                  state === "upcoming"
+                    ? "text-neutral-500"
+                    : state === "done"
+                      ? "text-white/85"
+                      : "text-white/75"
                 }`}
               >
                 {step.sub}

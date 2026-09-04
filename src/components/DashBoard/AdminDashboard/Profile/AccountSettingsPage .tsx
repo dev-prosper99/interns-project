@@ -46,11 +46,11 @@ interface UpdateProfilePayload {
 }
 
 const API_BASE = "https://ticketing-management-system-be.onrender.com";
- 
+
 // TODO: change this to match whatever key your login flow actually uses
 // to store the token (check your login/signup code for localStorage.setItem(...)).
 const TOKEN_STORAGE_KEYS = ["token", "accessToken", "authToken"];
- 
+
 function getStoredToken(): string | undefined {
   for (const key of TOKEN_STORAGE_KEYS) {
     const value = localStorage.getItem(key);
@@ -58,17 +58,17 @@ function getStoredToken(): string | undefined {
   }
   return undefined;
 }
- 
+
 function authHeaders(token?: string): HeadersInit {
   const headers: HeadersInit = { "Content-Type": "application/json" };
   if (token) headers["Authorization"] = `Bearer ${token}`;
   return headers;
 }
- 
+
 async function parseOrThrow<T>(res: Response): Promise<T> {
   if (res.status === 404) {
     throw new Error(
-      "Endpoint not found (404). Double-check the API path against the backend's Swagger docs — it may not be /api/Profile."
+      "Endpoint not found (404). Double-check the API path against the backend's Swagger docs — it may not be /api/Profile.",
     );
   }
   if (res.status === 401) {
@@ -76,17 +76,25 @@ async function parseOrThrow<T>(res: Response): Promise<T> {
   }
   const body: ApiResponse<T> | null = await res.json().catch(() => null);
   if (!res.ok || !body || body.success === false) {
-    throw new Error(body?.message || body?.errors?.[0] || `Request failed (${res.status})`);
+    throw new Error(
+      body?.message || body?.errors?.[0] || `Request failed (${res.status})`,
+    );
   }
   return body.data;
 }
- 
+
 async function getProfile(token?: string): Promise<ProfileData> {
-  const res = await fetch(`${API_BASE}/api/Profile`, { method: "GET", headers: authHeaders(token) });
+  const res = await fetch(`${API_BASE}/api/Profile`, {
+    method: "GET",
+    headers: authHeaders(token),
+  });
   return parseOrThrow<ProfileData>(res);
 }
- 
-async function updateProfile(payload: UpdateProfilePayload, token?: string): Promise<ProfileData> {
+
+async function updateProfile(
+  payload: UpdateProfilePayload,
+  token?: string,
+): Promise<ProfileData> {
   const res = await fetch(`${API_BASE}/api/Profile`, {
     method: "PUT",
     headers: authHeaders(token),
@@ -94,14 +102,14 @@ async function updateProfile(payload: UpdateProfilePayload, token?: string): Pro
   });
   return parseOrThrow<ProfileData>(res);
 }
- 
+
 function useProfile(tokenProp?: string) {
   const token = tokenProp ?? getStoredToken();
- 
+
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [loadMsg, setLoadMsg] = useState("Loading profile…");
   const [saving, setSaving] = useState(false);
- 
+
   const load = useCallback(() => {
     if (!token) {
       setLoadMsg("You're not logged in — no auth token found.");
@@ -113,15 +121,19 @@ function useProfile(tokenProp?: string) {
         setProfile(data);
         setLoadMsg("Profile loaded.");
       })
-      .catch((err: Error) => setLoadMsg(`Could not load profile (${err.message}).`));
+      .catch((err: Error) =>
+        setLoadMsg(`Could not load profile (${err.message}).`),
+      );
   }, [token]);
- 
+
   useEffect(() => {
     load();
   }, [load]);
- 
+
   const save = useCallback(
-    async (payload: UpdateProfilePayload): Promise<{ ok: boolean; error?: string }> => {
+    async (
+      payload: UpdateProfilePayload,
+    ): Promise<{ ok: boolean; error?: string }> => {
       if (!token) return { ok: false, error: "Not logged in." };
       setSaving(true);
       try {
@@ -134,12 +146,11 @@ function useProfile(tokenProp?: string) {
         setSaving(false);
       }
     },
-    [token]
+    [token],
   );
- 
+
   return { profile, loadMsg, saving, save };
 }
-  
 
 // ============================================================
 // Tabs
@@ -154,7 +165,9 @@ function ProfileInfoTab({
   profile: ProfileData | null;
   loadMsg: string;
   saving: boolean;
-  onSave: (payload: UpdateProfilePayload) => Promise<{ ok: boolean; error?: string }>;
+  onSave: (
+    payload: UpdateProfilePayload,
+  ) => Promise<{ ok: boolean; error?: string }>;
 }) {
   const [fullName, setFullName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -164,7 +177,10 @@ function ProfileInfoTab({
 
   useEffect(() => {
     if (!profile) return;
-    setFullName(profile.fullName || [profile.firstName, profile.lastName].filter(Boolean).join(" "));
+    setFullName(
+      profile.fullName ||
+        [profile.firstName, profile.lastName].filter(Boolean).join(" "),
+    );
     setPhoneNumber(profile.phoneNumber || "");
     setCity(profile.city || "");
   }, [profile]);
@@ -189,7 +205,6 @@ function ProfileInfoTab({
   }
 
   return (
-    
     <div className="flex min-h-85 flex-col rounded-xl border border-neutral-700 bg-neutral-1000 p-7 ">
       <div className="mb-6 text-base font-semibold">Profile Information</div>
       <div className="pb-4 text-xs text-gray-400">{loadMsg}</div>
@@ -200,18 +215,40 @@ function ProfileInfoTab({
         </div>
         <div>
           <div className="text-sm font-medium">Profile photo</div>
-          <div className="mt-0.5 text-xs text-gray-400">This image will be displayed on your profile</div>
+          <div className="mt-0.5 text-xs text-gray-400">
+            This image will be displayed on your profile
+          </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2">
-        <TextField id="fullName" label="Full Name" value={fullName} onChange={setFullName} />
-        <TextField id="email" label="Email Address" value={profile?.email || ""} disabled />
-        <TextField id="phoneNumber" label="Phone Number" value={phoneNumber} onChange={setPhoneNumber} />
+        <TextField
+          id="fullName"
+          label="Full Name"
+          value={fullName}
+          onChange={setFullName}
+        />
+        <TextField
+          id="email"
+          label="Email Address"
+          value={profile?.email || ""}
+          disabled
+        />
+        <TextField
+          id="phoneNumber"
+          label="Phone Number"
+          value={phoneNumber}
+          onChange={setPhoneNumber}
+        />
         <TextField id="city" label="City" value={city} onChange={setCity} />
       </div>
 
-      <SaveBar status={status} statusKind={statusKind} onSave={handleSave} saving={saving} />
+      <SaveBar
+        status={status}
+        statusKind={statusKind}
+        onSave={handleSave}
+        saving={saving}
+      />
     </div>
   );
 }
@@ -219,7 +256,9 @@ function ProfileInfoTab({
 function NotificationsTab() {
   const [emailNotif, setEmailNotif] = useState(true);
   const [smsNotif, setSmsNotif] = useState(true);
-  const [status, setStatus] = useState("No API endpoint provided yet — this tab is UI-only.");
+  const [status, setStatus] = useState(
+    "No API endpoint provided yet — this tab is UI-only.",
+  );
   const [statusKind, setStatusKind] = useState<StatusKind>("");
 
   function handleSave() {
@@ -230,20 +269,30 @@ function NotificationsTab() {
 
   return (
     <div className="flex min-h-85 flex-col rounded-xl border border-neutral-800 bg-neutral-900 p-7">
-      <div className="mb-6 text-base font-semibold">Notification Preferences</div>
+      <div className="mb-6 text-base font-semibold">
+        Notification Preferences
+      </div>
 
       <div className="flex items-start justify-between border-b border-neutral-800 py-4">
         <div>
           <div className="mb-0.5 text-sm font-medium">Email Notifications</div>
-          <div className="text-xs text-gray-400">Receive email notifications</div>
+          <div className="text-xs text-gray-400">
+            Receive email notifications
+          </div>
         </div>
-        <ToggleSwitch id="emailNotif" checked={emailNotif} onChange={setEmailNotif} />
+        <ToggleSwitch
+          id="emailNotif"
+          checked={emailNotif}
+          onChange={setEmailNotif}
+        />
       </div>
 
       <div className="flex items-start justify-between py-4">
         <div>
           <div className="mb-0.5 text-sm font-medium">SMS Notifications</div>
-          <div className="text-xs text-gray-400">Receive important updates via text message</div>
+          <div className="text-xs text-gray-400">
+            Receive important updates via text message
+          </div>
         </div>
         <ToggleSwitch id="smsNotif" checked={smsNotif} onChange={setSmsNotif} />
       </div>
@@ -257,7 +306,9 @@ function SecurityTab({ email }: { email: string }) {
   const [currentPw, setCurrentPw] = useState("");
   const [newPw, setNewPw] = useState("");
   const [confirmPw, setConfirmPw] = useState("");
-  const [status, setStatus] = useState("No password-change endpoint provided yet — this tab is UI-only.");
+  const [status, setStatus] = useState(
+    "No password-change endpoint provided yet — this tab is UI-only.",
+  );
   const [statusKind, setStatusKind] = useState<StatusKind>("");
 
   function handleSave() {
@@ -277,9 +328,24 @@ function SecurityTab({ email }: { email: string }) {
 
       <div className="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2">
         <TextField id="secEmail" label="Email Address" value={email} disabled />
-        <PasswordField id="currentPw" label="Current Password" value={currentPw} onChange={setCurrentPw} />
-        <PasswordField id="newPw" label="New Password" value={newPw} onChange={setNewPw} />
-        <PasswordField id="confirmPw" label="Confirm Password" value={confirmPw} onChange={setConfirmPw} />
+        <PasswordField
+          id="currentPw"
+          label="Current Password"
+          value={currentPw}
+          onChange={setCurrentPw}
+        />
+        <PasswordField
+          id="newPw"
+          label="New Password"
+          value={newPw}
+          onChange={setNewPw}
+        />
+        <PasswordField
+          id="confirmPw"
+          label="Confirm Password"
+          value={confirmPw}
+          onChange={setConfirmPw}
+        />
       </div>
 
       <SaveBar status={status} statusKind={statusKind} onSave={handleSave} />
@@ -296,7 +362,9 @@ interface AccountSettingsPageProps {
   token?: string;
 }
 
-export default function AccountSettingsPage({ token }: AccountSettingsPageProps) {
+export default function AccountSettingsPage({
+  token,
+}: AccountSettingsPageProps) {
   const [activeTab, setActiveTab] = useState<TabKey>("profile");
   const { profile, loadMsg, saving, save } = useProfile(token);
 
@@ -308,15 +376,24 @@ export default function AccountSettingsPage({ token }: AccountSettingsPageProps)
         <SettingsHeader onMenuClick={() => {}} />
 
         <div className=" w-full  px-5 py-8">
-          <h1 className="mb-5 text-xl font-semibold">Manage your account and preferences</h1>
+          <h1 className="mb-5 text-xl font-semibold">
+            Manage your account and preferences
+          </h1>
 
           <Tabs active={activeTab} onChange={setActiveTab} />
 
           {activeTab === "profile" && (
-            <ProfileInfoTab profile={profile} loadMsg={loadMsg} saving={saving} onSave={save} />
+            <ProfileInfoTab
+              profile={profile}
+              loadMsg={loadMsg}
+              saving={saving}
+              onSave={save}
+            />
           )}
           {activeTab === "notifications" && <NotificationsTab />}
-          {activeTab === "security" && <SecurityTab email={profile?.email || ""} />}
+          {activeTab === "security" && (
+            <SecurityTab email={profile?.email || ""} />
+          )}
         </div>
       </div>
     </div>

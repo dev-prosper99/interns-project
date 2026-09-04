@@ -21,7 +21,13 @@ export const STATUS_COLOR: Record<StatusKind, string> = {
   "": "text-gray-400",
 };
 
-export function Tabs({ active, onChange }: { active: TabKey; onChange: (t: TabKey) => void }) {
+export function Tabs({
+  active,
+  onChange,
+}: {
+  active: TabKey;
+  onChange: (t: TabKey) => void;
+}) {
   return (
     <div className="mb-6 flex gap-2">
       {TAB_ITEMS.map((tab) => (
@@ -120,7 +126,10 @@ export function ToggleSwitch({
   onChange: (c: boolean) => void;
 }) {
   return (
-    <label htmlFor={id} className="relative inline-block h-5.5 w-9.5  cursor-pointer">
+    <label
+      htmlFor={id}
+      className="relative inline-block h-5.5 w-9.5  cursor-pointer"
+    >
       <input
         id={id}
         type="checkbox"
@@ -147,7 +156,9 @@ export function SaveBar({
 }) {
   return (
     <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-6">
-      <div className={`min-h-4 text-xs ${STATUS_COLOR[statusKind]}`}>{status}</div>
+      <div className={`min-h-4 text-xs ${STATUS_COLOR[statusKind]}`}>
+        {status}
+      </div>
       <button
         type="button"
         onClick={onSave}

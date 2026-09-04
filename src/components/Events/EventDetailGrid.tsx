@@ -1,14 +1,16 @@
 import DetailField from "./DetailField";
 import type { EventDetailData } from "./EventsDetailsTypes";
- 
+
 interface EventDetailGridProps {
   event: EventDetailData;
 }
- 
+
 export default function EventDetailGrid({ event }: EventDetailGridProps) {
   return (
     <div className="flex flex-col gap-6">
-      <h3 className="text-md font-lightbold text-neutral-100">Review and Publish</h3>
+      <h3 className="text-md font-lightbold text-neutral-100">
+        Review and Publish
+      </h3>
       <div className="flex flex-col sm:flex-row gap-6 sm:gap-15">
         <DetailField label="Event Title" value={event.title} />
         <DetailField label="Category" value={event.category} />
@@ -27,4 +29,3 @@ export default function EventDetailGrid({ event }: EventDetailGridProps) {
     </div>
   );
 }
- 

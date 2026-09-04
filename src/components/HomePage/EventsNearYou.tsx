@@ -12,7 +12,13 @@ import event6 from "@/assets/event-6.png";
 
 const images = [event1, event2, event3, event4, event5, event6];
 
-function SectionHeader({ title, subtitle }: { title: string; subtitle: string }) {
+function SectionHeader({
+  title,
+  subtitle,
+}: {
+  title: string;
+  subtitle: string;
+}) {
   return (
     <div className="flex items-center justify-between max-w-6xl mx-auto mb-8">
       <div>
@@ -32,34 +38,33 @@ function SectionHeader({ title, subtitle }: { title: string; subtitle: string })
 }
 
 export default function UpcomingEvents() {
-    return (
-      <div className="pl-6 md:pl-30 py-16 bg-neutral-950">
-        <div className="max-w-6xl mx-auto">
+  return (
+    <div className="pl-6 md:pl-30 py-16 bg-neutral-950">
+      <div className="max-w-6xl mx-auto">
         <div className="pr-6 md:pr-30">
-        <SectionHeader
-         title="Events Near You"
-         subtitle="Don't miss what's happening near you"
+          <SectionHeader
+            title="Events Near You"
+            subtitle="Don't miss what's happening near you"
           />
         </div>
         <div className="flex gap-6 overflow-x-auto no-scrollbar pb-2">
           {Events.slice(0, 20).map((event, i) => (
-           <div key={i}>
-            <EventCard
-             key={i}
-             imageUrl={images[i % images.length]}
-             eventTitle={event.eventTitle}
-             eventCategory={event.eventCategory}
-             venue={event.venue}
-             numberAttending={event.numberAttending}
-             startDate={event.startDate}
-             startTime={event.startTime}
-             ticketPrice={event.regular_ticketPrice}
-            />
-           </div>
-         ))}
-        </div>
+            <div key={i}>
+              <EventCard
+                key={i}
+                imageUrl={images[i % images.length]}
+                eventTitle={event.eventTitle}
+                eventCategory={event.eventCategory}
+                venue={event.venue}
+                numberAttending={event.numberAttending}
+                startDate={event.startDate}
+                startTime={event.startTime}
+                ticketPrice={event.regular_ticketPrice}
+              />
+            </div>
+          ))}
         </div>
       </div>
- );
+    </div>
+  );
 }
-    

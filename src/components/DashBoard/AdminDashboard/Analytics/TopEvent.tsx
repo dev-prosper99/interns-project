@@ -4,19 +4,39 @@ interface EventItem {
   revenue: number;
   ticketsSold: number;
 }
- 
+
 const events: EventItem[] = [
-  { rank: 1, name: "Afrobeats & Vibes Festival 2026", revenue: 27300000, ticketsSold: 1820 },
-  { rank: 2, name: "TechFest West Africa 2026", revenue: 21750000, ticketsSold: 870 },
+  {
+    rank: 1,
+    name: "Afrobeats & Vibes Festival 2026",
+    revenue: 27300000,
+    ticketsSold: 1820,
+  },
+  {
+    rank: 2,
+    name: "TechFest West Africa 2026",
+    revenue: 21750000,
+    ticketsSold: 870,
+  },
   { rank: 3, name: "Lagos Comedy Fiesta", revenue: 11400000, ticketsSold: 950 },
-  { rank: 4, name: "AFCON Watch Party — Grand Final", revenue: 6700000, ticketsSold: 333 },
-  { rank: 2, name: "Nollywood & Afro Art Exhibition", revenue: 6600000, ticketsSold: 500 },
+  {
+    rank: 4,
+    name: "AFCON Watch Party — Grand Final",
+    revenue: 6700000,
+    ticketsSold: 333,
+  },
+  {
+    rank: 2,
+    name: "Nollywood & Afro Art Exhibition",
+    revenue: 6600000,
+    ticketsSold: 500,
+  },
 ];
- 
+
 function formatNaira(value: number): string {
   return `₦${value.toLocaleString("en-NG")}`;
 }
- 
+
 export default function TopPerformingEvents() {
   return (
     <div
@@ -40,7 +60,7 @@ export default function TopPerformingEvents() {
       >
         Top Performing Events (Top 5)
       </h2>
- 
+
       <div>
         {events.map((event, index) => (
           <div
@@ -81,8 +101,10 @@ export default function TopPerformingEvents() {
                 {event.name}
               </span>
             </div>
- 
-            <div style={{ textAlign: "right", flexShrink: 0, marginLeft: "12px" }}>
+
+            <div
+              style={{ textAlign: "right", flexShrink: 0, marginLeft: "12px" }}
+            >
               <div
                 style={{
                   color: "#FF6A3D",
@@ -107,4 +129,4 @@ export default function TopPerformingEvents() {
       </div>
     </div>
   );
-} 
+}

@@ -1,4 +1,4 @@
-import { NotificationIcon, HambugerIcon } from '@/assets/icons';
+import { NotificationIcon, HambugerIcon } from "@/assets/icons";
 
 type Props = {
   onMenuClick?: () => void;

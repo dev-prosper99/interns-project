@@ -1,6 +1,6 @@
 export type TicketTier = "VIP" | "VVIP" | "Free" | "Regular";
 export type Status = "Confirmed" | "Pending" | "Cancelled" | "Checked-in";
- 
+
 export interface Attendee {
   id: string;
   name: string;
@@ -16,14 +16,14 @@ export interface Attendee {
   status: Status;
   phone: string;
 }
- 
+
 export const TIER_SUBTITLE: Record<TicketTier, string> = {
   VIP: "Best Experience",
   VVIP: "Special Reservation",
   Free: "Limited Benefit",
   Regular: "Regular sitting area",
 };
- 
+
 export const ATTENDEES: Attendee[] = [
   {
     id: "1",
@@ -176,4 +176,3 @@ export const ATTENDEES: Attendee[] = [
     phone: "+234 815 000 5566",
   },
 ];
- 

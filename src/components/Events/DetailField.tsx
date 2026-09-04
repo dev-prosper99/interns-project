@@ -2,7 +2,7 @@ interface DetailFieldProps {
   label: string;
   value: string;
 }
- 
+
 export default function DetailField({ label, value }: DetailFieldProps) {
   return (
     <div className="flex flex-col gap-1 flex-1">
