@@ -14,7 +14,7 @@ import Dashboard from "./pages/Dashboard";
 import TicketsPage from "./components/DashBoard/AdminDashboard/Tickets/TicketsPage";
 import AttendeesPage from "./components/DashBoard/AdminDashboard/Atendee/Attendees";
 import Events from "./components/Events/Events";
-import AttendeDashboard from "./components/AttendeeDashboard/AttendeDashboard";
+import AttendeDashboard from "./components/DashBoard/AttendeeDashboard/AttendeDashboard";
 
 
 function App() {

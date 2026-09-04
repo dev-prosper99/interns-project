@@ -45,9 +45,7 @@ export default function EventsPage() {
   const [search, setSearch] = useState("");
   const [rows, setRows] = useState<EventRowData[]>([]);
  
-  const [hiddenIds, setHiddenIds] = useState<Set<string | number>>(
-    new Set()
-  );
+  
 
  
   const [statusOverrides, setStatusOverrides] = useState<

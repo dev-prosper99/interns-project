@@ -101,7 +101,7 @@ const events = eventsJson.data.items;
       
         const results = await Promise.all(
           events.map(async (e) => {
-            console.log("Role:", localStorage.getItem("role"));
+            
 
 console.log("Token exists:", !!getToken());
 

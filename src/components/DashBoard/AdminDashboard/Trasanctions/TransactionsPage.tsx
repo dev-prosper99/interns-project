@@ -33,7 +33,7 @@ export default function TransactionsPage({
   const [refundTxn, setRefundTxn] = useState<Transaction | null>(null);
   const [isRefunding, setIsRefunding] = useState(false);
   const [localTransactions, setLocalTransactions] = useState(transactions);
-  const [menuOpen, setMenuOpen] = useState(false);
+  
  
   const filtered = useMemo(() => {
     return localTransactions.filter((t) => {
@@ -82,7 +82,7 @@ export default function TransactionsPage({
       <Sidebar />
  
       <main className="min-w-0 flex-1">
-        <TransactionHeader onMenuClick={() =>  setMenuOpen(true)} />
+        <TransactionHeader />
  
         <div className="px-6 py-6 text-neutral-50">
           <div className="mb-5 flex items-center justify-between">

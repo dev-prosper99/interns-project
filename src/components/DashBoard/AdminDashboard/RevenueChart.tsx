@@ -36,7 +36,7 @@ type Props = {
   }>;
 };
 
-const RevenueChart: React.FC<Props> = ({ data, range }) => {
+const RevenueChart: React.FC<Props> = ({ data}) => {
   const chartData = (data ?? fallbackData).map((d) => {
     const month = 'month' in d && typeof d.month === 'string' ? d.month : (d as any).name ?? '';
     const revenue = 'revenue' in d && typeof d.revenue === 'number' ? d.revenue : (d as any).value ?? 0;
