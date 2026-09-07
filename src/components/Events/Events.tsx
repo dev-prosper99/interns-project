@@ -70,6 +70,7 @@ export default function EventsPage() {
         );
 
         const result = await response.json();
+      
 
         const mappedEvents = result.data.items.map((event: any) => ({
           id: event.id,

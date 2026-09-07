@@ -74,7 +74,7 @@ export function Select({
         value={value}
         onChange={onChange}
         disabled={disabled}
-        className="w-full rounded-lg bg-neutral-800/80 border border-neutral-700 px-3.5 py-2.5 text-sm text-neutral-100 outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed appearance-none bg-[url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 20 20%22 fill=%22%23888%22><path d=%22M5.5 7.5l4.5 4.5 4.5-4.5%22 stroke=%22%23888%22 stroke-width=%221.5%22 fill=%22none%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/></svg>')] bg-no-repeat bg-[right_0.9rem_center]"
+        className="w-full rounded-lg bg-neutral-800/80 border border-neutral-700 px-3.5 py-2.5 text-sm text-neutral-100 outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed appearance-none  bg-no-repeat  background-position: right 0.9rem  14.4px center;"
       >
         <option value="">{placeholder}</option>
         {options.map((option) => {

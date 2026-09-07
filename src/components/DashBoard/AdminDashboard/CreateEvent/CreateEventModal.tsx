@@ -159,7 +159,7 @@ const CreateEventModal = ({
 
       const responseText = await response.text();
 
-      console.log("Payload JSON:", JSON.stringify(payload, null, 2));
+      
 
       const responseBody = responseText ? JSON.parse(responseText) : null;
 

@@ -5,6 +5,7 @@ import AttendeeHeader from "./AttendeeHeader";
 import { ATTENDEES, TIER_SUBTITLE, type Attendee, type Status } from "./Data";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Pagination } from "@/components/ui/paginition";
 import {
   Select,
   SelectContent,
@@ -12,19 +13,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
+ 
 const STATUS_STYLES: Record<Status, string> = {
   Confirmed: "bg-violet-600/20 text-violet-400",
   "Checked-in": "bg-emerald-500/20 text-emerald-400",
   Pending: "bg-amber-500/20 text-amber-400",
   Cancelled: "bg-rose-500/20 text-rose-400",
 };
-
+ 
 function formatAmount(amount: number | "Free") {
   if (amount === "Free") return "Free";
   return `₦${amount.toLocaleString()}`;
 }
-
+ 
 function Avatar({ name, color }: { name: string; color: string }) {
   const initials = name
     .split(" ")
@@ -39,7 +40,7 @@ function Avatar({ name, color }: { name: string; color: string }) {
     </div>
   );
 }
-
+ 
 function TierCell({ attendee }: { attendee: Attendee }) {
   return (
     <div>
@@ -50,7 +51,7 @@ function TierCell({ attendee }: { attendee: Attendee }) {
     </div>
   );
 }
-
+ 
 function AttendeeDetailsModal({
   attendee,
   onClose,
@@ -77,7 +78,7 @@ function AttendeeDetailsModal({
             ></div>
           </div>
         </div>
-
+ 
         <dl className="grid grid-cols-2 gap-x-4 gap-y-4 text-sm">
           <Field label="Attendee" value={attendee.name} />
           <Field label="Email Address" value={attendee.email} />
@@ -113,7 +114,7 @@ function AttendeeDetailsModal({
             <Field label="Phone Number" value={attendee.phone} />
           </div>
         </dl>
-
+ 
         <div className="mt-6 flex gap-3">
           <Button variant="primary" className="flex-1">
             <MailIcon />
@@ -125,7 +126,7 @@ function AttendeeDetailsModal({
     </div>
   );
 }
-
+ 
 function Field({
   label,
   value,
@@ -144,11 +145,11 @@ function Field({
     </div>
   );
 }
-
+ 
 export default function AttendeesPage() {
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<Attendee | null>(null);
-
+ 
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     if (!q) return ATTENDEES;
@@ -159,14 +160,14 @@ export default function AttendeesPage() {
         a.ticketNo.toLowerCase().includes(q),
     );
   }, [search]);
-
+ 
   return (
     <div className="flex min-h-screen bg-neutral-950">
       <Sidebar />
-
+ 
       <div className="flex flex-1 flex-col">
         <AttendeeHeader onMenuClick={() => {}} />
-
+ 
         <main className="flex-1 p-6">
           <div className="mb-6 flex items-center justify-between">
             <div>
@@ -183,7 +184,7 @@ export default function AttendeesPage() {
               Export
             </Button>
           </div>
-
+ 
           <div className="mb-4 flex flex-wrap gap-3">
             <div className="relative min-w-55 flex-1">
               <SearchIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-500" />
@@ -211,115 +212,95 @@ export default function AttendeesPage() {
               </SelectContent>
             </Select>
           </div>
-
+ 
           <div className="overflow-hidden rounded-xl border border-white/10 bg-neutral-1000">
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-225 text-left text-sm">
-                <thead>
-                  <tr className="border-b border-white/10 text-xs uppercase tracking-wide text-neutral-500">
-                    <th className="px-4 py-3 font-medium">Attendee</th>
-                    <th className="px-4 py-3 font-medium">Event</th>
-                    <th className="px-4 py-3 font-medium">Ticket Tier</th>
-                    <th className="px-4 py-3 font-medium">Tickets</th>
-                    <th className="px-4 py-3 font-medium">Amount Paid</th>
-                    <th className="px-4 py-3 font-medium">Purchase Date</th>
-                    <th className="px-4 py-3 font-medium">Status</th>
-                    <th className="px-4 py-3 font-medium">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filtered.map((a) => (
-                    <tr
-                      key={a.id}
-                      className="border-b border-white/5 last:border-0 hover:bg-white/"
-                    >
-                      <td className="px-4 py-3">
-                        <div className="flex items-center gap-3">
-                          <Avatar name={a.name} color={a.avatarColor} />
-                          <div className="min-w-0">
-                            <div className="truncate font-medium text-white">
-                              {a.name}
-                            </div>
-                            <div className="truncate text-xs text-neutral-500">
-                              {a.email}
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-4 py-3 text-neutral-200">{a.event}</td>
-                      <td className="px-4 py-3">
-                        <TierCell attendee={a} />
-                      </td>
-                      <td className="px-4 py-3 text-neutral-300">
-                        {a.tickets}
-                      </td>
-                      <td
-                        className={`px-4 py-3 ${a.amountPaid === "Free" ? "text-emerald-400" : "text-neutral-300"}`}
-                      >
-                        {formatAmount(a.amountPaid)}
-                      </td>
-                      <td className="px-4 py-3 text-neutral-400">
-                        {a.purchaseDate}
-                      </td>
-                      <td className="px-4 py-3">
-                        <span
-                          className={`inline-flex rounded-md px-2.5 py-1 text-xs font-medium ${STATUS_STYLES[a.status]}`}
-                        >
-                          {a.status}
-                        </span>
-                      </td>
-                      <td className="px-4 py-3">
-                        <div
-                          onClick={() => setSelected(a)}
-                          className="flex items-center gap-2 cursor-pointer text-sm font-medium"
-                        >
-                          <EyeIcon />{" "}
-                          <p className="text-purple-500 cursor-pointer">
-                            Veiw details
-                          </p>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            <div className="flex items-center justify-between border-t border-white/10 px-4 py-3 text-sm text-neutral-500">
-              <span>Page 1 of 1</span>
-              <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="border-white/10 text-neutral-400 hover:bg-white/5"
-                >
-                  Prev
-                </Button>
-                <Button
-                  size="sm"
-                  className="bg-violet-600 hover:bg-violet-600/90"
-                >
-                  1
-                </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="border-white/10 text-neutral-400 hover:bg-white/5"
-                >
-                  Next
-                </Button>
-              </div>
-            </div>
+            <Pagination items={filtered} initialPageSize={10}>
+              {(paginated) => (
+                <>
+                  <div className="overflow-x-auto">
+                    <table className="w-full min-w-225 text-left text-sm">
+                      <thead>
+                        <tr className="border-b border-white/10 text-xs uppercase tracking-wide text-neutral-500">
+                          <th className="px-4 py-3 font-medium">Attendee</th>
+                          <th className="px-4 py-3 font-medium">Event</th>
+                          <th className="px-4 py-3 font-medium">Ticket Tier</th>
+                          <th className="px-4 py-3 font-medium">Tickets</th>
+                          <th className="px-4 py-3 font-medium">Amount Paid</th>
+                          <th className="px-4 py-3 font-medium">Purchase Date</th>
+                          <th className="px-4 py-3 font-medium">Status</th>
+                          <th className="px-4 py-3 font-medium">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {paginated.map((a) => (
+                          <tr
+                            key={a.id}
+                            className="border-b border-white/5 last:border-0 hover:bg-white/"
+                          >
+                            <td className="px-4 py-3">
+                              <div className="flex items-center gap-3">
+                                <Avatar name={a.name} color={a.avatarColor} />
+                                <div className="min-w-0">
+                                  <div className="truncate font-medium text-white">
+                                    {a.name}
+                                  </div>
+                                  <div className="truncate text-xs text-neutral-500">
+                                    {a.email}
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                            <td className="px-4 py-3 text-neutral-200">{a.event}</td>
+                            <td className="px-4 py-3">
+                              <TierCell attendee={a} />
+                            </td>
+                            <td className="px-4 py-3 text-neutral-300">
+                              {a.tickets}
+                            </td>
+                            <td
+                              className={`px-4 py-3 ${a.amountPaid === "Free" ? "text-emerald-400" : "text-neutral-300"}`}
+                            >
+                              {formatAmount(a.amountPaid)}
+                            </td>
+                            <td className="px-4 py-3 text-neutral-400">
+                              {a.purchaseDate}
+                            </td>
+                            <td className="px-4 py-3">
+                              <span
+                                className={`inline-flex rounded-md px-2.5 py-1 text-xs font-medium ${STATUS_STYLES[a.status]}`}
+                              >
+                                {a.status}
+                              </span>
+                            </td>
+                            <td className="px-4 py-3">
+                              <div
+                                onClick={() => setSelected(a)}
+                                className="flex items-center gap-2 cursor-pointer text-sm font-medium"
+                              >
+                                <EyeIcon />{" "}
+                                <p className="text-purple-500 cursor-pointer">
+                                  View details
+                                </p>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                    
+                  </div>
+                </>
+              )}
+            </Pagination>
+            
           </div>
         </main>
       </div>
-
+ 
       {selected && (
-        <AttendeeDetailsModal
-          attendee={selected}
-          onClose={() => setSelected(null)}
-        />
+        <AttendeeDetailsModal attendee={selected} onClose={() => setSelected(null)} />
       )}
     </div>
   );
 }
+ 

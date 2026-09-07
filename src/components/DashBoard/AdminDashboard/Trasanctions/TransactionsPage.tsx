@@ -5,14 +5,15 @@ import {
   SAMPLE_TRANSACTIONS,
   formatNaira,
 } from "./transactions.data";
-import { TransactionsTable, Pagination } from "./TransactionsTable";
+import { TransactionsTable } from "./TransactionsTable";
+import {Pagination} from "@/components/ui/paginition";
 import {
   TransactionDetailsModal,
   RefundConfirmModal,
 } from "./TransactionsModals";
 import Sidebar from "@/components/layouts/Sidebar";
 import TransactionHeader from "./TransctionHeader";
-
+ 
 const STATUS_OPTIONS: Array<TransactionStatus | "All"> = [
   "All",
   "Completed",
@@ -20,14 +21,14 @@ const STATUS_OPTIONS: Array<TransactionStatus | "All"> = [
   "Refunded",
   "Failed",
 ];
-
+ 
 export interface TransactionsPageProps {
   transactions?: Transaction[];
   onRefund?: (transaction: Transaction) => void | Promise<void>;
   onExport?: () => void;
   pageSize?: number;
 }
-
+ 
 export default function TransactionsPage({
   transactions = SAMPLE_TRANSACTIONS,
   onRefund,
@@ -38,13 +39,11 @@ export default function TransactionsPage({
   const [statusFilter, setStatusFilter] = useState<TransactionStatus | "All">(
     "All",
   );
-  const [page, setPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(pageSize);
   const [detailsTxn, setDetailsTxn] = useState<Transaction | null>(null);
   const [refundTxn, setRefundTxn] = useState<Transaction | null>(null);
   const [isRefunding, setIsRefunding] = useState(false);
   const [localTransactions, setLocalTransactions] = useState(transactions);
-
+ 
   const filtered = useMemo(() => {
     return localTransactions.filter((t) => {
       const matchesQuery =
@@ -52,30 +51,24 @@ export default function TransactionsPage({
         t.id.toLowerCase().includes(query.toLowerCase()) ||
         t.buyer.toLowerCase().includes(query.toLowerCase()) ||
         t.event.toLowerCase().includes(query.toLowerCase());
-      const matchesStatus = statusFilter === "All" || t.status === statusFilter;
+      const matchesStatus =
+        statusFilter === "All" || t.status === statusFilter;
       return matchesQuery && matchesStatus;
     });
   }, [localTransactions, query, statusFilter]);
-
-  const totalPages = Math.max(1, Math.ceil(filtered.length / rowsPerPage));
-  const currentPage = Math.min(page, totalPages);
-  const paginated = filtered.slice(
-    (currentPage - 1) * rowsPerPage,
-    currentPage * rowsPerPage,
-  );
-
+ 
   const revenueTotal = localTransactions
     .filter((t) => t.status === "Completed")
     .reduce((sum, t) => sum + t.amount, 0);
   const refundedTotal = localTransactions
     .filter((t) => t.status === "Refunded")
     .reduce((sum, t) => sum + t.amount, 0);
-
+ 
   function requestRefund(t: Transaction) {
     setDetailsTxn(null);
     setRefundTxn(t);
   }
-
+ 
   async function confirmRefund() {
     if (!refundTxn) return;
     setIsRefunding(true);
@@ -91,14 +84,14 @@ export default function TransactionsPage({
       setIsRefunding(false);
     }
   }
-
+ 
   return (
     <div className="flex min-h-screen bg-neutral-950">
       <Sidebar />
-
+ 
       <main className="min-w-0 flex-1">
         <TransactionHeader />
-
+ 
         <div className="px-6 py-6 text-neutral-50">
           <div className="mb-5 flex items-center justify-between">
             <h1 className="text-lg font-semibold">
@@ -112,7 +105,7 @@ export default function TransactionsPage({
               Export
             </button>
           </div>
-
+ 
           <div className="mb-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="rounded-xl border border-neutral-800 bg-neutral-900 p-4">
               <div className="mb-2 flex items-center gap-2 text-sm text-neutral-400">
@@ -133,7 +126,7 @@ export default function TransactionsPage({
               </div>
             </div>
           </div>
-
+ 
           <div className="mb-4 flex flex-wrap gap-3">
             <div className="flex min-w-55 flex-1 items-center gap-2 rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-neutral-400">
               <svg
@@ -161,20 +154,16 @@ export default function TransactionsPage({
                 type="text"
                 placeholder="Search by buyer or transaction id..."
                 value={query}
-                onChange={(e) => {
-                  setQuery(e.target.value);
-                  setPage(1);
-                }}
+                onChange={(e) => setQuery(e.target.value)}
                 className="w-full bg-transparent text-sm text-neutral-50 placeholder:text-neutral-500 focus:outline-none"
               />
             </div>
             <select
               className="rounded-lg border border-neutral-800 bg-neutral-900 px-3 py-2 text-sm text-neutral-50 focus:outline-none"
               value={statusFilter}
-              onChange={(e) => {
-                setStatusFilter(e.target.value as TransactionStatus | "All");
-                setPage(1);
-              }}
+              onChange={(e) =>
+                setStatusFilter(e.target.value as TransactionStatus | "All")
+              }
             >
               {STATUS_OPTIONS.map((s) => (
                 <option key={s} value={s}>
@@ -183,26 +172,16 @@ export default function TransactionsPage({
               ))}
             </select>
           </div>
-
-          <TransactionsTable
-            transactions={paginated}
-            onViewDetails={setDetailsTxn}
-          />
-
-          <div className="mt-4">
-            <Pagination
-              currentPage={currentPage}
-              totalPages={totalPages}
-              rowsPerPage={rowsPerPage}
-              onPrev={() => setPage((p) => Math.max(1, p - 1))}
-              onNext={() => setPage((p) => Math.min(totalPages, p + 1))}
-              onRowsPerPageChange={(n) => {
-                setRowsPerPage(n);
-                setPage(1);
-              }}
-            />
-          </div>
-
+ 
+          <Pagination items={filtered} initialPageSize={pageSize}>
+            {(paginated) => (
+              <TransactionsTable
+                transactions={paginated}
+                onViewDetails={setDetailsTxn}
+              />
+            )}
+          </Pagination>
+ 
           {detailsTxn && (
             <TransactionDetailsModal
               transaction={detailsTxn}
@@ -210,7 +189,7 @@ export default function TransactionsPage({
               onRefund={requestRefund}
             />
           )}
-
+ 
           {refundTxn && (
             <RefundConfirmModal
               isSubmitting={isRefunding}
@@ -223,3 +202,4 @@ export default function TransactionsPage({
     </div>
   );
 }
+ 

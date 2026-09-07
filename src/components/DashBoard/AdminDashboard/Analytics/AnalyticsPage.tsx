@@ -98,19 +98,19 @@ export default function Analytics() {
 
         const results = await Promise.all(
           events.map(async (e) => {
-            console.log("Token exists:", !!getToken());
+            
 
-            console.log("Event ID:", e.id);
+            
             const params = new URLSearchParams({ dateFrom, dateTo });
             const res = await fetch(
               `${Api_Base}/api/Analytics/events/${e.id}?${params}`,
               { headers: { Authorization: `Bearer ${getToken()}` } },
             );
             if (!res.ok) {
-              console.log("Status:", res.status);
+              
 
               const errorBody = await res.text();
-              console.log("Analytics Error Response:", errorBody);
+              console.error("Analytics Error Response:", errorBody);
 
               throw new Error(
                 `Analytics fetch failed for ${e.id}: ${res.status}`,

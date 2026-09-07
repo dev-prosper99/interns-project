@@ -22,9 +22,7 @@ const RecentEvents = () => {
           "https://ticketing-management-system-be.onrender.com/api/Events",
         );
         const data = await response.json();
-        console.log(data);
-        console.log("Status:", response.status);
-        console.log("Events:", data.data.items);
+      
         setRecentEvents(data.data.items || []);
       } catch (error) {
         console.error(error);

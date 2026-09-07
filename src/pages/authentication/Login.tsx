@@ -106,6 +106,7 @@ const Login = () => {
       );
 
       const data = await response.json();
+      
 
       if (!response.ok) {
         throw new Error(data.message || "Invalid email or password");
@@ -154,6 +155,7 @@ const Login = () => {
         message: "Welcome back!",
       });
       const payload = JSON.parse(atob(authToken.split(".")[1]));
+      
 
       const role =
         payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];

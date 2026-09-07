@@ -23,7 +23,7 @@ export default function Stepper({ currentIndex }: StepperProps) {
               state === "active"
                 ? "bg-[#3b2466]"
                 : state === "done"
-                  ? "bg-[#7c3aed]"
+                  ? "bg-purple-500"
                   : "bg-[#161616]"
             }`}
           >
