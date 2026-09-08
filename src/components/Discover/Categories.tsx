@@ -2,16 +2,16 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { EventCard } from "@/components/cards/EventCard";
 import { Events } from "@/constants/events";
- 
+
 import event1 from "@/assets/event-1.png";
 import event2 from "@/assets/event-2.png";
 import event3 from "@/assets/event-3.png";
 import event4 from "@/assets/event-4.png";
 import event5 from "@/assets/event-5.png";
 import event6 from "@/assets/event-6.png";
- 
+
 const images = [event1, event2, event3, event4, event5, event6];
- 
+
 const filterCategories = [
   { label: "All Categories", value: "all" },
   { label: "Music", value: "music" },
@@ -26,22 +26,21 @@ const filterCategories = [
   { label: "Business", value: "business" },
   { label: "Gaming", value: "gaming" },
 ];
- 
+
 const PAGE_SIZE = 6;
- 
 
 function parseEventDate(startDate: string): Date {
   const [day, month, year] = startDate.split("-").map(Number);
   return new Date(year, month - 1, day);
 }
- 
+
 function matchesDateFilter(startDate: string, dateFilter?: string): boolean {
   if (!dateFilter) return true;
- 
+
   const eventDate = parseEventDate(startDate);
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
- 
+
   switch (dateFilter) {
     case "Today": {
       return eventDate.getTime() === today.getTime();
@@ -66,12 +65,15 @@ function matchesDateFilter(startDate: string, dateFilter?: string): boolean {
       return true;
   }
 }
- 
-function matchesPriceFilter(regularPrice: string, priceFilter?: string): boolean {
+
+function matchesPriceFilter(
+  regularPrice: string,
+  priceFilter?: string,
+): boolean {
   if (!priceFilter) return true;
- 
+
   const price = Number(regularPrice);
- 
+
   switch (priceFilter) {
     case "Free":
       return price === 0;
@@ -83,33 +85,37 @@ function matchesPriceFilter(regularPrice: string, priceFilter?: string): boolean
       return true;
   }
 }
- 
+
 interface CategoriesProps {
   search?: string;
   city?: string;
   price?: string;
   date?: string;
 }
- 
-export default function Categories({ search, city, price, date }: CategoriesProps) {
+
+export default function Categories({
+  search,
+  city,
+  price,
+  date,
+}: CategoriesProps) {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [page, setPage] = useState(1);
- 
+
   const filteredEvents = Events.filter((event) => {
     const matchesCategory =
       selectedCategory === "all" ||
       event.eventCategory?.toLowerCase() === selectedCategory;
- 
+
     const matchesSearch =
-      !search ||
-      event.eventTitle.toLowerCase().includes(search.toLowerCase());
- 
+      !search || event.eventTitle.toLowerCase().includes(search.toLowerCase());
+
     const matchesCity =
       !city || event.venue.toLowerCase().includes(city.toLowerCase());
- 
+
     const matchesPrice = matchesPriceFilter(event.regular_ticketPrice, price);
     const matchesDate = matchesDateFilter(event.startDate, date);
- 
+
     return (
       matchesCategory &&
       matchesSearch &&
@@ -118,21 +124,21 @@ export default function Categories({ search, city, price, date }: CategoriesProp
       matchesDate
     );
   });
- 
+
   const totalPages = Math.max(1, Math.ceil(filteredEvents.length / PAGE_SIZE));
   const paginatedEvents = filteredEvents.slice(
     (page - 1) * PAGE_SIZE,
-    page * PAGE_SIZE
+    page * PAGE_SIZE,
   );
- 
+
   const handleCategorySelect = (value: string) => {
     setSelectedCategory(value);
     setPage(1);
   };
- 
+
   const goToPrevPage = () => setPage((p) => Math.max(1, p - 1));
   const goToNextPage = () => setPage((p) => Math.min(totalPages, p + 1));
- 
+
   return (
     <div className="px-6 md:px-16 py-16 bg-neutral-950">
       <div className="mb-6">
@@ -141,7 +147,7 @@ export default function Categories({ search, city, price, date }: CategoriesProp
           Don't miss what's happening near you
         </p>
       </div>
- 
+
       {/* Categories */}
       <div className="flex flex-wrap gap-2 mb-4">
         {filterCategories.map((category) => (
@@ -158,11 +164,11 @@ export default function Categories({ search, city, price, date }: CategoriesProp
           </button>
         ))}
       </div>
- 
+
       <p className="text-neutral-400 text-sm mb-6">
         {filteredEvents.length} events found
       </p>
- 
+
       {/* Grid */}
       {paginatedEvents.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -185,7 +191,7 @@ export default function Categories({ search, city, price, date }: CategoriesProp
           No events match your filters.
         </p>
       )}
- 
+
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex items-center justify-center gap-2 mt-10">
@@ -197,7 +203,7 @@ export default function Categories({ search, city, price, date }: CategoriesProp
           >
             Prev
           </Button>
- 
+
           {Array.from({ length: totalPages }, (_, idx) => idx + 1).map((p) => (
             <Button
               key={p}
@@ -211,7 +217,7 @@ export default function Categories({ search, city, price, date }: CategoriesProp
               {p}
             </Button>
           ))}
- 
+
           <Button
             variant="outline"
             onClick={goToNextPage}
@@ -225,4 +231,3 @@ export default function Categories({ search, city, price, date }: CategoriesProp
     </div>
   );
 }
- 

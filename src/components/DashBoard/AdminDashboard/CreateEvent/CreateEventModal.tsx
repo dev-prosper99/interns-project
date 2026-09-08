@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import Stepper from "./Stepper";
 import StepBasics from "./StepBasics";
@@ -10,7 +10,8 @@ import Alert from "@/assets/alert";
 import { Button } from "@/components/ui/button";
 import type { AlertState, AlertType } from "./types";
 
-const API_URL = "https://ticketing-management-system-be.onrender.com/api/Events";
+const API_URL =
+  "https://ticketing-management-system-be.onrender.com/api/Events";
 
 const getStoredToken = (): string => {
   if (typeof window === "undefined") return "";
@@ -37,15 +38,58 @@ const toIsoDateTime = (date: string, time: string): string => {
 interface CreateEventModalProps {
   isOpen: boolean;
   onClose?: () => void;
+  eventId?: string | number;
 }
 
-const CreateEventModal = ({ onClose }: CreateEventModalProps) => {
+const CreateEventModal = ({
+  isOpen,
+  onClose,
+  eventId,
+}: CreateEventModalProps) => {
   const [stepIndex, setStepIndex] = useState(0);
   const [form, setForm] = useState(emptyForm);
   const [alert, setAlert] = useState<AlertState | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  useEffect(() => {
+    if (!eventId) return;
 
-  const update = (patch: Partial<typeof emptyForm>) => setForm((f) => ({ ...f, ...patch }));
+    const fetchEvent = async () => {
+      try {
+        const token = getStoredToken();
+
+        const response = await fetch(
+          `https://ticketing-management-system-be.onrender.com/api/Events/${eventId}`,
+          {
+            headers: {
+              ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            },
+          },
+        );
+
+        const result = await response.json();
+
+        const event = result.data;
+
+        setForm((prev) => ({
+          ...prev,
+          title: event.title ?? "",
+          description: event.description ?? "",
+          venue: event.venue ?? "",
+          state: event.state ?? "",
+          city: event.city ?? "",
+          bannerUrl: event.bannerUrl ?? "",
+          refundPolicy: event.eventPolicy ?? "",
+        }));
+      } catch (error) {
+        console.error("Failed to fetch event:", error);
+      }
+    };
+
+    fetchEvent();
+  }, [eventId]);
+
+  const update = (patch: Partial<typeof emptyForm>) =>
+    setForm((f) => ({ ...f, ...patch }));
 
   const goNext = () => setStepIndex((i) => Math.min(i + 1, STEPS.length - 1));
   const goBack = () => setStepIndex((i) => Math.max(i - 1, 0));
@@ -61,8 +105,20 @@ const CreateEventModal = ({ onClose }: CreateEventModalProps) => {
   };
 
   const handlePublish = async () => {
-    if (!form.title || !form.description || !form.venue || !form.state || !form.city || !form.startDate || !form.startTime) {
-      showAlert("error", "Missing details", "Fill the required event fields before publishing.");
+    if (
+      !form.title ||
+      !form.description ||
+      !form.venue ||
+      !form.state ||
+      !form.city ||
+      !form.startDate ||
+      !form.startTime
+    ) {
+      showAlert(
+        "error",
+        "Missing details",
+        "Fill the required event fields before publishing.",
+      );
       return;
     }
 
@@ -76,7 +132,10 @@ const CreateEventModal = ({ onClose }: CreateEventModalProps) => {
       bannerUrl: form.bannerUrl || "",
       eventPolicy: form.refundPolicy,
       availabilityStart: toIsoDateTime(form.startDate, form.startTime),
-      availabilityEnd: toIsoDateTime(form.endDate || form.startDate, form.startTime),
+      availabilityEnd: toIsoDateTime(
+        form.endDate || form.startDate,
+        form.startTime,
+      ),
       ticketTypes: form.tiers.map((tier) => ({
         name: tier.name,
         description: tier.description,
@@ -99,27 +158,51 @@ const CreateEventModal = ({ onClose }: CreateEventModalProps) => {
       });
 
       const responseText = await response.text();
-     
 
-
-
-console.log(
-  "Payload JSON:",
-  JSON.stringify(payload, null, 2)
-);
+      
 
       const responseBody = responseText ? JSON.parse(responseText) : null;
 
       if (!response.ok) {
         const message =
-          responseBody?.message || responseBody?.error || `Request failed with status ${response.status}`;
+          responseBody?.message ||
+          responseBody?.error ||
+          `Request failed with status ${response.status}`;
         throw new Error(message);
       }
+      const eventId = responseBody.data.id;
 
-      showAlert("success", "Event published", responseBody?.message || "Your event was created successfully.");
+      await fetch(
+        `https://ticketing-management-system-be.onrender.com/api/TicketTypes/${eventId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+          body: JSON.stringify(
+            form.tiers.map((tier) => ({
+              name: tier.name,
+              description: tier.description,
+              price: Number(tier.price) || 0,
+              totalQuantity: Number(tier.quantity) || 0,
+            })),
+          ),
+        },
+      );
+
+      showAlert(
+        "success",
+        "Event published",
+        responseBody?.message || "Your event was created successfully.",
+      );
       handleReset();
     } catch (error) {
-      showAlert("error", "Publish failed", error instanceof Error ? error.message : "Unable to create the event.");
+      showAlert(
+        "error",
+        "Publish failed",
+        error instanceof Error ? error.message : "Unable to create the event.",
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -140,8 +223,13 @@ console.log(
     }
   };
 
+  if (!isOpen) return null;
+
   return (
-    <div className="relative min-h-screen bg-neutral-1000 flex items-center justify-center p-6">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-6"
+      onClick={onClose}
+    >
       {alert && (
         <div className="fixed top-6 right-6 z-50 w-full max-w-md">
           <Alert
@@ -150,15 +238,21 @@ console.log(
             message={alert.message}
             onClose={() => setAlert(null)}
           />
-          
         </div>
       )}
-        
-      <div className="w-full max-w-xl bg-neutral-1000 rounded-2xl border border-neutral-800 shadow-2xl p-6">
+
+      <div
+        className="w-full max-w-xl bg-neutral-1000 rounded-2xl border border-neutral-800 shadow-2xl p-6"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="flex items-start justify-between mb-5">
           <div>
-            <h2 className="text-lg font-semibold text-neutral-100">Create New Event</h2>
-            <p className="text-sm text-neutral-500">Follow the steps to publish your event</p>
+            <h2 className="text-lg font-semibold text-neutral-100">
+              Create New Event
+            </h2>
+            <p className="text-sm text-neutral-500">
+              Follow the steps to publish your event
+            </p>
           </div>
           <Button
             type="button"
@@ -173,7 +267,9 @@ console.log(
 
         <Stepper currentIndex={stepIndex} />
 
-        <div className="max-h-[55vh] overflow-y-auto pr-1 -mr-1">{renderStep()}</div>
+        <div className="max-h-[55vh] overflow-y-auto pr-1 -mr-1">
+          {renderStep()}
+        </div>
 
         <div className="flex gap-3 mt-7">
           <Button
@@ -185,11 +281,7 @@ console.log(
             Back
           </Button>
           {stepIndex < STEPS.length - 1 ? (
-            <Button
-              onClick={goNext}
-              variant="yellow"
-              className="flex-1 h-11"
-            >
+            <Button onClick={goNext} variant="yellow" className="flex-1 h-11">
               Continue
             </Button>
           ) : (
@@ -206,6 +298,6 @@ console.log(
       </div>
     </div>
   );
-}
+};
 
 export default CreateEventModal;

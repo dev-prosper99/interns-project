@@ -1,8 +1,8 @@
 const ContactUs = () => {
-    return (
-        <>
-        <div>contact us</div>
-        </>
-    )
-}
+  return (
+    <>
+      <div>contact us</div>
+    </>
+  );
+};
 export default ContactUs;

@@ -19,7 +19,9 @@ export async function fetchStates(): Promise<LocationOption[]> {
   return data.map((state) => ({ label: state, value: state }));
 }
 
-export async function fetchCitiesByState(state: string): Promise<LocationOption[]> {
+export async function fetchCitiesByState(
+  state: string,
+): Promise<LocationOption[]> {
   if (!state) return [];
   const res = await fetch(`${BASE_URL}/?state=${encodeURIComponent(state)}`);
   if (!res.ok) {

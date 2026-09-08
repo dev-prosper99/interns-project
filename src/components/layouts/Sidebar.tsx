@@ -9,10 +9,10 @@ import {
   AttendeeIcon,
   SettingsIcon,
   LogoutIcon,
-  DownarrowIcon
+  DownarrowIcon,
 } from "@/assets/icons";
 import logo from "@/assets/images/logo.png";
- 
+
 const navItems = [
   { label: "Dashboard", icon: DashboardIcon, path: "/dashboard" },
   { label: "Events", icon: EventIcon, path: "/events" },
@@ -22,43 +22,46 @@ const navItems = [
   { label: "Attendees", icon: AttendeeIcon, path: "/attendees" },
   { label: "Settings", icon: SettingsIcon, path: "/settings" },
 ];
- 
+
 export default function Sidebar() {
   const [showLogoutMenu, setShowLogoutMenu] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
- 
+
   const displayName =
-    (localStorage.getItem("fullName") ||
+    (
+      localStorage.getItem("fullName") ||
       localStorage.getItem("firstName") ||
-      "User")
+      "User"
+    )
       .trim()
       .replace(/\s+/g, " ") || "User";
- 
+
   const userEmail =
     (localStorage.getItem("email") || "your@email.com").trim() ||
     "your@email.com";
- 
-  const initials = displayName
-    .split(" ")
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase())
-    .join("") || "U";
- 
+
+  const initials =
+    displayName
+      .split(" ")
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase())
+      .join("") || "U";
+
   const handleLogout = () => {
     localStorage.clear();
     setShowLogoutMenu(false);
     navigate("/login");
   };
- 
+
   return (
     <aside className="h-screen w-56 bg-neutral-1000 flex flex-col px-3 py-5 sticky top-0">
       <div className="flex-1">
         <div className="flex items-center gap-2 px-2 mb-8">
           <img src={logo} alt="Logo" className="h-8 w-auto" />
         </div>
- 
+
         <nav className="flex flex-col gap-1">
           {navItems.map(({ label, icon: Icon, path }) => {
             const isActive = location.pathname.startsWith(path);
@@ -83,7 +86,7 @@ export default function Sidebar() {
           })}
         </nav>
       </div>
- 
+
       <div className="mt-auto pt-4 border-t border-white/5 relative">
         <button
           type="button"
@@ -109,7 +112,7 @@ export default function Sidebar() {
             <DownarrowIcon />
           </span>
         </button>
- 
+
         {showLogoutMenu && (
           <div className="absolute bottom-full left-0 right-0 mb-2 rounded-xl bg-neutral-800 overflow-hidden shadow-lg">
             <button
@@ -117,7 +120,9 @@ export default function Sidebar() {
               onClick={handleLogout}
               className="w-full flex items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium text-red-500 hover:bg-white/5"
             >
-              <span className="text-base"><LogoutIcon /></span>
+              <span className="text-base">
+                <LogoutIcon />
+              </span>
               Log Out
             </button>
           </div>
@@ -126,4 +131,3 @@ export default function Sidebar() {
     </aside>
   );
 }
- 

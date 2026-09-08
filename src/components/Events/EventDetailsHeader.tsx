@@ -1,10 +1,12 @@
 import { CancelCircleIcon } from "@/assets/icons"; // TODO: rename to match your close/X icon's export name
- 
+
 interface EventDetailsHeaderProps {
   onClose: () => void;
 }
- 
-export default function EventDetailsHeader({ onClose }: EventDetailsHeaderProps) {
+
+export default function EventDetailsHeader({
+  onClose,
+}: EventDetailsHeaderProps) {
   return (
     <div className="flex items-center justify-between">
       <h2 className="text-white text-xl font-semibold">Event Details</h2>
@@ -14,4 +16,3 @@ export default function EventDetailsHeader({ onClose }: EventDetailsHeaderProps)
     </div>
   );
 }
- 

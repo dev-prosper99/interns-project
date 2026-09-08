@@ -1,4 +1,6 @@
+import { useNavigate } from "react-router-dom";
 export default function CtaBanner() {
+  const navigate = useNavigate();
   return (
     <div
       className="relative h-100 bg-cover bg-center flex flex-col items-center justify-center text-center px-4"
@@ -13,10 +15,16 @@ export default function CtaBanner() {
           Join thousands of event organizers already selling tickets with TixO
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <button className="bg-purple-600 hover:bg-[#6D28D9] text-white px-6 py-3 rounded-lg font-medium">
+          <button
+            onClick={() => navigate("/sign-up")}
+            className="bg-purple-600 hover:bg-[#6D28D9] text-white px-6 py-3 rounded-lg font-medium"
+          >
             Get Started
           </button>
-          <button className="bg-neutral-500 hover:bg-neutral-600 text-white px-6 py-3 rounded-lg font-medium border border-white/30">
+          <button
+            onClick={() => navigate("/discover")}
+            className="bg-neutral-500 hover:bg-neutral-600 text-white px-6 py-3 rounded-lg font-medium border border-white/30"
+          >
             Discover Events
           </button>
         </div>

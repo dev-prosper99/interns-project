@@ -49,7 +49,6 @@ const SignUp = () => {
         return;
       }
 
-      
       const response = await fetch(
         "https://ticketing-management-system-be.onrender.com/api/Auth/register",
         {
@@ -119,7 +118,6 @@ const SignUp = () => {
 
   return (
     <div className="relative flex h-screen flex-col bg-neutral-1000 lg:flex-row">
-    
       <div
         className="sticky top-0 hidden h-screen flex-col bg-cover bg-center p-10 lg:flex lg:w-1/2"
         style={{ backgroundImage: `url(${Discover})` }}
@@ -151,15 +149,12 @@ const SignUp = () => {
         </div>
       </div>
 
-    
       <div className="h-screen w-full overflow-y-auto p-8 lg:w-1/2 lg:pt-8">
-      
         <div className="mb-6 w-[162.5px] lg:hidden">
           <img src={Logo} alt="Logo" className="h-10 w-auto" />
         </div>
 
         <div className="w-full max-w-150 rounded-xl bg-neutral-925 p-8">
-        
           <div className="mx-auto flex h-11 w-64.5 items-center justify-center gap-2 rounded-2xl bg-neutral-900 p-1">
             <Button
               type="button"

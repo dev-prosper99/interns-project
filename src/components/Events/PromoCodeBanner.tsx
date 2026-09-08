@@ -2,8 +2,11 @@ interface PromoCodeBannerProps {
   code: string;
   discount: string;
 }
- 
-export default function PromoCodeBanner({ code, discount }: PromoCodeBannerProps) {
+
+export default function PromoCodeBanner({
+  code,
+  discount,
+}: PromoCodeBannerProps) {
   return (
     <div
       className="rounded-2xl flex items-center justify-between p-4"

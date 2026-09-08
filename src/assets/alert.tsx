@@ -1,5 +1,5 @@
 import { SuccessIcon } from "@/assets/icons";
-import {ErrorIcon} from "@/assets/icons";
+import { ErrorIcon } from "@/assets/icons";
 
 interface AlertProps {
   type: "success" | "error";
@@ -33,10 +33,7 @@ const Alert = ({ type, title, message, onClose }: AlertProps) => {
       </div>
 
       {onClose && (
-        <button
-          onClick={onClose}
-          className="text-gray-400 hover:text-white"
-        >
+        <button onClick={onClose} className="text-gray-400 hover:text-white">
           ✕
         </button>
       )}

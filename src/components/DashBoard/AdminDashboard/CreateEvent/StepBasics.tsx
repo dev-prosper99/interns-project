@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { TextInput, TextArea, Select } from "./FormControls";
 import { CATEGORIES } from "../../../../constants/eventOptions";
-import { fetchStates, fetchCitiesByState, type LocationOption } from "../../../../lib/nigeriaLocations";
+import {
+  fetchStates,
+  fetchCitiesByState,
+  type LocationOption,
+} from "../../../../lib/nigeriaLocations";
 import type { EventFormData, FormUpdater } from "./types";
 
 interface StepBasicsProps {
@@ -25,7 +29,8 @@ export default function StepBasics({ form, update }: StepBasicsProps) {
         if (!cancelled) setStateOptions(states);
       })
       .catch(() => {
-        if (!cancelled) setLocationError("Couldn't load states. Please try again.");
+        if (!cancelled)
+          setLocationError("Couldn't load states. Please try again.");
       })
       .finally(() => {
         if (!cancelled) setLoadingStates(false);
@@ -48,7 +53,8 @@ export default function StepBasics({ form, update }: StepBasicsProps) {
         if (!cancelled) setCityOptions(cities);
       })
       .catch(() => {
-        if (!cancelled) setLocationError("Couldn't load cities for this state.");
+        if (!cancelled)
+          setLocationError("Couldn't load cities for this state.");
       })
       .finally(() => {
         if (!cancelled) setLoadingCities(false);
@@ -150,9 +156,7 @@ export default function StepBasics({ form, update }: StepBasicsProps) {
           onChange={(e) => update({ city: e.target.value })}
         />
       </div>
-      {locationError && (
-        <p className="text-xs text-red-400">{locationError}</p>
-      )}
+      {locationError && <p className="text-xs text-red-400">{locationError}</p>}
 
       <div>
         <TextInput
@@ -177,7 +181,9 @@ export default function StepBasics({ form, update }: StepBasicsProps) {
           </div>
         )}
         {form.bannerPreview && bannerError && (
-          <p className="mt-2 text-xs text-red-400">Couldn't load an image from that URL.</p>
+          <p className="mt-2 text-xs text-red-400">
+            Couldn't load an image from that URL.
+          </p>
         )}
       </div>
     </div>

@@ -2,7 +2,7 @@ interface PillProps {
   label: string;
   color: string;
 }
- 
+
 // Solid text over a ~24%-opacity tint of the same color
 export default function Pill({ label, color }: PillProps) {
   return (

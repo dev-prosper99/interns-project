@@ -3,7 +3,6 @@ import { Button } from "../ui/button";
 import { NavLink, useNavigate } from "react-router-dom";
 import logo from "@/assets/images/logo.png";
 
-
 const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const navigateToLogin = (pageLink: string) => {
@@ -26,7 +25,6 @@ const Navbar: React.FC = () => {
               Discover
             </NavLink>
           </li>
-          
         </ul>
 
         <div className="flex items-center gap-4">

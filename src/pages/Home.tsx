@@ -10,12 +10,10 @@ import StatsBar from "@/components/HomePage/StatsBar";
 import TicketSteps from "@/components/HomePage/TicketSteps";
 import Newsletter from "@/components/HomePage/NewsLetter";
 import CtaBanner from "@/components/HomePage/CtaBanner";
-import Events from "@/components/Events/Events";
- 
+
 const Home = () => {
   return (
     <div>
-      <Events />
       <Navbar />
       <Hero />
       <StatsBar />
@@ -23,7 +21,7 @@ const Home = () => {
       <TicketSteps />
       <EventsNearYou />
       <BuiltForNigerians />
-      <OrganizerPitch />    
+      <OrganizerPitch />
       <Testimonials />
       <Newsletter />
       <CtaBanner />
@@ -31,5 +29,5 @@ const Home = () => {
     </div>
   );
 };
- 
+
 export default Home;

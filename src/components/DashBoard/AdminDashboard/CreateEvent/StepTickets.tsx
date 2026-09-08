@@ -11,11 +11,18 @@ interface StepTicketsProps {
 
 export default function StepTickets({ form, update }: StepTicketsProps) {
   const setTier = (id: string, patch: Partial<Tier>) =>
-    update({ tiers: form.tiers.map((t) => (t.id === id ? { ...t, ...patch } : t)) });
+    update({
+      tiers: form.tiers.map((t) => (t.id === id ? { ...t, ...patch } : t)),
+    });
 
   const addTier = () => update({ tiers: [...form.tiers, emptyTier()] });
   const removeTier = (id: string) =>
-    update({ tiers: form.tiers.length > 1 ? form.tiers.filter((t) => t.id !== id) : form.tiers });
+    update({
+      tiers:
+        form.tiers.length > 1
+          ? form.tiers.filter((t) => t.id !== id)
+          : form.tiers,
+    });
 
   return (
     <div>
@@ -33,7 +40,10 @@ export default function StepTickets({ form, update }: StepTicketsProps) {
 
       <div className="space-y-4">
         {form.tiers.map((tier, i) => (
-          <div key={tier.id} className="rounded-lg border border-neutral-800 bg-neutral-800/30 p-4 relative">
+          <div
+            key={tier.id}
+            className="rounded-lg border border-neutral-800 bg-neutral-800/30 p-4 relative"
+          >
             {form.tiers.length > 1 && (
               <Button
                 type="button"
@@ -42,7 +52,7 @@ export default function StepTickets({ form, update }: StepTicketsProps) {
                 className="absolute top-2 right-2 h-8 w-8 rounded-full p-0 text-neutral-500 hover:text-red-400"
                 aria-label="Remove tier"
               >
-                < DeleteIcon/>
+                <DeleteIcon />
               </Button>
             )}
             <p className="text-xs text-neutral-500 mb-3">Tier {i + 1}</p>
@@ -76,7 +86,9 @@ export default function StepTickets({ form, update }: StepTicketsProps) {
                 label="Description"
                 placeholder="Brief Description"
                 value={tier.description}
-                onChange={(e) => setTier(tier.id, { description: e.target.value })}
+                onChange={(e) =>
+                  setTier(tier.id, { description: e.target.value })
+                }
               />
             </div>
           </div>

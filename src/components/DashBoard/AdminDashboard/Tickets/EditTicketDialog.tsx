@@ -132,7 +132,8 @@ export function EditTicketDialog({
 
           {isBelowSold && (
             <p className="text-xs text-red-400">
-              Total qty can't be lower than the {ticket.sold} tickets already sold.
+              Total qty can't be lower than the {ticket.sold} tickets already
+              sold.
             </p>
           )}
         </div>

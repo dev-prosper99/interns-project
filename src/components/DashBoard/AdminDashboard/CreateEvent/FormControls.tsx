@@ -16,15 +16,16 @@ export function FieldLabel({ children, required }: FieldLabelProps) {
   );
 }
 
-interface TextInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "label"> {
+interface TextInputProps extends Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  "label"
+> {
   required?: boolean;
   label?: string;
 }
 
 export function TextInput({ required, label, ...props }: TextInputProps) {
-  return (
-    <Input label={label} required={required} {...props} />
-  );
+  return <Input label={label} required={required} {...props} />;
 }
 
 interface TextAreaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -57,7 +58,15 @@ interface SelectProps {
   disabled?: boolean;
 }
 
-export function Select({ required, label, options, placeholder, value, onChange, disabled }: SelectProps) {
+export function Select({
+  required,
+  label,
+  options,
+  placeholder,
+  value,
+  onChange,
+  disabled,
+}: SelectProps) {
   return (
     <div>
       {label && <FieldLabel required={required}>{label}</FieldLabel>}
@@ -65,17 +74,19 @@ export function Select({ required, label, options, placeholder, value, onChange,
         value={value}
         onChange={onChange}
         disabled={disabled}
-        className="w-full rounded-lg bg-neutral-800/80 border border-neutral-700 px-3.5 py-2.5 text-sm text-neutral-100 outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed appearance-none bg-[url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 20 20%22 fill=%22%23888%22><path d=%22M5.5 7.5l4.5 4.5 4.5-4.5%22 stroke=%22%23888%22 stroke-width=%221.5%22 fill=%22none%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22/></svg>')] bg-no-repeat bg-[right_0.9rem_center]"
+        className="w-full rounded-lg bg-neutral-800/80 border border-neutral-700 px-3.5 py-2.5 text-sm text-neutral-100 outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed appearance-none  bg-no-repeat  background-position: right 0.9rem  14.4px center;"
       >
         <option value="">{placeholder}</option>
         {options.map((option) => {
-          const optionValue = typeof option === "string" ? option : option.value;
-          const optionLabel = typeof option === "string" ? option : option.label;
+          const optionValue =
+            typeof option === "string" ? option : option.value;
+          const optionLabel =
+            typeof option === "string" ? option : option.label;
 
           return (
             <option key={optionValue} value={optionValue}>
               {optionLabel}
-          </option>
+            </option>
           );
         })}
       </select>
@@ -90,18 +101,33 @@ interface RadioOptionProps {
   children?: React.ReactNode;
 }
 
-export function RadioOption({ selected, onClick, label, children }: RadioOptionProps) {
+export function RadioOption({
+  selected,
+  onClick,
+  label,
+  children,
+}: RadioOptionProps) {
   return (
     <div>
-      <button type="button" onClick={onClick} className="w-full flex items-start gap-3 text-left group">
+      <button
+        type="button"
+        onClick={onClick}
+        className="w-full flex items-start gap-3 text-left group"
+      >
         <span
           className={`mt-0.5 shrink-0 w-4 h-4 rounded-full border flex items-center justify-center transition-colors ${
-            selected ? "border-purple-500" : "border-neutral-600 group-hover:border-neutral-400"
+            selected
+              ? "border-purple-500"
+              : "border-neutral-600 group-hover:border-neutral-400"
           }`}
         >
           {selected && <span className="w-2 h-2 rounded-full bg-purple-500" />}
         </span>
-        <span className={`text-sm ${selected ? "text-neutral-100" : "text-neutral-400"}`}>{label}</span>
+        <span
+          className={`text-sm ${selected ? "text-neutral-100" : "text-neutral-400"}`}
+        >
+          {label}
+        </span>
       </button>
       {children}
     </div>

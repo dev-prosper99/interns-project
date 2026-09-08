@@ -1,11 +1,14 @@
 import { Button } from "@/components/ui/button";
- 
+
 interface EventDetailsFooterProps {
   onBack: () => void;
   onEdit: () => void;
 }
- 
-export default function EventDetailsFooter({ onBack, onEdit }: EventDetailsFooterProps) {
+
+export default function EventDetailsFooter({
+  onBack,
+  onEdit,
+}: EventDetailsFooterProps) {
   return (
     <div className="flex flex-col sm:flex-row gap-4">
       <Button
@@ -23,4 +26,3 @@ export default function EventDetailsFooter({ onBack, onEdit }: EventDetailsFoote
     </div>
   );
 }
- 

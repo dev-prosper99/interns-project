@@ -11,14 +11,18 @@ export default function StepSettings({ form, update }: StepSettingsProps) {
   return (
     <div className="space-y-7">
       <div>
-        <h3 className="text-sm font-semibold text-neutral-200 mb-4">Event Settings</h3>
+        <h3 className="text-sm font-semibold text-neutral-200 mb-4">
+          Event Settings
+        </h3>
         <TextInput
           label="Promo Code"
           placeholder="e.g EARLYBIRD20"
           value={form.promoCode}
           onChange={(e) => update({ promoCode: e.target.value })}
         />
-        <p className="text-xs text-neutral-500 mt-1.5">Leave blank to disable promo codes</p>
+        <p className="text-xs text-neutral-500 mt-1.5">
+          Leave blank to disable promo codes
+        </p>
 
         {form.promoCode && (
           <div className="mt-3">
@@ -34,7 +38,9 @@ export default function StepSettings({ form, update }: StepSettingsProps) {
       </div>
 
       <div>
-        <h3 className="text-sm font-semibold text-neutral-200 mb-4">Refund Policy</h3>
+        <h3 className="text-sm font-semibold text-neutral-200 mb-4">
+          Refund Policy
+        </h3>
         <div className="space-y-4">
           {REFUND_POLICIES.map((policy) => (
             <RadioOption
@@ -48,7 +54,9 @@ export default function StepSettings({ form, update }: StepSettingsProps) {
                   <TextArea
                     placeholder="Describe your custom refund policy"
                     value={form.customRefundNote}
-                    onChange={(e) => update({ customRefundNote: e.target.value })}
+                    onChange={(e) =>
+                      update({ customRefundNote: e.target.value })
+                    }
                   />
                 </div>
               )}
