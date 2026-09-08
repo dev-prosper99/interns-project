@@ -3,45 +3,53 @@ import Home from "./pages/Home";
 import Discover from "./pages/Discover";
 import ContactUs from "./pages/ContactUs";
 import AboutUs from "./pages/AboutUs";
-import SignUp from "./pages/Authentication/SignUp";
-import Login from "./pages/Authentication/Login";
-import Analytics from "./components/DashBoard/AdminDashboard/Analytics/AnalyticsPage";
+import SignUp from "./pages/authentication/SignUp";
+import Login from "./pages/authentication/Login";
 import ProtectedRoute from "./ProtectedRoutes";
-import TransactionsPage from "./components/DashBoard/AdminDashboard/Trasanctions/TransactionsPage";
-import AccountSettingsPage from "./components/DashBoard/AdminDashboard/Profile/AccountSettingsPage ";
-
 import Dashboard from "./pages/Dashboard";
-import TicketsPage from "./components/DashBoard/AdminDashboard/Tickets/TicketsPage";
-import AttendeesPage from "./components/DashBoard/AdminDashboard/Atendee/Attendees";
 import Events from "./components/Events/Events";
-import AttendeDashboard from "./components/DashBoard/AttendeeDashboard/AttendeDashboard";
+import MyTickets from "./components/Dashboard/AttendeeDashboard/AttendeeDashboardPages/MyTickets";
+import DiscoverEvents from "./components/Dashboard/AttendeeDashboard/AttendeeDashboardPages/DiscoverEvents";
+import DiscoverEventsDetails from "./components/Dashboard/AttendeeDashboard/Sections/DiscoverEventsSections/DiscoverEventsDetails";
+import SavedEvents from "./components/Dashboard/AttendeeDashboard/AttendeeDashboardPages/SavedEvents";
+import Settings from "./components/Dashboard/AttendeeDashboard/AttendeeDashboardPages/Settings";
+import Analytics from "./components/Dashboard/AdminDashboard/AdminDashboardPages/Analytics/AnalyticsPage";
+import TicketsPage from "./components/Dashboard/AdminDashboard/AdminDashboardPages/Tickets/TicketsPage";
+import AttendeesPage from "./components/Dashboard/AdminDashboard/AdminDashboardPages/Atendee/Attendees";
+import AccountSettingsPage from "./components/Dashboard/AdminDashboard/AdminDashboardPages/Profile/AccountSettingsPage ";
+import TransactionsPage from "./components/Dashboard/AdminDashboard/AdminDashboardPages/Trasanctions/TransactionsPage";
 
 function App() {
-  return (
-    <div>
-      <Routes>
-        <Route element={<ProtectedRoute />}>
-          <Route path="/tickets" element={<TicketsPage />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/analytics" element={<Analytics />} />
-          <Route path="/transactions" element={<TransactionsPage />} />
-          <Route path="/settings" element={<AccountSettingsPage />} />
-          <Route path="/attendees" element={<AttendeesPage />} />
-          <Route path="/events" element={<Events />} />
-          <Route path="/attendee-dashboard" element={<AttendeDashboard />} />
-        </Route>
+      return (
+            <div>
+                  <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/discover" element={<Discover />} />
+                        <Route path="/contact-us" element={<ContactUs />} />
+                        <Route path="/about-us" element={<AboutUs />} />
+                        <Route path="/sign-up" element={<SignUp />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/" element={<Home />} />
 
-        <Route path="/" element={<Home />} />
+                        <Route element={<ProtectedRoute />}>
+                              <Route path="/dashboard" element={<Dashboard />} />
+                              <Route path="/analytics" element={<Analytics />} />
+                              <Route path="/tickets" element={<TicketsPage />} />
+                              <Route path="/my-tickets" element={<MyTickets />} />
+                              <Route path="/events" element={<Events />} />
+                              <Route path="/discover-events" element={<DiscoverEvents />} />
+                              <Route path="/discover-events/:title" element={<DiscoverEventsDetails />} />
+                              <Route path="/saved-events" element={<SavedEvents />} />
+                              <Route path="/my-settings" element={<Settings />} />
+                              <Route path="/transactions" element={<TransactionsPage />} />
+                              <Route path="/settings" element={<AccountSettingsPage />} />
+                              <Route path="/attendees" element={<AttendeesPage />} />
+                        </Route>
 
-        <Route path="/discover" element={<Discover />} />
-        <Route path="/contact-us" element={<ContactUs />} />
-        <Route path="/about-us" element={<AboutUs />} />
-        <Route path="/sign-up" element={<SignUp />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-      </Routes>
-    </div>
-  );
+                        <Route path="*" element={<div>404 Not Found</div>} />
+                  </Routes>
+            </div>
+      );
 }
 
 export default App;

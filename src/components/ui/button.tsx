@@ -44,7 +44,7 @@ const buttonVariants = cva(
 function Button({
   className,
   variant = "primary",
-  size = "sm",
+  size = "lg",
   ...props
 }: React.ButtonHTMLAttributes<HTMLButtonElement> &
   VariantProps<typeof buttonVariants>) {
