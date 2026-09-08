@@ -1,6 +1,17 @@
-export default function EventsPagination() {
+import { cn } from "@/lib/utils";
+
+type EventsPaginationProps = {
+  className?: string;
+};
+
+export default function EventsPagination({ className }: EventsPaginationProps) {
   return (
-    <div className="flex flex-col gap-3 items-center md:flex-row md:items-center md:justify-between mt-4 text-xs text-neutral-500">
+    <div
+      className={cn(
+        "mt-4 flex flex-col items-center gap-3 text-xs text-neutral-500 md:flex-row md:items-center md:justify-between",
+        className,
+      )}
+    >
       <span>Page 1 of 1</span>
       <div className="flex gap-2">
         <button className="px-3 py-1 rounded-md bg-neutral-900 border border-neutral-800">

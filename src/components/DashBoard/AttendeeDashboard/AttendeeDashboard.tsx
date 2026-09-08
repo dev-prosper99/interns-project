@@ -1,0 +1,102 @@
+import { useState } from "react";
+import Sidebar from "@/components/layouts/Sidebar";
+import { Button } from "@/components/ui/button";
+import { DashboardIcon, EventIcon, SettingsIcon, TicketIcon } from "@/assets/icons";
+import { useNavigate } from "react-router-dom";
+import DashboardStats from "./Sections/DashboardSections/DashboardStats";
+import Upcoming from "./Sections/DashboardSections/Upcoming";
+import SavedEventsPreview from "./Sections/DashboardSections/SavedEventsPreview";
+import SuggestedEvents from "./Sections/DashboardSections/SuggestedEvents";
+import ticketBackground from "@/assets/ticket.png";
+import { HeartIcon } from "lucide-react";
+import DashboardHeader from "@/components/Dashboard/AttendeeDashboard/DashboardHeader";
+
+const attendeeSidebarItems = [
+      { label: "Dashboard", path: "/dashboard", icon: DashboardIcon },
+      { label: "Discover Events", path: "/discover-events", icon: EventIcon },
+      { label: "My Tickets", path: "/my-tickets", icon: TicketIcon },
+      { label: "Saved Events", path: "/saved-events", icon: HeartIcon },
+      { label: "Settings", path: "/my-settings", icon: SettingsIcon },
+];
+
+const AttendeeDashboard = () => {
+      const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+      const navigate = useNavigate();
+      const firstName = (localStorage.getItem("firstName") || "there").trim().replace(/\s+/g, " ") || "there";
+
+      return (
+            <div className="flex ">
+                  <div className="hidden lg:block">
+                        <Sidebar items={attendeeSidebarItems} />
+                  </div>
+
+                  <div className="min-w-0 flex-1 bg-neutral-925 pb-10">
+                        <DashboardHeader onMenuClick={() => setIsSidebarOpen(true)} title="Dashboard" />
+
+                        {isSidebarOpen && (
+                              <>
+                                    <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setIsSidebarOpen(false)} />
+                                    <div className="fixed left-0 top-0 h-full sm:w-64 max-w-xs z-50 lg:hidden overflow-y-auto">
+                                          <div className="p-4 bg-neutral-1000 min-h-full">
+                                                <div className="flex items-center justify-end mb-6">
+                                                      <button
+                                                            onClick={() => setIsSidebarOpen(false)}
+                                                            aria-label="Close menu"
+                                                            className="p-2 rounded-md hover:bg-white/10 text-white"
+                                                      >
+                                                            ×
+                                                      </button>
+                                                </div>
+                                                <Sidebar items={attendeeSidebarItems} />
+                                          </div>
+                                    </div>
+                              </>
+                        )}
+
+                        <div className="p-4 w-full ">
+                              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                                    <p className="text-white sm:text-xl text-lg font-medium font-jakarta">Welcome, {firstName}👋</p>
+
+                                    <Button variant="yellow" className="md:w-auto w-1/2" onClick={() => navigate("/events")}>
+                                          Discover Events
+                                    </Button>
+                              </div>
+                        </div>
+
+                        <div className="space-y-7 px-4 w-full mt-2">
+                              <DashboardStats />
+
+                              <div className="flex items-start justify-between gap-6 xl:flex-nowrap flex-wrap">
+                                    <Upcoming />
+                                    <SavedEventsPreview />
+                              </div>
+
+                              <div className="flex items-stretch justify-between gap-6 xl:flex-nowrap flex-wrap">
+                                    <SuggestedEvents />
+                                    <div
+                                          className="bg-neutral-1000 py-8 rounded-2xl w-full px-4 space-y-10 flex flex-col bg-no-repeat"
+                                          style={{
+                                                backgroundImage: `url(${ticketBackground})`,
+                                                backgroundPosition: "right bottom",
+                                                backgroundSize: "75% 100%",
+                                          }}
+                                    >
+                                          <div className="space-y-16">
+                                                <div className="">
+                                                      <p className="text-white text-2xl font-normal mb-2">Ready for your next experience?</p>
+                                                      <p className="text-white text-lg">Thousands of events are waiting for you across Nigeria</p>
+                                                </div>
+
+                                                <Button variant="yellow" className="self-start w-full md:w-auto" onClick={() => navigate("/events")}>
+                                                      Discover Events
+                                                </Button>
+                                          </div>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
+            </div>
+      );
+};
+
+export default AttendeeDashboard;

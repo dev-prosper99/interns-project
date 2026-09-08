@@ -12,22 +12,22 @@ import Newsletter from "@/components/HomePage/NewsLetter";
 import CtaBanner from "@/components/HomePage/CtaBanner";
 
 const Home = () => {
-  return (
-    <div>
-      <Navbar />
-      <Hero />
-      <StatsBar />
-      <UpcomingEvents />
-      <TicketSteps />
-      <EventsNearYou />
-      <BuiltForNigerians />
-      <OrganizerPitch />
-      <Testimonials />
-      <Newsletter />
-      <CtaBanner />
-      <Footer />
-    </div>
-  );
+      return (
+            <div>
+                  <Navbar />
+                  <Hero />
+                  <StatsBar />
+                  <UpcomingEvents />
+                  <TicketSteps />
+                  <EventsNearYou />
+                  <BuiltForNigerians />
+                  <OrganizerPitch />
+                  <Testimonials />
+                  <Newsletter />
+                  <CtaBanner />
+                  <Footer />
+            </div>
+      );
 };
 
 export default Home;

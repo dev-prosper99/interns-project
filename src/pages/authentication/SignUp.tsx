@@ -7,6 +7,7 @@ import { TickIcon } from "@/assets/icons";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Alert from "@/components/ui/alert";
+import { Eye, EyeOff } from "lucide-react";
 
 const benefits = [
   "Instant ticket delivery to your inbox",
@@ -15,6 +16,7 @@ const benefits = [
 ];
 
 const SignUp = () => {
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [role, setRole] = useState<"attendee" | "organizer">("attendee");
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -226,11 +228,27 @@ const SignUp = () => {
 
               <Input
                 id="password"
-                type="password"
+                type={isPasswordVisible ? "text" : "password"}
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={isLoading}
+                  trailingIcon={
+                    <button
+                      type="button"
+                      aria-label={
+                        isPasswordVisible ? "Hide password" : "Show password"
+                      }
+                      title={
+                        isPasswordVisible ? "Hide password" : "Show password"
+                      }
+                      onClick={() => setIsPasswordVisible((visible) => !visible)}
+                      disabled={isLoading}
+                      className="text-neutral-400 transition-colors hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      {isPasswordVisible ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  }
               />
             </div>
 
