@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
-import RevenueChart from "@/components/Dashboard/AdminDashboard/Sections/RevenueChart";
-import CategoryChart from "@/components/Dashboard/AdminDashboard/Sections/CategoryChart";
-import RecentEvents from "@/components/Dashboard/AdminDashboard/Sections/RecentEvents";
-import RecentTransactions from "@/components/Dashboard/AdminDashboard/Sections/RecentTransactions";
+import RevenueChart from "@/components/DashBoard/AdminDashboard/Sections/RevenueChart";
+import CategoryChart from "@/components/DashBoard/AdminDashboard/Sections/CategoryChart";
+import RecentEvents from "@/components/DashBoard/AdminDashboard/Sections/RecentEvents";
+import RecentTransactions from "@/components/DashBoard/AdminDashboard/Sections/RecentTransactions";
 
 import DashboardStatCard from "./DashboardStatCard";
 import { dashboardStats } from "./dashboardStats";

@@ -9,7 +9,7 @@ import SavedEventsPreview from "./Sections/DashboardSections/SavedEventsPreview"
 import SuggestedEvents from "./Sections/DashboardSections/SuggestedEvents";
 import ticketBackground from "@/assets/ticket.png";
 import { HeartIcon } from "lucide-react";
-import DashboardHeader from "@/components/Dashboard/AttendeeDashboard/DashboardHeader";
+import DashboardHeader from "@/components/DashBoard/AttendeeDashboard/DashboardHeader";
 
 const attendeeSidebarItems = [
       { label: "Dashboard", path: "/dashboard", icon: DashboardIcon },

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import CreateEventModal from "../Dashboard/AdminDashboard/CreateEvent/CreateEventModal";
+import CreateEventModal from "../DashBoard/AdminDashboard/CreateEvent/CreateEventModal";
 import { Button } from "@/components/ui/button";
 
 export default function EventsPageHeader() {
