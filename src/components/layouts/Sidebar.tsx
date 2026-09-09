@@ -1,5 +1,6 @@
 import { useState, type ComponentType, type CSSProperties } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { UserRound } from "lucide-react";
 import { DashboardIcon, EventIcon, TicketIcon, AnalyticsIcon, TransactionIcon, AttendeeIcon, SettingsIcon, LogoutIcon, DownarrowIcon } from "@/assets/icons";
 import logo from "@/assets/images/logo.png";
 
@@ -39,6 +40,8 @@ export default function Sidebar({ items = defaultNavItems, logoSrc = logo, logou
       const displayName = (localStorage.getItem("fullName") || localStorage.getItem("firstName") || "User").trim().replace(/\s+/g, " ") || "User";
 
       const userEmail = (localStorage.getItem("email") || "your@email.com").trim() || "your@email.com";
+      const profilePath = localStorage.getItem("role")?.trim().toLowerCase() === "attendee" ? "/my-settings" : "/settings";
+      const avatarUrl = localStorage.getItem("avatarUrl");
 
       const initials =
             displayName
@@ -85,9 +88,13 @@ export default function Sidebar({ items = defaultNavItems, logoSrc = logo, logou
                               onClick={() => setShowLogoutMenu((prev) => !prev)}
                               className="w-full flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-white/5 cursor-pointer text-left"
                         >
-                              <div className="w-9 h-9 rounded-full bg-purple-500 flex items-center justify-center text-[10px] font-semibold text-white shrink-0">
-                                    {initials}
-                              </div>
+                              {avatarUrl ? (
+                                    <img src={avatarUrl} alt="Profile" className="h-9 w-9 shrink-0 rounded-full object-cover" />
+                              ) : (
+                                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-purple-500 text-[10px] font-semibold text-white">
+                                          {initials}
+                                    </div>
+                              )}
                               <div className="flex-1 min-w-0">
                                     <p className="text-white text-sm font-medium truncate leading-tight">{displayName}</p>
                                     <p className="text-neutral-500 text-[11px] truncate leading-tight mt-0.5">{userEmail}</p>
@@ -102,16 +109,29 @@ export default function Sidebar({ items = defaultNavItems, logoSrc = logo, logou
                         </button>
 
                         {showLogoutMenu && (
-                              <div className="absolute bottom-full left-0 right-0 mb-2 rounded-xl bg-neutral-800 overflow-hidden shadow-lg">
+                              <div className="absolute bottom-full left-0 right-0 mb-3 overflow-hidden rounded-xl border border-white/10 bg-neutral-900 p-1.5 shadow-2xl shadow-black/30">
+                                    <button
+                                          type="button"
+                                          onClick={() => {
+                                                setShowLogoutMenu(false);
+                                                navigate(profilePath);
+                                          }}
+                                          className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-neutral-100 transition-colors hover:bg-white/10"
+                                    >
+                                          <span className="flex h-7 w-7 items-center justify-center rounded-md bg-purple-500/15 text-purple-300">
+                                                <UserRound size={16} strokeWidth={2} />
+                                          </span>
+                                          <span>Profile</span>
+                                    </button>
                                     <button
                                           type="button"
                                           onClick={handleLogout}
-                                          className="w-full flex items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium text-red-500 hover:bg-white/5"
+                                          className="mt-1 flex w-full items-center gap-3 rounded-lg border-t border-white/10 px-3 py-2.5 text-left text-sm font-medium text-red-400 transition-colors hover:bg-red-500/10 hover:text-red-300"
                                     >
-                                          <span className="text-base">
+                                          <span className="flex h-7 w-7 items-center justify-center rounded-md bg-red-500/10">
                                                 <LogoutIcon />
                                           </span>
-                                          Log Out
+                                          <span>Log Out</span>
                                     </button>
                               </div>
                         )}

@@ -10,6 +10,7 @@ const Navbar: React.FC = () => {
       const menuRef = useRef<HTMLDivElement>(null);
       const isLoggedIn = Boolean(localStorage.getItem("token"));
       const displayName = (localStorage.getItem("fullName") || localStorage.getItem("firstName") || "User").trim().replace(/\s+/g, " ") || "User";
+      const avatarUrl = localStorage.getItem("avatarUrl");
       const initials =
             displayName
                   .split(" ")
@@ -64,9 +65,13 @@ const Navbar: React.FC = () => {
                                                 onClick={() => setIsMenuOpen((open) => !open)}
                                                 className="flex items-center gap-2 rounded-full p-1 text-white transition-colors hover:bg-white/10"
                                           >
-                                                <span className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-600 text-sm font-semibold text-white">
-                                                      {initials}
-                                                </span>
+                                                {avatarUrl ? (
+                                                      <img src={avatarUrl} alt="Profile" className="h-10 w-10 rounded-full object-cover" />
+                                                ) : (
+                                                      <span className="flex h-10 w-10 items-center justify-center rounded-full bg-orange-600 text-sm font-semibold text-white">
+                                                            {initials}
+                                                      </span>
+                                                )}
                                                 <ChevronDown className={`hidden h-4 w-4 transition-transform sm:block ${isMenuOpen ? "rotate-180" : ""}`} />
                                           </button>
 
