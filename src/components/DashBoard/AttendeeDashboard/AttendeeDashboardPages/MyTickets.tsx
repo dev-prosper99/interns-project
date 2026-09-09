@@ -6,7 +6,7 @@ import EventsPagination from "@/components/Events/EventsPagination";
 import TicketsCard from "../../../cards/TicketsCard";
 import { Events } from "@/constants/events";
 import { HeartIcon } from "lucide-react";
-import QRCodeModal from "./../Sections/MyTicketsSections/QRCodeModal";
+import QRCodeModal from "../Sections/MyTicketsSections/QRCodeModal";
 
 const attendeeSidebarItems = [
       { label: "Dashboard", path: "/dashboard", icon: DashboardIcon },
