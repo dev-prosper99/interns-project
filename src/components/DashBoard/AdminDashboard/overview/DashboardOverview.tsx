@@ -5,7 +5,10 @@ import RecentEvents from "@/components/Dashboard/AdminDashboard/Sections/RecentE
 import RecentTransactions from "@/components/Dashboard/AdminDashboard/Sections/RecentTransactions";
 
 import DashboardStatCard from "./DashboardStatCard";
-import { dashboardStats } from "./dashboardStats";
+import { useDashboardStats } from "./dashboardStats";
+const dashboardStats = useDashboardStats();
+
+
 
 const DashboardOverview = () => {
       return (

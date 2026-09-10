@@ -17,7 +17,7 @@ const RANGE_LABELS: Record<string, string> = {
       "90": "Last 90 days",
 };
 
-const Api_Base = "https://ticketing-management-system-be.onrender.com";
+const Api_Base = "https://peacemaker001-001-site1.ltempurl.com";
 function getToken() {
       return typeof window !== "undefined" ? (localStorage.getItem("token") ?? "") : "";
 }
@@ -69,8 +69,9 @@ export default function Analytics() {
                   setError(null);
                   try {
                         const { dateFrom, dateTo } = rangeToDates(range);
+                        const userId = localStorage.getItem("userId");
 
-                        const eventsRes = await fetch(`${Api_Base}/api/Events`, {
+                        const eventsRes = await fetch(`${Api_Base}/api/Events/my-events/${userId}`, {
                               headers: { Authorization: `Bearer ${getToken()}` },
                         });
                         if (!eventsRes.ok) throw new Error(`Failed to load events: ${eventsRes.status}`);

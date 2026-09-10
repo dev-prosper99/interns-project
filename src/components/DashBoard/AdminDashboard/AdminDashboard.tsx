@@ -3,7 +3,7 @@ import Sidebar from "@/components/layouts/Sidebar";
 import DashboardHeader from "@/components/Dashboard/AdminDashboard/Sections/DashboardHeader";
 import { Button } from "@/components/ui/button";
 import DashboardStatCard from "@/components/Dashboard/AdminDashboard/overview/DashboardStatCard";
-import { dashboardStats } from "@/components/Dashboard/AdminDashboard/overview/dashboardStats";
+import { useDashboardStats } from "@/components/Dashboard/AdminDashboard/overview/dashboardStats";
 import RevenueChart from "@/components/Dashboard/AdminDashboard/Sections/RevenueChart";
 import CategoryChart from "@/components/Dashboard/AdminDashboard/Sections/CategoryChart";
 import RecentEvents from "@/components/Dashboard/AdminDashboard/Sections/RecentEvents";
@@ -59,7 +59,7 @@ const AdminDashboard = () => {
                               </div>
 
                               <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
-                                    {dashboardStats.map((stat, idx) => (
+                                    {useDashboardStats().map((stat, idx) => (
                                           <DashboardStatCard key={idx} stat={stat} />
                                     ))}
                               </div>
