@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Sidebar from "@/components/layouts/Sidebar";
-import DashboardHeader from "@/components/DashBoard/AttendeeDashboard/DashboardHeader";
+import DashboardHeader from "@/components/Dashboard/AttendeeDashboard/DashboardHeader";
 import { EventCard } from "@/components/cards/EventCard";
 import { Events } from "@/constants/events";
 import { DashboardIcon, EventIcon, SettingsIcon, TicketIcon } from "@/assets/icons";
@@ -20,7 +20,7 @@ const priceRanges = [
 
 const dates = [...new Set(Events.map((event) => event.startDate))].sort();
 const attendeeSidebarItems = [
-      { label: "Dashboard", path: "/dashboard", icon: DashboardIcon },
+      { label: "Dashboard", path: "/Dashboard", icon: DashboardIcon },
       { label: "Discover Events", path: "/discover-events", icon: EventIcon },
       { label: "My Tickets", path: "/my-tickets", icon: TicketIcon },
       { label: "Saved Events", path: "/saved-events", icon: HeartIcon },

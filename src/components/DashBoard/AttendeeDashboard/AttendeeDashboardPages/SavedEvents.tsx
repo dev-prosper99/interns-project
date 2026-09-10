@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Sidebar from "@/components/layouts/Sidebar";
-import DashboardHeader from "@/components/DashBoard/AttendeeDashboard/DashboardHeader";
+import DashboardHeader from "@/components/Dashboard/AttendeeDashboard/DashboardHeader";
 import { DashboardIcon, EventIcon, SettingsIcon, TicketIcon } from "@/assets/icons";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +10,7 @@ import { EventCard } from "@/components/cards/EventCard";
 import { Events } from "@/constants/events";
 
 const attendeeSidebarItems = [
-      { label: "Dashboard", path: "/dashboard", icon: DashboardIcon },
+      { label: "Dashboard", path: "/Dashboard", icon: DashboardIcon },
       { label: "Discover Events", path: "/discover-events", icon: EventIcon },
       { label: "My Tickets", path: "/my-tickets", icon: TicketIcon },
       { label: "Saved Events", path: "/saved-events", icon: HeartIcon },

@@ -9,10 +9,10 @@ import SavedEventsPreview from "./Sections/DashboardSections/SavedEventsPreview"
 import SuggestedEvents from "./Sections/DashboardSections/SuggestedEvents";
 import ticketBackground from "@/assets/ticket.png";
 import { HeartIcon } from "lucide-react";
-import DashboardHeader from "@/components/DashBoard/AttendeeDashboard/DashboardHeader";
+import DashboardHeader from "@/components/Dashboard/AttendeeDashboard/DashboardHeader";
 
 const attendeeSidebarItems = [
-      { label: "Dashboard", path: "/dashboard", icon: DashboardIcon },
+      { label: "Dashboard", path: "/Dashboard", icon: DashboardIcon },
       { label: "Discover Events", path: "/discover-events", icon: EventIcon },
       { label: "My Tickets", path: "/my-tickets", icon: TicketIcon },
       { label: "Saved Events", path: "/saved-events", icon: HeartIcon },
