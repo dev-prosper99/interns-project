@@ -2,6 +2,7 @@ import { MapPin, Users, Calendar, Heart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
  
 export interface EventCardProps {
+  eventId?: string;
   imageUrl: string;
   eventTitle: string;
   eventCategory: string;
@@ -16,6 +17,7 @@ export interface EventCardProps {
 }
  
 export const EventCard = ({
+  eventId,
   onClick,
   imageUrl,
   eventTitle,
@@ -39,7 +41,11 @@ export const EventCard = ({
     numericPrice > 0;
  
   const handleGetTicket = () => {
-    navigate("/login");
+    if (!eventId) {
+      navigate("/login");
+      return;
+    }
+    navigate(`/events/${eventId}`);
   };
  
   return (

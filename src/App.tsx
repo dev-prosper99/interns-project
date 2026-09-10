@@ -1,4 +1,5 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes} from "react-router-dom";
+
 import Home from "./pages/Home";
 import Discover from "./pages/Discover";
 import ContactUs from "./pages/ContactUs";
@@ -18,7 +19,7 @@ import Settings from "./components/Dashboard/AttendeeDashboard/AttendeeDashboard
 import { TransactionsPage } from "./components/Dashboard/AdminDashboard/AdminDashboardPages/Trasanctions";
 import AccountSettingsPage from "./components/Dashboard/AdminDashboard/AdminDashboardPages/Profile/AccountSettingsPage ";
 import AttendeesPage from "./components/Dashboard/AdminDashboard/AdminDashboardPages/Atendee/Attendees";
-
+import EventDetail from "./pages/EventDetail";
 function App() {
   return (
     <div>
@@ -30,6 +31,7 @@ function App() {
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<Home />} />
+        <Route path="/events/:eventId" element={<EventDetail />} />
 
         <Route element={<ProtectedRoute />}>
           <Route path="/Dashboard" element={<Dashboard />} />
