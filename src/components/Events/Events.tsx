@@ -9,7 +9,7 @@ import EventsPagination from "./EventsPagination";
 import DeleteEventModal from "./DeleteEventModal";
 import UnpublishEventModal from "./UnpublishEventModal";
 import EventDetails from "./EventsDetails";
-import CreateEventModal from "../Dashboard/AdminDashboard/CreateEvent/CreateEventModal";
+import CreateEventModal from "../DashBoard/AdminDashboard/CreateEvent/CreateEventModal";
 
 import type { EventRowData } from "./Types";
 

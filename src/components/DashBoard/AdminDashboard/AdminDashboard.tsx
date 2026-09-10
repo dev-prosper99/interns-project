@@ -1,7 +1,8 @@
 import { useState } from "react";
 import Sidebar from "@/components/layouts/Sidebar";
-import DashboardHeader from "@/components/Dashboard/AdminDashboard/Sections/DashboardHeader";
+import DashboardHeader from "@/components/DashBoard/AdminDashboard/Sections/DashboardHeader";
 import { Button } from "@/components/ui/button";
+<<<<<<< HEAD
 import DashboardStatCard from "@/components/Dashboard/AdminDashboard/overview/DashboardStatCard";
 import { useDashboardStats } from "@/components/Dashboard/AdminDashboard/overview/dashboardStats";
 import RevenueChart from "@/components/Dashboard/AdminDashboard/Sections/RevenueChart";
@@ -9,6 +10,15 @@ import CategoryChart from "@/components/Dashboard/AdminDashboard/Sections/Catego
 import RecentEvents from "@/components/Dashboard/AdminDashboard/Sections/RecentEvents";
 import RecentTransactions from "@/components/Dashboard/AdminDashboard/Sections/RecentTransactions";
 import CreateEventModal from "@/components/Dashboard/AdminDashboard/CreateEvent/CreateEventModal";
+=======
+import DashboardStatCard from "@/components/DashBoard/AdminDashboard/overview/DashboardStatCard";
+import { dashboardStats } from "@/components/DashBoard/AdminDashboard/overview/dashboardStats";
+import RevenueChart from "@/components/DashBoard/AdminDashboard/Sections/RevenueChart";
+import CategoryChart from "@/components/DashBoard/AdminDashboard/Sections/CategoryChart";
+import RecentEvents from "@/components/DashBoard/AdminDashboard/Sections/RecentEvents";
+import RecentTransactions from "@/components/DashBoard/AdminDashboard/Sections/RecentTransactions";
+import CreateEventModal from "@/components/DashBoard/AdminDashboard/CreateEvent/CreateEventModal";
+>>>>>>> 1c9e40bc1c6caf03095c0c40d120f721cc3a7023
 
 const AdminDashboard = () => {
       const [isSidebarOpen, setIsSidebarOpen] = useState(false);

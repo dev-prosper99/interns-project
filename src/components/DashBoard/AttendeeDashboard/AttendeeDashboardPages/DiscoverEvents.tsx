@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Sidebar from "@/components/layouts/Sidebar";
-import DashboardHeader from "@/components/Dashboard/AttendeeDashboard/DashboardHeader";
+import DashboardHeader from "@/components/DashBoard/AttendeeDashboard/DashboardHeader";
 import { EventCard } from "@/components/cards/EventCard";
 import { Events } from "@/constants/events";
 import { DashboardIcon, EventIcon, SettingsIcon, TicketIcon } from "@/assets/icons";
