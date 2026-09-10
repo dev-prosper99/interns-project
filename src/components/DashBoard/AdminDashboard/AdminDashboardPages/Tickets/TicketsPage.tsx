@@ -125,7 +125,7 @@ function computeStatus(
 export default function TicketsPage() {
   const [tickets, setTickets] = useState<TicketTier[]>([]);
 
-  const [isLoading, setIsLoading] = useState(true);
+
   const [loadError, setLoadError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
   const [eventFilter, setEventFilter] = useState<string | undefined>(undefined);
@@ -136,8 +136,8 @@ export default function TicketsPage() {
 
   const [editingTicket, setEditingTicket] = useState<TicketTier | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-  const [saveError, setSaveError] = useState<string | null>(null);
+
+
 
   const events = useMemo(
     () => Array.from(new Set(tickets.map((t) => t.event))),
@@ -146,13 +146,13 @@ export default function TicketsPage() {
   useEffect(() => {
     const loadTickets = async () => {
       try {
-        setIsLoading(true);
+        
         setLoadError(null);
       } catch (error) {
         console.error(error);
         setLoadError("Failed to load tickets");
       } finally {
-        setIsLoading(false);
+        
       }
     };
 
@@ -183,13 +183,13 @@ export default function TicketsPage() {
 
   const handleEditClick = (ticket: TicketTier) => {
     setEditingTicket(ticket);
-    setSaveError(null);
+  
     setDialogOpen(true);
   };
 
   const handleSave = async (updated: TicketTier) => {
-    setIsSaving(true);
-    setSaveError(null);
+  
+  
 
     try {
       const dto: TicketTypeDto = await updateTicketType(updated.id, {
@@ -216,13 +216,14 @@ export default function TicketsPage() {
       );
       setDialogOpen(false);
     } catch (err) {
-      setSaveError(
-        err instanceof TicketTypesApiError
-          ? err.message
-          : "Failed to update ticket type. Please try again.",
-      );
+      if (err instanceof TicketTypesApiError) {
+        console.error("API error:", err.message, err.errors);
+        setLoadError(
+          `Failed to update ticket: ${err.message}. ${err.errors.join(", ")}`,
+        );
+      }
     } finally {
-      setIsSaving(false);
+      
     }
   };
 
@@ -348,7 +349,7 @@ export default function TicketsPage() {
           open={dialogOpen}
           onOpenChange={(open) => {
             setDialogOpen(open);
-            if (!open) setSaveError(null);
+          
           }}
           onSave={handleSave}
         

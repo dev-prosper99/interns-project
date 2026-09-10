@@ -1,5 +1,4 @@
-import { useState } from "react";
-import CreateEventModal from "../Dashboard/AdminDashboard/CreateEvent/CreateEventModal";
+
 import { Button } from "@/components/ui/button";
  
 interface EventsPageHeaderProps {

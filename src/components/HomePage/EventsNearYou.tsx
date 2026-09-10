@@ -42,8 +42,7 @@ interface EventsApiResponse {
 }
 
 function SectionHeader({
-  title,
-  subtitle,
+  
   onScroll,
 }: {
   title: string;
