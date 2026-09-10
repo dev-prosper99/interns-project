@@ -47,8 +47,6 @@ interface UpdateProfilePayload {
 
 const API_BASE = "https://peacemaker001-001-site1.ltempurl.com";
 
-// TODO: change this to match whatever key your login flow actually uses
-// to store the token (check your login/signup code for localStorage.setItem(...)).
 const TOKEN_STORAGE_KEYS = ["token", "accessToken", "authToken"];
 
 function getStoredToken(): string | undefined {
