@@ -3,6 +3,7 @@ import { Button } from "../ui/button";
 import { NavLink, useNavigate } from "react-router-dom";
 import { ChevronDown, LayoutDashboard, LogOut } from "lucide-react";
 import logo from "@/assets/images/logo.png";
+import { clearAuthStorage, getStoredAvatarUrl } from "@/lib/api";
 
 const Navbar: React.FC = () => {
       const navigate = useNavigate();
@@ -10,7 +11,7 @@ const Navbar: React.FC = () => {
       const menuRef = useRef<HTMLDivElement>(null);
       const isLoggedIn = Boolean(localStorage.getItem("token"));
       const displayName = (localStorage.getItem("fullName") || localStorage.getItem("firstName") || "User").trim().replace(/\s+/g, " ") || "User";
-      const avatarUrl = localStorage.getItem("avatarUrl");
+      const avatarUrl = getStoredAvatarUrl(localStorage.getItem("email") || undefined);
       const initials =
             displayName
                   .split(" ")
@@ -35,7 +36,7 @@ const Navbar: React.FC = () => {
       };
 
       const handleLogout = () => {
-            localStorage.clear();
+            clearAuthStorage();
             setIsMenuOpen(false);
             navigate("/login", { replace: true });
       };

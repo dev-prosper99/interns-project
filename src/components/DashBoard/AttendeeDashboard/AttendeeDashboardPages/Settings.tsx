@@ -17,7 +17,7 @@ const TAB_ITEMS: { key: TabKey; label: string }[] = [
 ];
 
 const attendeeSidebarItems = [
-      { label: "Dashboard", path: "/dashboard", icon: DashboardIcon },
+      { label: "Dashboard", path: "/Dashboard", icon: DashboardIcon },
       { label: "Discover Events", path: "/discover-events", icon: EventIcon },
       { label: "My Tickets", path: "/my-tickets", icon: TicketIcon },
       { label: "Saved Events", path: "/saved-events", icon: HeartIcon },
@@ -52,19 +52,8 @@ const Settings = () => {
                         {isSidebarOpen && (
                               <>
                                     <div className="fixed inset-0 z-40 bg-black/50 lg:hidden" onClick={() => setIsSidebarOpen(false)} />
-                                    <div className="fixed left-0 top-0 z-50 h-full max-w-xs overflow-y-auto sm:w-64 lg:hidden">
-                                          <div className="min-h-full bg-neutral-1000 p-4">
-                                                <div className="mb-6 flex items-center justify-end">
-                                                      <button
-                                                            onClick={() => setIsSidebarOpen(false)}
-                                                            aria-label="Close menu"
-                                                            className="rounded-md p-2 text-white hover:bg-white/10"
-                                                      >
-                                                            ×
-                                                      </button>
-                                                </div>
-                                                <Sidebar items={attendeeSidebarItems} />
-                                          </div>
+                                    <div className="fixed inset-y-0 left-0 z-50 w-[min(21rem,88vw)] lg:hidden">
+                                          <Sidebar items={attendeeSidebarItems} onClose={() => setIsSidebarOpen(false)} />
                                     </div>
                               </>
                         )}

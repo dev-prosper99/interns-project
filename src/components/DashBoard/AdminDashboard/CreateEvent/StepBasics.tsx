@@ -96,13 +96,25 @@ export default function StepBasics({ form, update }: StepBasicsProps) {
 
       <div className="grid grid-cols-2 gap-4">
         <Select
-          label="Category"
-          required
-          placeholder="Select Category"
-          options={CATEGORIES}
-          value={form.category}
-          onChange={(e) => update({ category: e.target.value })}
-        />
+  label="Category"
+  required
+  placeholder="Select Category"
+  options={CATEGORIES}
+  value={form.category}
+  onChange={(e) => update({ category: e.target.value })}
+/>
+
+{form.category === "Other" && (
+  <TextInput
+    label="Custom Category"
+    required
+    placeholder="Enter category"
+    value={form.customCategory ?? ""}
+    onChange={(e) =>
+      update({ customCategory: e.target.value })
+    }
+  />
+)}
         <TextInput
           label="Start Date"
           required

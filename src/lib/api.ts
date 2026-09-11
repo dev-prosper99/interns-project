@@ -19,6 +19,23 @@ export interface UpdateProfilePayload {
       phoneNumber: string;
 }
 
+export function getStoredAvatarUrl(email?: string): string {
+      const normalizedEmail = email?.trim().toLowerCase();
+      return (normalizedEmail ? localStorage.getItem(`avatarUrl:${normalizedEmail}`) : null) || localStorage.getItem("avatarUrl") || "";
+}
+
+export function storeAvatarUrl(url: string, email?: string): void {
+      const normalizedEmail = (email || localStorage.getItem("email") || "").trim().toLowerCase();
+      if (normalizedEmail) {
+            localStorage.setItem(`avatarUrl:${normalizedEmail}`, url);
+      }
+      localStorage.setItem("avatarUrl", url);
+}
+
+export function clearAuthStorage(): void {
+      ["token", "refreshToken", "email", "firstName", "fullName", "role"].forEach((key) => localStorage.removeItem(key));
+}
+
 interface ApiResponse<T> {
       success?: boolean;
       message?: string;
@@ -73,7 +90,7 @@ export async function uploadProfileImage(file: File): Promise<string> {
       const formData = new FormData();
       formData.append("file", file);
 
-      const response = await fetch(`${API_BASE_URL}/api/Uploads/image`, {
+      const response = await fetch(`${API_BASE_URL}/api/Uploads/image?folder=pictures`, {
             method: "POST",
             headers: getAuthHeadersWithoutContentType(),
             body: formData,

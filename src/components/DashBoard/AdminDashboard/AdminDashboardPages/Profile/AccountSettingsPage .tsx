@@ -4,7 +4,7 @@ import { Tabs, TextField, PasswordField, ToggleSwitch, SaveBar, initialsFrom, ty
 
 import Sidebar from "@/components/layouts/Sidebar";
 import SettingsHeader from "./SettingsHeader";
-import { uploadProfileImage } from "@/lib/api";
+import { getStoredAvatarUrl, storeAvatarUrl, uploadProfileImage } from "@/lib/api";
 
 // ============================================================
 // API — inlined here on purpose, no separate api file
@@ -40,8 +40,6 @@ interface UpdateProfilePayload {
 
 const API_BASE = "https://peacemaker001-001-site1.ltempurl.com";
 
-// TODO: change this to match whatever key your login flow actually uses
-// to store the token (check your login/signup code for localStorage.setItem(...)).
 const TOKEN_STORAGE_KEYS = ["token", "accessToken", "authToken"];
 
 function getStoredToken(): string | undefined {
@@ -152,7 +150,7 @@ function ProfileInfoTab({
       const [fullName, setFullName] = useState("");
       const [phoneNumber, setPhoneNumber] = useState("");
       const [city, setCity] = useState("");
-      const [avatarUrl, setAvatarUrl] = useState(() => localStorage.getItem("avatarUrl") || "");
+      const [avatarUrl, setAvatarUrl] = useState(() => getStoredAvatarUrl(profile?.email));
       const [status, setStatus] = useState("");
       const [statusKind, setStatusKind] = useState<StatusKind>("");
       const [isUploading, setIsUploading] = useState(false);
@@ -163,6 +161,7 @@ function ProfileInfoTab({
             setFullName(profile.fullName || [profile.firstName, profile.lastName].filter(Boolean).join(" "));
             setPhoneNumber(profile.phoneNumber || "");
             setCity(profile.city || "");
+            setAvatarUrl(getStoredAvatarUrl(profile.email));
       }, [profile]);
 
       async function handleSave() {
@@ -195,7 +194,7 @@ function ProfileInfoTab({
             try {
                   const imageUrl = await uploadProfileImage(file);
                   setAvatarUrl(imageUrl);
-                  localStorage.setItem("avatarUrl", imageUrl);
+                  storeAvatarUrl(imageUrl, profile?.email);
                   setStatus("Profile photo updated successfully.");
                   setStatusKind("ok");
             } catch (error) {

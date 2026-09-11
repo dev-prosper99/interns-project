@@ -6,6 +6,10 @@ export const CATEGORIES = [
   { label: "Business", value: "Business" },
   { label: "Sports", value: "Sports" },
   { label: "Art", value: "Art" },
+  { label: "Entertainment", value: "Entertainment" },
+  { label: "Food", value: "Food" },
+  { label: "Education", value: "Education" },
+  { label: "Other", value: "Other" },
 ];
 
 export const REFUND_POLICIES = [
@@ -62,6 +66,7 @@ export const emptyForm: EventFormData = {
   title: "",
   description: "",
   category: "",
+  customCategory: "",
   startDate: "",
   endDate: "",
   startTime: "",

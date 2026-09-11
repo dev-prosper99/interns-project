@@ -2,14 +2,14 @@ import { useEffect, useRef, useState } from "react";
 import { Camera } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { getProfile, updateProfile, uploadProfileImage } from "@/lib/api";
+import { getProfile, getStoredAvatarUrl, storeAvatarUrl, updateProfile, uploadProfileImage } from "@/lib/api";
 
 export default function Profile() {
       const [fullName, setFullName] = useState("");
       const [email, setEmail] = useState("");
       const [phoneNumber, setPhoneNumber] = useState("");
       const [city, setCity] = useState("");
-      const [avatarUrl, setAvatarUrl] = useState(() => localStorage.getItem("avatarUrl") || "");
+      const [avatarUrl, setAvatarUrl] = useState(() => getStoredAvatarUrl(localStorage.getItem("email") || undefined));
       const [status, setStatus] = useState("Loading profile...");
       const [isSaving, setIsSaving] = useState(false);
       const [isUploading, setIsUploading] = useState(false);
@@ -20,6 +20,7 @@ export default function Profile() {
                   .then((profile) => {
                         setFullName(profile.fullName || [profile.firstName, profile.lastName].filter(Boolean).join(" "));
                         setEmail(profile.email || "");
+                        setAvatarUrl(getStoredAvatarUrl(profile.email));
                         setPhoneNumber(profile.phoneNumber || "");
                         setCity(profile.city || "");
                         setStatus("");
@@ -70,7 +71,7 @@ export default function Profile() {
             try {
                   const imageUrl = await uploadProfileImage(file);
                   setAvatarUrl(imageUrl);
-                  localStorage.setItem("avatarUrl", imageUrl);
+                  storeAvatarUrl(imageUrl, email || localStorage.getItem("email") || undefined);
                   setStatus("Profile photo updated successfully.");
             } catch (error) {
                   setStatus(error instanceof Error ? error.message : "Could not upload your profile photo.");

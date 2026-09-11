@@ -1,8 +1,9 @@
 import { useState, type ComponentType, type CSSProperties } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { UserRound } from "lucide-react";
+import { UserRound, X } from "lucide-react";
 import { DashboardIcon, EventIcon, TicketIcon, AnalyticsIcon, TransactionIcon, AttendeeIcon, SettingsIcon, LogoutIcon, DownarrowIcon } from "@/assets/icons";
 import logo from "@/assets/images/logo.png";
+import { clearAuthStorage, getStoredAvatarUrl } from "@/lib/api";
 
 type SidebarIcon = ComponentType<{
       color?: string;
@@ -20,6 +21,7 @@ export type SidebarProps = {
       items?: SidebarItem[];
       logoSrc?: string;
       logoutPath?: string;
+      onClose?: () => void;
 };
 
 const defaultNavItems: SidebarItem[] = [
@@ -32,7 +34,7 @@ const defaultNavItems: SidebarItem[] = [
       { label: "Settings", icon: SettingsIcon, path: "/settings" },
 ];
 
-export default function Sidebar({ items = defaultNavItems, logoSrc = logo, logoutPath = "/login" }: SidebarProps) {
+export default function Sidebar({ items = defaultNavItems, logoSrc = logo, logoutPath = "/login", onClose }: SidebarProps) {
       const [showLogoutMenu, setShowLogoutMenu] = useState(false);
       const navigate = useNavigate();
       const location = useLocation();
@@ -41,7 +43,7 @@ export default function Sidebar({ items = defaultNavItems, logoSrc = logo, logou
 
       const userEmail = (localStorage.getItem("email") || "your@email.com").trim() || "your@email.com";
       const profilePath = localStorage.getItem("role")?.trim().toLowerCase() === "attendee" ? "/my-settings" : "/settings";
-      const avatarUrl = localStorage.getItem("avatarUrl");
+      const avatarUrl = getStoredAvatarUrl(localStorage.getItem("email") || undefined);
 
       const initials =
             displayName
@@ -52,19 +54,29 @@ export default function Sidebar({ items = defaultNavItems, logoSrc = logo, logou
                   .join("") || "U";
 
       const handleLogout = () => {
-            localStorage.clear();
+            clearAuthStorage();
             setShowLogoutMenu(false);
             navigate(logoutPath);
       };
 
       return (
-            <aside className="h-screen w-56 bg-neutral-1000 flex flex-col px-3 py-5 sticky top-0">
-                  <div className="flex-1">
-                        <div className="flex items-center gap-2 px-2 mb-8">
+            <aside className="sticky top-0 z-30 flex h-dvh min-h-dvh w-full shrink-0 flex-col overflow-y-auto overscroll-contain bg-neutral-1000 px-3 py-5 lg:w-60 xl:w-64">
+                  <div className="flex min-h-0 flex-1 flex-col">
+                        <div className="mb-8 flex items-center justify-between gap-3 px-2">
                               <img src={logoSrc} alt="Logo" className="h-8 w-auto" />
+                              {onClose && (
+                                    <button
+                                          type="button"
+                                          onClick={onClose}
+                                          aria-label="Close menu"
+                                          className="flex h-9 w-9 items-center justify-center rounded-lg text-neutral-300 transition-colors  hover:bg-white/10 hover:text-white lg:hidden"
+                                    >
+                                          <X size={20} strokeWidth={2} />
+                                    </button>
+                              )}
                         </div>
 
-                        <nav className="flex flex-col gap-1">
+                        <nav className="flex flex-col gap-1" aria-label="Main navigation">
                               {items.map(({ label, icon: Icon, path, isActive: isActiveMatcher }) => {
                                     const isActive = isActiveMatcher ? isActiveMatcher(location.pathname, path) : location.pathname.startsWith(path);
                                     return (

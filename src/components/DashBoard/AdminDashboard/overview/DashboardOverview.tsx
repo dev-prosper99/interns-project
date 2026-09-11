@@ -5,7 +5,10 @@ import RecentEvents from "@/components/Dashboard/AdminDashboard/Sections/RecentE
 import RecentTransactions from "@/components/Dashboard/AdminDashboard/Sections/RecentTransactions";
 
 import DashboardStatCard from "./DashboardStatCard";
-import { dashboardStats } from "./dashboardStats";
+import { useDashboardStats } from "./dashboardStats";
+const DashboardStats = useDashboardStats();
+
+
 
 const DashboardOverview = () => {
       return (
@@ -19,7 +22,7 @@ const DashboardOverview = () => {
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
-                        {dashboardStats.map((stat) => (
+                        {DashboardStats.map((stat) => (
                               <DashboardStatCard key={stat.title} stat={stat} />
                         ))}
                   </div>

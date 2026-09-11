@@ -17,7 +17,8 @@ export interface EventDetailData {
   startDate: string;
   startTime: string;
   ticketTiers: TicketTier[];
-  image: string;
+  
+  bannerUrl: string;
   promoCode: string;
   promoDiscount: string;
   refundPolicy: string;

@@ -7,7 +7,6 @@ import PromoCodeBanner from "./PromoCodeBanner";
 import BannerImageSection from "./BannerImageSection";
 import EventDetailsFooter from "./EventDetailsFooter";
 import type { EventDetailData } from "./EventsDetailsTypes";
-import bannerImage from "@/assets/event-1.png";
 
 interface EventDetailsProps {
   event: EventDetailData;
@@ -47,7 +46,7 @@ export default function EventDetails({
         />
         <DetailField label="Refund Policy" value={event.refundPolicy} />
         <DetailField label="Description" value={event.description} />
-        <BannerImageSection image={bannerImage} alt={event.title} />
+        <BannerImageSection image={event.bannerUrl} alt={event.title} />
       </div>
 
       <EventDetailsFooter onBack={onBack} onEdit={onEdit} />

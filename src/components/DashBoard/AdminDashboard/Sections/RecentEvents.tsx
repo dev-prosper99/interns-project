@@ -14,22 +14,36 @@ interface EventItem {
 
 const RecentEvents = () => {
       const [recentEvents, setRecentEvents] = useState<EventItem[]>([]);
+      
+useEffect(() => {
+  const fetchEvents = async () => {
+    try {
+      const userId = localStorage.getItem("userId");
 
-      useEffect(() => {
-            const fetchEvents = async () => {
-                  try {
-                        const response = await fetch("https://ticketing-management-system-be.onrender.com/api/Events");
-                        const data = await response.json();
+      if (!userId) {
+        console.error("User ID not found");
+        return;
+      }
 
-                        setRecentEvents(data.data.items || []);
-                  } catch (error) {
-                        console.error(error);
-                  }
-            };
+      
 
-            fetchEvents();
-      }, []);
+      const response = await fetch(
+        `https://peacemaker001-001-site1.ltempurl.com/api/Events/my-events/${userId}`
+      );
 
+     
+
+      const data = await response.json();
+
+
+      setRecentEvents(data.data.items || []);
+    } catch (error) {
+      console.error("Failed to fetch events:", error);
+    }
+  };
+
+  fetchEvents();
+}, []);
       return (
             <div className="bg-neutral-1000 rounded-2xl p-6 h-full flex flex-col">
                   <h2 className="text-2xl font-semibold text-white mb-6">Recent Events</h2>

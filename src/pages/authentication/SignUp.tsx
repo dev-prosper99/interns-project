@@ -47,22 +47,19 @@ const SignUp = () => {
                         return;
                   }
 
-                  const response = await fetch(
-                        "https://peacemaker001-001-site1.ltempurl.com/api/Auth/register",
-                        {
-                              method: "POST",
-                              headers: {
-                                    "Content-Type": "application/json",
-                              },
-                              body: JSON.stringify({
-                                    firstname,
-                                    lastname,
-                                    email,
-                                    password,
-                                    role: role === "attendee" ? "Attendee" : "Organizer",
-                              }),
+                  const response = await fetch("https://peacemaker001-001-site1.ltempurl.com/api/Auth/register", {
+                        method: "POST",
+                        headers: {
+                              "Content-Type": "application/json",
                         },
-                  );
+                        body: JSON.stringify({
+                              firstname,
+                              lastname,
+                              email,
+                              password,
+                              role: role === "attendee" ? "Attendee" : "Organizer",
+                        }),
+                  });
 
                   const data = await response.json();
 

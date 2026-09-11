@@ -10,6 +10,7 @@ export interface EventFormData {
   title: string;
   description: string;
   category: string;
+  customCategory: string;
   startDate: string;
   endDate: string;
   startTime: string;
