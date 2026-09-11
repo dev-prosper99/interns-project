@@ -17,11 +17,11 @@ const TAB_ITEMS: { key: TabKey; label: string }[] = [
 ];
 
 const attendeeSidebarItems = [
-      { label: "Dashboard", path: "/Dashboard", icon: DashboardIcon },
-      { label: "Discover Events", path: "/discover-events", icon: EventIcon },
-      { label: "My Tickets", path: "/my-tickets", icon: TicketIcon },
-      { label: "Saved Events", path: "/saved-events", icon: HeartIcon },
-      { label: "Settings", path: "/my-settings", icon: SettingsIcon },
+      { label: "Dashboard", path: "/dashboard/attendee", icon: DashboardIcon },
+      { label: "Discover Events", path: "/dashboard/attendee/events", icon: EventIcon },
+      { label: "My Tickets", path: "/dashboard/attendee/tickets", icon: TicketIcon },
+      { label: "Saved Events", path: "/dashboard/attendee/saved-events", icon: HeartIcon },
+      { label: "Settings", path: "/dashboard/attendee/settings", icon: SettingsIcon },
 ];
 
 const Settings = () => {

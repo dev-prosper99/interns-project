@@ -85,7 +85,8 @@ const Navbar: React.FC = () => {
                                                             type="button"
                                                             onClick={() => {
                                                                   setIsMenuOpen(false);
-                                                                  navigate("/dashboard");
+                                                                  const role = (localStorage.getItem("role") || "attendee").toLowerCase();
+                                                                  navigate(role === "organizer" ? "/dashboard/organizer" : "/dashboard/attendee");
                                                             }}
                                                             className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm text-neutral-200 hover:bg-white/10"
                                                       >

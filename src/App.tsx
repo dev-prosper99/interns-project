@@ -17,8 +17,9 @@ import Settings from "./components/DashBoard/AttendeeDashboard/AttendeeDashboard
 import { TransactionsPage } from "./components/DashBoard/AdminDashboard/AdminDashboardPages/Trasanctions";
 import AccountSettingsPage from "./components/DashBoard/AdminDashboard/AdminDashboardPages/Profile/AccountSettingsPage ";
 import AttendeesPage from "./components/DashBoard/AdminDashboard/AdminDashboardPages/Atendee/Attendees";
-import EventDetail from "./pages/EventDetail";
-import DashBoard from "./pages/Dashboard";
+import AttendeeDashboard from "@/pages/AttendeeDashboard";
+import AdminDashboard from "@/pages/AdminDashboard";
+
 function App() {
       return (
             <div>
@@ -30,21 +31,21 @@ function App() {
                         <Route path="/sign-up" element={<SignUp />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/" element={<Home />} />
-                        <Route path="/events/:eventId" element={<EventDetail />} />
 
                         <Route element={<ProtectedRoute />}>
-                              <Route path="/DashBoard" element={<DashBoard />} />
-                              <Route path="/analytics" element={<Analytics />} />
-                              <Route path="/tickets" element={<TicketsPage />} />
-                              <Route path="/my-tickets" element={<MyTickets />} />
-                              <Route path="/events" element={<Events />} />
-                              <Route path="/discover-events" element={<DiscoverEvents />} />
-                              <Route path="/discover-events/:title" element={<DiscoverEventsDetails />} />
-                              <Route path="/saved-events" element={<SavedEvents />} />
-                              <Route path="/my-settings" element={<Settings />} />
-                              <Route path="/transactions" element={<TransactionsPage />} />
-                              <Route path="/settings" element={<AccountSettingsPage />} />
-                              <Route path="/attendees" element={<AttendeesPage />} />
+                              <Route path="/dashboard/attendee" element={<AttendeeDashboard />} />
+                              <Route path="/dashboard/attendee/tickets" element={<MyTickets />} />
+                              <Route path="/dashboard/attendee/events" element={<DiscoverEvents />} />
+                              <Route path="/dashboard/attendee/events/:title" element={<DiscoverEventsDetails />} />
+                              <Route path="/dashboard/attendee/settings" element={<Settings />} />
+                              <Route path="/dashboard/attendee/saved-events" element={<SavedEvents />} />
+                              <Route path="/dashboard/organizer" element={<AdminDashboard />} />
+                              <Route path="/dashboard/organizer/analytics" element={<Analytics />} />
+                              <Route path="/dashboard/organizer/tickets" element={<TicketsPage />} />
+                              <Route path="/dashboard/organizer/events" element={<Events />} />
+                              <Route path="/dashboard/organizer/settings" element={<AccountSettingsPage />} />
+                              <Route path="/dashboard/organizer/transactions" element={<TransactionsPage />} />
+                              <Route path="/dashboard/organizer/attendees" element={<AttendeesPage />} />
                         </Route>
 
                         <Route path="*" element={<div>404 Not Found</div>} />

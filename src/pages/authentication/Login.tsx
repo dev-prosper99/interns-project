@@ -11,18 +11,25 @@ import { useState } from "react";
 import Alert from "@/components/ui/alert";
 import { Eye, EyeOff } from "lucide-react";
 
-const getAuthToken = (payload: any): string | null => {
+type AuthPayload = Record<string, unknown>;
+
+const asRecord = (value: unknown): AuthPayload => (typeof value === "object" && value !== null ? (value as AuthPayload) : {});
+
+const getAuthToken = (payload: unknown): string | null => {
+      const root = asRecord(payload);
+      const data = asRecord(root.data);
+      const user = asRecord(root.user);
       const candidates = [
-            payload?.token,
-            payload?.accessToken,
-            payload?.authToken,
-            payload?.jwt,
-            payload?.data?.token,
-            payload?.data?.accessToken,
-            payload?.data?.authToken,
-            payload?.data?.jwt,
-            payload?.user?.token,
-            payload?.user?.accessToken,
+            root.token,
+            root.accessToken,
+            root.authToken,
+            root.jwt,
+            data.token,
+            data.accessToken,
+            data.authToken,
+            data.jwt,
+            user.token,
+            user.accessToken,
       ];
 
       const token = candidates.find((value) => typeof value === "string" && value.trim().length > 0);
@@ -30,16 +37,10 @@ const getAuthToken = (payload: any): string | null => {
       return typeof token === "string" ? token : null;
 };
 
-const getDisplayFirstName = (payload: any, fallback = ""): string => {
-      const rawName =
-            payload?.user?.firstname ||
-            payload?.user?.firstName ||
-            payload?.firstname ||
-            payload?.firstName ||
-            payload?.name ||
-            payload?.fullName ||
-            payload?.user?.name ||
-            fallback;
+const getDisplayFirstName = (payload: unknown, fallback = ""): string => {
+      const root = asRecord(payload);
+      const user = asRecord(root.user);
+      const rawName = user.firstname || user.firstName || root.firstname || root.firstName || root.name || root.fullName || user.name || fallback;
 
       const cleaned = String(rawName || "")
             .trim()
@@ -102,10 +103,11 @@ const Login = () => {
                         }),
                   });
 
-                  const data = await response.json();
+                  const data = (await response.json()) as AuthPayload;
+                  const user = asRecord(data.user);
 
                   if (!response.ok) {
-                        throw new Error(data.message || "Invalid email or password");
+                        throw new Error(String(data.message || "Invalid email or password"));
                   }
 
                   const authToken = getAuthToken(data);
@@ -119,10 +121,10 @@ const Login = () => {
                   const responseFirstName = getDisplayFirstName(data, savedFirstName);
                   const finalFirstName = (responseFirstName || savedFirstName || email.split("@")[0]).trim();
                   const normalizedEmail = email.trim().toLowerCase();
-                  const finalFullName = (data?.user?.name || data?.user?.fullName || savedFullName || fullNameFromEmail(normalizedEmail)).trim();
+                  const finalFullName = String(user.name || user.fullName || savedFullName || fullNameFromEmail(normalizedEmail)).trim();
 
                   localStorage.setItem("token", authToken);
-                  localStorage.setItem("refreshToken", data.refreshToken || data.refresh_token || "");
+                  localStorage.setItem("refreshToken", String(data.refreshToken || data.refresh_token || ""));
                   localStorage.setItem("email", normalizedEmail);
 
                   if (finalFirstName) {
@@ -138,11 +140,11 @@ const Login = () => {
                         title: "Login Successful",
                         message: "Welcome back!",
                   });
-                  const payload = JSON.parse(atob(authToken.split(".")[1]));
+                  const payload = JSON.parse(atob(authToken.split(".")[1])) as AuthPayload;
 
                   const userId = payload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
 
-                  localStorage.setItem("userId", userId);
+                  localStorage.setItem("userId", String(userId));
 
                   const role = String(payload["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] || "")
                         .trim()
@@ -150,8 +152,10 @@ const Login = () => {
 
                   localStorage.setItem("role", role);
 
-                  if (role === "organizer" || role === "attendee") {
-                        navigate("/dashboard");
+                  if (role === "organizer") {
+                        navigate("/dashboard/organizer");
+                  } else if (role === "attendee") {
+                        navigate("/dashboard/attendee");
                   }
             } catch (error) {
                   if (error instanceof Error) {
