@@ -3,20 +3,20 @@ import Sidebar from "@/components/layouts/Sidebar";
 import { Button } from "@/components/ui/button";
 import { DashboardIcon, EventIcon, SettingsIcon, TicketIcon } from "@/assets/icons";
 import { useNavigate } from "react-router-dom";
-import DashboardStats from "./Sections/DashboardSections/DashboardStats";
-import Upcoming from "./Sections/DashboardSections/Upcoming";
-import SavedEventsPreview from "./Sections/DashboardSections/SavedEventsPreview";
-import SuggestedEvents from "./Sections/DashboardSections/SuggestedEvents";
+import DashboardStats from "../components/DashBoard/AttendeeDashboard/Sections/DashboardSections/DashboardStats";
+import Upcoming from "../components/DashBoard/AttendeeDashboard/Sections/DashboardSections/Upcoming";
+import SavedEventsPreview from "../components/DashBoard/AttendeeDashboard/Sections/DashboardSections/SavedEventsPreview";
+import SuggestedEvents from "../components/DashBoard/AttendeeDashboard/Sections/DashboardSections/SuggestedEvents";
 import ticketBackground from "@/assets/ticket.png";
 import { HeartIcon } from "lucide-react";
 import DashboardHeader from "@/components/DashBoard/AttendeeDashboard/DashboardHeader";
 
 const attendeeSidebarItems = [
-      { label: "Dashboard", path: "/Dashboard", icon: DashboardIcon },
-      { label: "Discover Events", path: "/discover-events", icon: EventIcon },
-      { label: "My Tickets", path: "/my-tickets", icon: TicketIcon },
-      { label: "Saved Events", path: "/saved-events", icon: HeartIcon },
-      { label: "Settings", path: "/my-settings", icon: SettingsIcon },
+      { label: "Dashboard", path: "/dashboard/attendee", icon: DashboardIcon },
+      { label: "Discover Events", path: "/dashboard/attendee/events", icon: EventIcon },
+      { label: "My Tickets", path: "/dashboard/attendee/tickets", icon: TicketIcon },
+      { label: "Saved Events", path: "/dashboard/attendee/saved-events", icon: HeartIcon },
+      { label: "Settings", path: "/dashboard/attendee/settings", icon: SettingsIcon },
 ];
 
 const AttendeeDashboard = () => {

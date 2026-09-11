@@ -25,24 +25,31 @@ export type SidebarProps = {
 };
 
 const defaultNavItems: SidebarItem[] = [
-      { label: "DashBoard", icon: DashboardIcon, path: "/dashboard" },
-      { label: "Events", icon: EventIcon, path: "/events" },
-      { label: "Tickets", icon: TicketIcon, path: "/tickets" },
-      { label: "Analytics", icon: AnalyticsIcon, path: "/analytics" },
-      { label: "Transactions", icon: TransactionIcon, path: "/transactions" },
-      { label: "Attendees", icon: AttendeeIcon, path: "/attendees" },
-      { label: "Settings", icon: SettingsIcon, path: "/settings" },
+      { label: "DashBoard", icon: DashboardIcon, path: "/dashboard/organizer" },
+      { label: "Events", icon: EventIcon, path: "/dashboard/organizer/events" },
+      { label: "Tickets", icon: TicketIcon, path: "/dashboard/organizer/tickets" },
+      { label: "Analytics", icon: AnalyticsIcon, path: "/dashboard/organizer/analytics" },
+      { label: "Transactions", icon: TransactionIcon, path: "/dashboard/organizer/transactions" },
+      { label: "Attendees", icon: AttendeeIcon, path: "/dashboard/organizer/attendees" },
+      { label: "Settings", icon: SettingsIcon, path: "/dashboard/organizer/settings" },
 ];
 
 export default function Sidebar({ items = defaultNavItems, logoSrc = logo, logoutPath = "/login", onClose }: SidebarProps) {
       const [showLogoutMenu, setShowLogoutMenu] = useState(false);
       const navigate = useNavigate();
       const location = useLocation();
+      const activePath = items.reduce<string | null>((currentPath, item) => {
+            const matches = item.isActive
+                  ? item.isActive(location.pathname, item.path)
+                  : location.pathname === item.path || location.pathname.startsWith(`${item.path}/`);
+
+            return matches && (!currentPath || item.path.length > currentPath.length) ? item.path : currentPath;
+      }, null);
 
       const displayName = (localStorage.getItem("fullName") || localStorage.getItem("firstName") || "User").trim().replace(/\s+/g, " ") || "User";
 
       const userEmail = (localStorage.getItem("email") || "your@email.com").trim() || "your@email.com";
-      const profilePath = localStorage.getItem("role")?.trim().toLowerCase() === "attendee" ? "/my-settings" : "/settings";
+      const profilePath = localStorage.getItem("role")?.trim().toLowerCase() === "attendee" ? "/dashboard/attendee/settings" : "/dashboard/organizer/settings";
       const avatarUrl = getStoredAvatarUrl(localStorage.getItem("email") || undefined);
 
       const initials =
@@ -77,14 +84,14 @@ export default function Sidebar({ items = defaultNavItems, logoSrc = logo, logou
                         </div>
 
                         <nav className="flex flex-col gap-1" aria-label="Main navigation">
-                              {items.map(({ label, icon: Icon, path, isActive: isActiveMatcher }) => {
-                                    const isActive = isActiveMatcher ? isActiveMatcher(location.pathname, path) : location.pathname.startsWith(path);
+                              {items.map(({ label, icon: Icon, path }) => {
+                                    const isActive = activePath === path;
                                     return (
                                           <button
                                                 key={label}
                                                 onClick={() => navigate(path)}
                                                 className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-left
-                  ${isActive ? " text-white bg-purple-500 font-bold" : "text-neutral-400 hover:text-white"}`}
+                                                      ${isActive ? " text-white bg-purple-500 font-bold" : "text-neutral-400 hover:text-white"}`}
                                           >
                                                 <Icon color={isActive ? "white" : "#A2A4A9"} style={{ fontWeight: isActive ? 700 : 400 }} />
                                                 {label}
