@@ -31,12 +31,12 @@ function App() {
                         <Route path="/sign-up" element={<SignUp />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/" element={<Home />} />
+                        <Route path="/dashboard/attendee/events/:title" element={<DiscoverEventsDetails />} />
 
                         <Route element={<ProtectedRoute />}>
                               <Route path="/dashboard/attendee" element={<AttendeeDashboard />} />
                               <Route path="/dashboard/attendee/tickets" element={<MyTickets />} />
                               <Route path="/dashboard/attendee/events" element={<DiscoverEvents />} />
-                              <Route path="/dashboard/attendee/events/:title" element={<DiscoverEventsDetails />} />
                               <Route path="/dashboard/attendee/settings" element={<Settings />} />
                               <Route path="/dashboard/attendee/saved-events" element={<SavedEvents />} />
                               <Route path="/dashboard/organizer" element={<AdminDashboard />} />

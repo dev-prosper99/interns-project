@@ -31,7 +31,7 @@ const AttendeeDashboard = () => {
                   </div>
 
                   <div className="min-w-0 flex-1 bg-neutral-925 pb-10">
-                        <DashboardHeader onMenuClick={() => setIsSidebarOpen(true)} title="DashBoard" />
+                        <DashboardHeader onMenuClick={() => setIsSidebarOpen(true)} title="Dashboard" />
 
                         {isSidebarOpen && (
                               <>
@@ -46,7 +46,7 @@ const AttendeeDashboard = () => {
                               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                                     <p className="text-white sm:text-xl text-lg font-medium font-jakarta">Welcome, {firstName}👋</p>
 
-                                    <Button variant="yellow" className="md:w-auto w-1/2" onClick={() => navigate("/discover-events")}>
+                                    <Button variant="yellow" className="md:w-auto w-1/2" onClick={() => navigate("/dashboard/attendee/events")}>
                                           Discover Events
                                     </Button>
                               </div>
@@ -76,7 +76,11 @@ const AttendeeDashboard = () => {
                                                       <p className="text-white text-lg">Thousands of events are waiting for you across Nigeria</p>
                                                 </div>
 
-                                                <Button variant="yellow" className="self-start w-full md:w-auto" onClick={() => navigate("/events")}>
+                                                <Button
+                                                      variant="yellow"
+                                                      className="self-start w-full md:w-auto"
+                                                      onClick={() => navigate("/dashboard/attendee/events")}
+                                                >
                                                       Discover Events
                                                 </Button>
                                           </div>

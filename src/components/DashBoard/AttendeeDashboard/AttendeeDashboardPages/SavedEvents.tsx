@@ -56,11 +56,6 @@ const SavedEvents = () => {
                                                       {Events.slice(0, 3).map((event, i) => (
                                                             <div key={`${event.eventTitle}-${i}`} className="flex min-w-0">
                                                                   <EventCard
-                                                                        onClick={() =>
-                                                                              navigate(
-                                                                                    `/discover-events/${event.eventTitle.trim().replace(/\s+/g, "-").toLowerCase()}`,
-                                                                              )
-                                                                        }
                                                                         imageUrl={event.imageUrl}
                                                                         eventTitle={event.eventTitle}
                                                                         eventCategory={event.eventCategory}

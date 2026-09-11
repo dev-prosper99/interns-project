@@ -1,16 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Sidebar from "@/components/layouts/Sidebar";
 import DashboardHeader from "@/components/DashBoard/AttendeeDashboard/DashboardHeader";
 import { EventCard } from "@/components/cards/EventCard";
-import { Events } from "@/constants/events";
 import { DashboardIcon, EventIcon, SettingsIcon, TicketIcon } from "@/assets/icons";
 import EventsPagination from "@/components/Events/EventsPagination";
 import { Input } from "@/components/ui/input";
 import { ChevronDown, HeartIcon, Search } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import Loader from "@/components/layouts/Loader";
 
-const categories = [...new Set(Events.map((event) => event.eventCategory))].sort();
-const cities = [...new Set(Events.map((event) => event.venue.split(",").pop()?.trim() || event.venue))].sort();
+const API_BASE_URL = "https://peacemaker001-001-site1.ltempurl.com";
 
 const priceRanges = [
       { label: "Under ₦5,000", value: "under-5000" },
@@ -18,7 +16,6 @@ const priceRanges = [
       { label: "Above ₦10,000", value: "above-10000" },
 ];
 
-const dates = [...new Set(Events.map((event) => event.startDate))].sort();
 const attendeeSidebarItems = [
       { label: "Dashboard", path: "/dashboard/attendee", icon: DashboardIcon },
       { label: "Discover Events", path: "/dashboard/attendee/events", icon: EventIcon },
@@ -31,6 +28,32 @@ type FilterSelectProps = {
       placeholder: string;
       options: string[];
       optionValues?: string[];
+};
+
+type EventListItem = {
+      id: string;
+      title: string;
+      venue: string;
+      city: string;
+      eventDate: string;
+      bannerUrl: string | null;
+      status: string;
+      organizerName: string;
+};
+
+type EventWithPrice = EventListItem & {
+      minPrice: number | null;
+};
+
+type EventsApiResponse = {
+      success: boolean;
+      message?: string;
+      data: { items: EventListItem[] };
+};
+
+type EventDetailApiResponse = {
+      success: boolean;
+      data: { ticketTypes?: Array<{ price: number }> };
 };
 
 function FilterSelect({ placeholder, options, optionValues }: FilterSelectProps) {
@@ -54,7 +77,63 @@ function FilterSelect({ placeholder, options, optionValues }: FilterSelectProps)
 
 const DiscoverEvents = () => {
       const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-      const navigate = useNavigate();
+      const [events, setEvents] = useState<EventWithPrice[]>([]);
+      const [isLoading, setIsLoading] = useState(true);
+      const [error, setError] = useState<string | null>(null);
+
+      useEffect(() => {
+            const controller = new AbortController();
+
+            async function fetchEvents() {
+                  try {
+                        setIsLoading(true);
+                        setError(null);
+
+                        const response = await fetch(`${API_BASE_URL}/api/Events?page=1&pageSize=100`, {
+                              headers: { Accept: "application/json" },
+                              signal: controller.signal,
+                        });
+
+                        if (!response.ok) throw new Error(`Request failed with status ${response.status}`);
+
+                        const result: EventsApiResponse = await response.json();
+                        if (!result.success) throw new Error(result.message || "Failed to load events");
+
+                        const eventsWithPrices = await Promise.all(
+                              result.data.items.map(async (event) => {
+                                    try {
+                                          const detailResponse = await fetch(`${API_BASE_URL}/api/Events/${event.id}`, {
+                                                headers: { Accept: "application/json" },
+                                                signal: controller.signal,
+                                          });
+                                          const detail: EventDetailApiResponse = await detailResponse.json();
+                                          const prices = detail.data.ticketTypes?.map((ticket) => ticket.price) ?? [];
+                                          return { ...event, minPrice: prices.length ? Math.min(...prices) : null };
+                                    } catch {
+                                          return { ...event, minPrice: null };
+                                    }
+                              }),
+                        );
+
+                        setEvents(eventsWithPrices);
+                  } catch (requestError) {
+                        if ((requestError as Error).name !== "AbortError") {
+                              setError((requestError as Error).message || "Something went wrong");
+                        }
+                  } finally {
+                        if (!controller.signal.aborted) setIsLoading(false);
+                  }
+            }
+
+            fetchEvents();
+            return () => controller.abort();
+      }, []);
+
+      const categories = [...new Set(events.map((event) => event.status))].sort();
+      const cities = [...new Set(events.map((event) => event.city || event.venue))].sort();
+      const dates = [...new Set(events.map((event) => new Date(event.eventDate).toLocaleDateString()))].sort();
+
+      if (isLoading) return <Loader />;
 
       return (
             <div className="flex min-h-screen">
@@ -98,29 +177,34 @@ const DiscoverEvents = () => {
                                           </div>
 
                                           <div className="space-y-2 w-full">
-                                                <p className="text-white">6 events found</p>
-                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6  xl:grid-cols-3">
-                                                      {Events.slice(0, 6).map((event, i) => (
-                                                            <div key={`${event.eventTitle}-${i}`} className="flex min-w-0">
-                                                                  <EventCard
-                                                                        onClick={() =>
-                                                                              navigate(
-                                                                                    `/discover-events/${event.eventTitle.trim().replace(/\s+/g, "-").toLowerCase()}`,
-                                                                              )
-                                                                        }
-                                                                        imageUrl={event.imageUrl}
-                                                                        eventTitle={event.eventTitle}
-                                                                        eventCategory={event.eventCategory}
-                                                                        venue={event.venue}
-                                                                        numberAttending={event.numberAttending}
-                                                                        startDate={event.startDate}
-                                                                        startTime={event.startTime}
-                                                                        ticketPrice={event.regular_ticketPrice}
-                                                                  />
-                                                            </div>
-                                                      ))}
-                                                      <EventsPagination className="col-span-full w-full" />
-                                                </div>
+                                                {error && <p className="py-8 text-center text-red-400">Could not load events: {error}</p>}
+                                                {!error && <p className="text-white">{events.length} events found</p>}
+                                                {!error && (
+                                                      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+                                                            {events.map((event, i) => {
+                                                                  const date = new Date(event.eventDate);
+                                                                  return (
+                                                                        <div key={`${event.id}-${i}`} className="flex min-w-0">
+                                                                              <EventCard
+                                                                                    eventId={event.id}
+                                                                                    imageUrl={event.bannerUrl || "null"}
+                                                                                    eventTitle={event.title}
+                                                                                    eventCategory={event.status}
+                                                                                    venue={`${event.venue}, ${event.city}`}
+                                                                                    numberAttending={event.organizerName}
+                                                                                    startDate={date.toLocaleDateString()}
+                                                                                    startTime={date.toLocaleTimeString([], {
+                                                                                          hour: "2-digit",
+                                                                                          minute: "2-digit",
+                                                                                    })}
+                                                                                    ticketPrice={event.minPrice ?? 0}
+                                                                              />
+                                                                        </div>
+                                                                  );
+                                                            })}
+                                                            <EventsPagination className="col-span-full w-full" />
+                                                      </div>
+                                                )}
                                           </div>
                                     </div>
                               </div>

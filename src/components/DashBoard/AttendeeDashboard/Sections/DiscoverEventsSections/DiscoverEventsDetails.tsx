@@ -1,14 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Sidebar from "@/components/layouts/Sidebar";
 import DashboardHeader from "@/components/DashBoard/AdminDashboard/Sections/DashboardHeader";
 import { DashboardIcon, EventIcon, SettingsIcon, TicketIcon, LocationIcon } from "@/assets/icons";
 import { Events } from "@/constants/events";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Share2 } from "lucide-react";
 import { FaMinus } from "react-icons/fa";
 import { PiPlus } from "react-icons/pi";
 import GetTicketModal from "./GetTicketModal";
+import Loader from "@/components/layouts/Loader";
 
 const attendeeSidebarItems = [
       { label: "Dashboard", path: "/Dashboard", icon: DashboardIcon },
@@ -20,21 +21,125 @@ const attendeeSidebarItems = [
 type TicketType = "regular" | "vip" | "vvip";
 
 type TicketQuantities = Record<TicketType, number>;
+type EventDetailLocationState = { ticketQuantities?: TicketQuantities };
+
+type ApiTicketType = {
+      name: string;
+      price: number;
+};
+
+type ApiEvent = {
+      id?: string;
+      title: string;
+      description?: string;
+      venue: string;
+      city?: string;
+      eventDate: string;
+      bannerUrl?: string;
+      organizerName?: string;
+      ticketTypes?: ApiTicketType[];
+};
+
+type DisplayEvent = (typeof Events)[number] & {
+      description?: string;
+      organizerName?: string;
+};
+
+type ApiEventResponse = {
+      success: boolean;
+      message?: string;
+      data: ApiEvent;
+};
+
+type ApiEventListResponse = {
+      success: boolean;
+      message?: string;
+      data: {
+            items: Array<{ id: string; title: string }>;
+      };
+};
+
+const API_BASE_URL = "https://peacemaker001-001-site1.ltempurl.com";
+
+const toEventSlug = (value: string) => value.trim().replace(/\s+/g, "-").toLowerCase();
+
+function toDisplayEvent(apiEvent: ApiEvent): DisplayEvent {
+      const date = new Date(apiEvent.eventDate);
+      const ticketTypes = apiEvent.ticketTypes ?? [];
+      const priceFor = (name: string, fallbackIndex: number) =>
+            ticketTypes.find((ticket) => ticket.name.toLowerCase().includes(name))?.price ?? ticketTypes[fallbackIndex]?.price ?? 0;
+
+      return {
+            imageUrl: apiEvent.bannerUrl || "",
+            eventTitle: apiEvent.title,
+            eventCategory: "Event",
+            venue: [apiEvent.venue, apiEvent.city].filter(Boolean).join(", "),
+            numberAttending: "0",
+            startDate: date.toLocaleDateString(),
+            startTime: date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+            regular_ticketPrice: String(priceFor("regular", 0)),
+            vip_ticketPrice: String(priceFor("vip", 1)),
+            vvip_ticketPrice: String(priceFor("vvip", 2)),
+            description: apiEvent.description,
+            organizerName: apiEvent.organizerName,
+      };
+}
 
 const DiscoverEventsDetails = () => {
       const [isSidebarOpen, setIsSidebarOpen] = useState(false);
       const navigate = useNavigate();
+      const location = useLocation();
       const { title } = useParams<{ title: string }>();
+      const locationState = location.state as EventDetailLocationState | null;
+      const localEvent: DisplayEvent | undefined = Events.find((item) => toEventSlug(item.eventTitle) === title?.toLowerCase());
+      const [apiEvent, setApiEvent] = useState<DisplayEvent | null>(null);
+      const [isLoading, setIsLoading] = useState(true);
       const [selectedTicket, setSelectedTicket] = useState<TicketType | null>(null);
-      const [ticketQuantities, setTicketQuantities] = useState<TicketQuantities>({ regular: 0, vip: 0, vvip: 0 });
+      const [ticketQuantities, setTicketQuantities] = useState<TicketQuantities>(locationState?.ticketQuantities ?? { regular: 0, vip: 0, vvip: 0 });
       const [isOpen, setIsOpen] = useState(false);
+
+      useEffect(() => {
+            const controller = new AbortController();
+
+            fetch(`${API_BASE_URL}/api/Events?page=1&pageSize=100`, {
+                  headers: { Accept: "application/json" },
+                  signal: controller.signal,
+            })
+                  .then(async (response) => {
+                        if (!response.ok) throw new Error(`Request failed (${response.status})`);
+                        const result: ApiEventListResponse = await response.json();
+                        if (!result.success) throw new Error(result.message || "Failed to load event");
+                        const matchingEvent = result.data.items.find((item) => toEventSlug(item.title) === title?.toLowerCase());
+                        if (!matchingEvent) return;
+
+                        const detailResponse = await fetch(`${API_BASE_URL}/api/Events/${encodeURIComponent(matchingEvent.id)}`, {
+                              headers: { Accept: "application/json" },
+                              signal: controller.signal,
+                        });
+                        if (!detailResponse.ok) throw new Error(`Request failed (${detailResponse.status})`);
+
+                        const detailResult: ApiEventResponse = await detailResponse.json();
+                        if (!detailResult.success) throw new Error(detailResult.message || "Failed to load event details");
+                        setApiEvent(toDisplayEvent(detailResult.data));
+                  })
+                  .catch((error: unknown) => {
+                        if (error instanceof Error && error.name !== "AbortError") {
+                              console.error("Failed to load event details:", error);
+                        }
+                  })
+                  .finally(() => {
+                        if (!controller.signal.aborted) setIsLoading(false);
+                  });
+
+            return () => controller.abort();
+      }, [title]);
 
       const updateTicketQuantity = (ticket: TicketType, quantity: number, limit: number) => {
             setSelectedTicket(ticket);
             setTicketQuantities((current) => ({ ...current, [ticket]: Math.max(0, Math.min(limit, quantity)) }));
       };
 
-      const event = Events.find((item) => item.eventTitle.replace(/\s+/g, "-").toLowerCase() === title?.toLowerCase());
+      const event = apiEvent ?? localEvent;
 
       const totalTicketAmount =
             ticketQuantities.regular * Number(event?.regular_ticketPrice ?? 0) +
@@ -42,6 +147,9 @@ const DiscoverEventsDetails = () => {
             ticketQuantities.vvip * Number(event?.vvip_ticketPrice ?? 0);
 
       const formattedTotalTicketAmount = `₦${totalTicketAmount.toLocaleString("en-NG")}`;
+      const isLoggedIn = Boolean(localStorage.getItem("token"));
+
+      if (isLoading) return <Loader />;
 
       return (
             <div className="flex ">
@@ -195,7 +303,7 @@ const DiscoverEventsDetails = () => {
                                                             />
                                                       </div>
                                                       <div className="flex flex-col gap-1">
-                                                            <h4 className="text-white text-sm md:text-lg">Michael Events</h4>
+                                                            <h4 className="text-white text-sm md:text-lg">{event?.organizerName || "Organizer"}</h4>
                                                             <p className="text-white font-normal text-xs md:text-sm">Verified event organizer</p>
                                                       </div>
                                                 </div>
@@ -363,13 +471,22 @@ const DiscoverEventsDetails = () => {
                                                                   variant="yellow"
                                                                   className="w-full"
                                                                   disabled={
+                                                                        isLoggedIn &&
                                                                         ticketQuantities.regular === 0 &&
                                                                         ticketQuantities.vip === 0 &&
                                                                         ticketQuantities.vvip === 0
                                                                   }
-                                                                  onClick={() => setIsOpen(true)}
+                                                                  onClick={() => {
+                                                                        if (!isLoggedIn) {
+                                                                              navigate("/login", {
+                                                                                    state: { from: location.pathname, ticketQuantities },
+                                                                              });
+                                                                              return;
+                                                                        }
+                                                                        setIsOpen(true);
+                                                                  }}
                                                             >
-                                                                  Proceed to checkout
+                                                                  {isLoggedIn ? "Proceed to checkout" : "Login to continue"}
                                                             </Button>
                                                       </div>
                                                 </div>

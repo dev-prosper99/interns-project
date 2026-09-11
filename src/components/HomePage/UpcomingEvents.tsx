@@ -3,14 +3,6 @@
 import { LeftArrow, RightArrow } from "@/assets/icons";
 import { EventCard } from "@/components/cards/EventCard";
 import { useEffect, useRef, useState } from "react";
-import event1 from "@/assets/event-1.png";
-import event2 from "@/assets/event-2.png";
-import event3 from "@/assets/event-3.png";
-import event4 from "@/assets/event-4.png";
-import event5 from "@/assets/event-5.png";
-import event6 from "@/assets/event-6.png";
-
-const images = [event1, event2, event3, event4, event5, event6];
 
 const API_BASE_URL = "https://peacemaker001-001-site1.ltempurl.com";
 
@@ -212,7 +204,7 @@ export default function UpcomingEvents() {
                                     ref={eventsTrackRef}
                                     className="flex w-full min-w-0 gap-6 overflow-x-auto overscroll-x-contain scroll-smooth no-scrollbar pb-2"
                               >
-                                    {events.map((event, i) => {
+                                    {events.map((event) => {
                                           const date = new Date(event.eventDate);
                                           return (
                                                 <div
@@ -221,7 +213,7 @@ export default function UpcomingEvents() {
                                                 >
                                                       <EventCard
                                                             eventId={event.id}
-                                                            imageUrl={event.bannerUrl || images[i % images.length]}
+                                                            imageUrl={event.bannerUrl || "null"}
                                                             eventTitle={event.title}
                                                             eventCategory={event.status}
                                                             venue={`${event.venue}, ${event.city}`}

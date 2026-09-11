@@ -25,7 +25,7 @@ export type SidebarProps = {
 };
 
 const defaultNavItems: SidebarItem[] = [
-      { label: "DashBoard", icon: DashboardIcon, path: "/dashboard/organizer" },
+      { label: "Dashboard", icon: DashboardIcon, path: "/dashboard/organizer" },
       { label: "Events", icon: EventIcon, path: "/dashboard/organizer/events" },
       { label: "Tickets", icon: TicketIcon, path: "/dashboard/organizer/tickets" },
       { label: "Analytics", icon: AnalyticsIcon, path: "/dashboard/organizer/analytics" },
