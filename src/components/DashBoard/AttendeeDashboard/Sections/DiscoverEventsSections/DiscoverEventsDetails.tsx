@@ -43,8 +43,6 @@ const DiscoverEventsDetails = () => {
 
       const formattedTotalTicketAmount = `₦${totalTicketAmount.toLocaleString("en-NG")}`;
 
-      // ...existing code...
-
       return (
             <div className="flex ">
                   <div className="hidden lg:block">
