@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from "react";
 import Sidebar from "@/components/layouts/Sidebar";
-import StatsCard from "@/components/DashBoard/AdminDashboard/overview/DashboardStatCard";
-import RevenueChart from "@/components/DashBoard/AdminDashboard/Sections/RevenueChart";
+import StatsCard from "@/components/Dashboard/AdminDashboard/overview/DashboardStatCard";
+import RevenueChart from "@/components/Dashboard/AdminDashboard/Sections/RevenueChart";
 import { Button } from "@/components/ui/button";
-import CategoryChart from "@/components/DashBoard/AdminDashboard/Sections/CategoryChart";
+import CategoryChart from "@/components/Dashboard/AdminDashboard/Sections/CategoryChart";
 import { AttendeeIcon, EventIcon, RevenueIcon, TicketIcon, ExportIcon, CalenderIcon } from "@/assets/icons";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import AnalyticsHeader from "@/components/DashBoard/AdminDashboard/AdminDashboardPages/Analytics/AnalyticsHeader";
-import TopEvent from "@/components/DashBoard/AdminDashboard/AdminDashboardPages/Analytics/TopEvent";
+import AnalyticsHeader from "@/components/Dashboard/AdminDashboard/AdminDashboardPages/Analytics/AnalyticsHeader";
+import TopEvent from "@/components/Dashboard/AdminDashboard/AdminDashboardPages/Analytics/TopEvent";
 
 const RANGE_LABELS: Record<string, string> = {
       "7": "Last 7 days",
@@ -17,7 +17,7 @@ const RANGE_LABELS: Record<string, string> = {
       "90": "Last 90 days",
 };
 
-const Api_Base = "https://ticketing-management-system-be.onrender.com";
+const Api_Base = "https://peacemaker001-001-site1.ltempurl.com";
 function getToken() {
       return typeof window !== "undefined" ? (localStorage.getItem("token") ?? "") : "";
 }
@@ -69,8 +69,9 @@ export default function Analytics() {
                   setError(null);
                   try {
                         const { dateFrom, dateTo } = rangeToDates(range);
+                        const userId = localStorage.getItem("userId");
 
-                        const eventsRes = await fetch(`${Api_Base}/api/Events`, {
+                        const eventsRes = await fetch(`${Api_Base}/api/Events/my-events/${userId}`, {
                               headers: { Authorization: `Bearer ${getToken()}` },
                         });
                         if (!eventsRes.ok) throw new Error(`Failed to load events: ${eventsRes.status}`);

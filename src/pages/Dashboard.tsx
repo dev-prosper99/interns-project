@@ -1,6 +1,6 @@
 import { Navigate } from "react-router-dom";
-import AdminDashboard from "@/components/DashBoard/AdminDashboard/AdminDashboard";
-import AttendeeDashboard from "@/components/DashBoard/AttendeeDashboard/AttendeeDashboard";
+import AdminDashboard from "@/components/Dashboard/AdminDashboard/AdminDashboard";
+import AttendeeDashboard from "@/components/Dashboard/AttendeeDashboard/AttendeeDashboard";
 
 const Dashboard = () => {
       const role = localStorage.getItem("role")?.trim().toLowerCase();

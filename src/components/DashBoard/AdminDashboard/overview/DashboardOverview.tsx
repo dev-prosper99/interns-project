@@ -1,11 +1,14 @@
 import { Button } from "@/components/ui/button";
-import RevenueChart from "@/components/DashBoard/AdminDashboard/Sections/RevenueChart";
-import CategoryChart from "@/components/DashBoard/AdminDashboard/Sections/CategoryChart";
-import RecentEvents from "@/components/DashBoard/AdminDashboard/Sections/RecentEvents";
-import RecentTransactions from "@/components/DashBoard/AdminDashboard/Sections/RecentTransactions";
+import RevenueChart from "@/components/Dashboard/AdminDashboard/Sections/RevenueChart";
+import CategoryChart from "@/components/Dashboard/AdminDashboard/Sections/CategoryChart";
+import RecentEvents from "@/components/Dashboard/AdminDashboard/Sections/RecentEvents";
+import RecentTransactions from "@/components/Dashboard/AdminDashboard/Sections/RecentTransactions";
 
 import DashboardStatCard from "./DashboardStatCard";
-import { dashboardStats } from "./dashboardStats";
+import { useDashboardStats } from "./dashboardStats";
+const DashboardStats = useDashboardStats();
+
+
 
 const DashboardOverview = () => {
       return (
@@ -19,7 +22,7 @@ const DashboardOverview = () => {
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
-                        {dashboardStats.map((stat) => (
+                        {DashboardStats.map((stat) => (
                               <DashboardStatCard key={stat.title} stat={stat} />
                         ))}
                   </div>

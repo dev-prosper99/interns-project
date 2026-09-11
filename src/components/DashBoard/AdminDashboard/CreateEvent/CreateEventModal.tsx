@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import type { AlertState, AlertType } from "./types";
 
 const API_URL =
-  "https://ticketing-management-system-be.onrender.com/api/Events";
+  "https://peacemaker001-001-site1.ltempurl.com/api/Events";
 
 const getStoredToken = (): string => {
   if (typeof window === "undefined") return "";
@@ -58,7 +58,7 @@ const CreateEventModal = ({
         const token = getStoredToken();
 
         const response = await fetch(
-          `https://ticketing-management-system-be.onrender.com/api/Events/${eventId}`,
+          `https://peacemaker001-001-site1.ltempurl.com/api/Events/${eventId}`,
           {
             headers: {
               ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -70,16 +70,48 @@ const CreateEventModal = ({
 
         const event = result.data;
 
-        setForm((prev) => ({
-          ...prev,
-          title: event.title ?? "",
-          description: event.description ?? "",
-          venue: event.venue ?? "",
-          state: event.state ?? "",
-          city: event.city ?? "",
-          bannerUrl: event.bannerUrl ?? "",
-          refundPolicy: event.eventPolicy ?? "",
-        }));
+    const startDate = new Date(event.eventDate);
+const endDate = event.availabilityEnd
+  ? new Date(event.availabilityEnd)
+  : null;
+
+
+
+setForm((prev) => ({
+  ...prev,
+  title: event.title ?? "",
+  description: event.description ?? "",
+  category: event.eventCategory ?? "",
+  venue: event.venue ?? "",
+  state: event.state ?? "",
+  city: event.city ?? "",
+  
+  bannerUrl: event.bannerUrl ?? "",
+  refundPolicy: event.eventPolicy ?? "",
+  
+
+  startDate: startDate.toISOString().split("T")[0],
+  startTime: startDate.toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,     
+  }),
+
+  endDate: endDate
+    ? endDate.toISOString().split("T")[0]
+    : "",
+
+    tiers:
+  event.ticketTypes?.map((ticket: any) => ({
+    id: crypto.randomUUID(),
+    name: ticket.name,
+    description: ticket.description ?? "",
+    price: String(ticket.price),
+    quantity: String(ticket.totalQuantity),
+  })) ?? [],
+
+}));
+
       } catch (error) {
         console.error("Failed to fetch event:", error);
       }
@@ -105,109 +137,117 @@ const CreateEventModal = ({
   };
 
   const handlePublish = async () => {
-    if (
-      !form.title ||
-      !form.description ||
-      !form.venue ||
-      !form.state ||
-      !form.city ||
-      !form.startDate ||
-      !form.startTime
-    ) {
-      showAlert(
-        "error",
-        "Missing details",
-        "Fill the required event fields before publishing.",
-      );
-      return;
+  if (
+    !form.title ||
+    !form.description ||
+    !form.venue ||
+    !form.state ||
+    !form.city ||
+    !form.startDate ||
+    !form.startTime
+  ) {
+    showAlert(
+      "error",
+      "Missing details",
+      "Fill the required event fields before publishing.",
+    );
+    return;
+  }
+ const isEditing = Boolean(eventId);
+  const payload = {
+    title: form.title,
+    description: form.description,
+    venue: form.venue,
+    state: form.state,
+    city: form.city,
+    eventDate: toIsoDateTime(form.startDate, form.startTime),
+    bannerUrl: form.bannerUrl || "",
+    eventPolicy: form.refundPolicy,
+    availabilityStart: toIsoDateTime(form.startDate, form.startTime),
+    availabilityEnd: toIsoDateTime(
+      form.endDate || form.startDate,
+      form.startTime,
+    ),
+    ticketTypes: form.tiers.map((tier) => ({
+      name: tier.name,
+      description: tier.description,
+      price: Number(tier.price) || 0,
+      totalQuantity: Number(tier.quantity) || 0,
+    })),
+  };
+ 
+  try {
+    setIsSubmitting(true);
+ 
+    const token = getStoredToken();
+    const isEditing = Boolean(eventId);
+    const url = isEditing ? `${API_URL}/${eventId}` : API_URL;
+    const method = isEditing ? "PUT" : "POST";
+ 
+    const response = await fetch(url, {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify(payload),
+    });
+ 
+    const responseText = await response.text();
+    const responseBody = responseText ? JSON.parse(responseText) : null;
+ 
+    if (!response.ok) {
+      const message =
+        responseBody?.message ||
+        responseBody?.error ||
+        `Request failed with status ${response.status}`;
+      throw new Error(message);
     }
-
-    const payload = {
-      title: form.title,
-      description: form.description,
-      venue: form.venue,
-      state: form.state,
-      city: form.city,
-      eventDate: toIsoDateTime(form.startDate, form.startTime),
-      bannerUrl: form.bannerUrl || "",
-      eventPolicy: form.refundPolicy,
-      availabilityStart: toIsoDateTime(form.startDate, form.startTime),
-      availabilityEnd: toIsoDateTime(
-        form.endDate || form.startDate,
-        form.startTime,
-      ),
-      ticketTypes: form.tiers.map((tier) => ({
-        name: tier.name,
-        description: tier.description,
-        price: Number(tier.price) || 0,
-        totalQuantity: Number(tier.quantity) || 0,
-      })),
-    };
-
-    try {
-      setIsSubmitting(true);
-
-      const token = getStoredToken();
-      const response = await fetch(API_URL, {
+ 
+    const savedEventId = isEditing ? eventId : responseBody.data.id;
+ 
+    await fetch(
+      `https://peacemaker001-001-site1.ltempurl.com/api/TicketTypes/${savedEventId}`,
+      {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
-        body: JSON.stringify(payload),
-      });
-
-      const responseText = await response.text();
-
-      
-
-      const responseBody = responseText ? JSON.parse(responseText) : null;
-
-      if (!response.ok) {
-        const message =
-          responseBody?.message ||
-          responseBody?.error ||
-          `Request failed with status ${response.status}`;
-        throw new Error(message);
-      }
-      const eventId = responseBody.data.id;
-
-      await fetch(
-        `https://ticketing-management-system-be.onrender.com/api/TicketTypes/${eventId}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            ...(token ? { Authorization: `Bearer ${token}` } : {}),
-          },
-          body: JSON.stringify(
-            form.tiers.map((tier) => ({
-              name: tier.name,
-              description: tier.description,
-              price: Number(tier.price) || 0,
-              totalQuantity: Number(tier.quantity) || 0,
-            })),
-          ),
-        },
-      );
-
-      showAlert(
-        "success",
-        "Event published",
-        responseBody?.message || "Your event was created successfully.",
-      );
-      handleReset();
-    } catch (error) {
-      showAlert(
-        "error",
-        "Publish failed",
-        error instanceof Error ? error.message : "Unable to create the event.",
-      );
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
+        body: JSON.stringify(
+          form.tiers.map((tier) => ({
+            name: tier.name,
+            description: tier.description,
+            price: Number(tier.price) || 0,
+            totalQuantity: Number(tier.quantity) || 0,
+          })),
+        ),
+      },
+    );
+ 
+    showAlert(
+      "success",
+      isEditing ? "Event updated" : "Event published",
+      responseBody?.message ||
+        (isEditing
+          ? "Your event was updated successfully."
+          : "Your event was created successfully."),
+    );
+    handleReset();
+    onClose?.();
+  } catch (error) {
+    showAlert(
+      "error",
+      isEditing ? "Update failed" : "Publish failed",
+      error instanceof Error
+        ? error.message
+        : `Unable to ${isEditing ? "update" : "create"} the event.`,
+    );
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+ 
   const renderStep = () => {
     switch (STEPS[stepIndex].key) {
       case "basics":

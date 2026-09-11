@@ -1,9 +1,9 @@
 import { useState } from "react";
 import Sidebar from "@/components/layouts/Sidebar";
-import DashboardHeader from "@/components/DashBoard/AttendeeDashboard/DashboardHeader";
-import Profile from "@/components/DashBoard/AttendeeDashboard/Sections/SettingsSections/Profile";
-import Notifications from "@/components/DashBoard/AttendeeDashboard/Sections/SettingsSections/Notifications";
-import Security from "@/components/DashBoard/AttendeeDashboard/Sections/SettingsSections/Security";
+import DashboardHeader from "@/components/Dashboard/AttendeeDashboard/DashboardHeader";
+import Profile from "@/components/Dashboard/AttendeeDashboard/Sections/SettingsSections/Profile";
+import Notifications from "@/components/Dashboard/AttendeeDashboard/Sections/SettingsSections/Notifications";
+import Security from "@/components/Dashboard/AttendeeDashboard/Sections/SettingsSections/Security";
 import { DashboardIcon, EventIcon, SettingsIcon, TicketIcon } from "@/assets/icons";
 import { HeartIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -17,7 +17,7 @@ const TAB_ITEMS: { key: TabKey; label: string }[] = [
 ];
 
 const attendeeSidebarItems = [
-      { label: "Dashboard", path: "/dashboard", icon: DashboardIcon },
+      { label: "Dashboard", path: "/Dashboard", icon: DashboardIcon },
       { label: "Discover Events", path: "/discover-events", icon: EventIcon },
       { label: "My Tickets", path: "/my-tickets", icon: TicketIcon },
       { label: "Saved Events", path: "/saved-events", icon: HeartIcon },

@@ -1,4 +1,5 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes} from "react-router-dom";
+
 import Home from "./pages/Home";
 import Discover from "./pages/Discover";
 import ContactUs from "./pages/ContactUs";
@@ -8,17 +9,17 @@ import Login from "./pages/authentication/Login";
 import ProtectedRoute from "./ProtectedRoutes";
 import Dashboard from "./pages/Dashboard";
 import Events from "./components/Events/Events";
-import DiscoverEventsDetails from "./components/DashBoard/AttendeeDashboard/Sections/DiscoverEventsSections/DiscoverEventsDetails";
-import Analytics from "./components/DashBoard/AdminDashboard/AdminDashboardPages/Analytics/AnalyticsPage";
-import TicketsPage from "./components/DashBoard/AdminDashboard/AdminDashboardPages/Tickets/TicketsPage";
-import MyTickets from "./components/DashBoard/AttendeeDashboard/AttendeeDashboardPages/MyTickets";
-import DiscoverEvents from "./components/DashBoard/AttendeeDashboard/AttendeeDashboardPages/DiscoverEvents";
-import SavedEvents from "./components/DashBoard/AttendeeDashboard/AttendeeDashboardPages/SavedEvents";
-import Settings from "./components/DashBoard/AttendeeDashboard/AttendeeDashboardPages/Settings";
-import { TransactionsPage } from "./components/DashBoard/AdminDashboard/AdminDashboardPages/Trasanctions";
-import AccountSettingsPage from "./components/DashBoard/AdminDashboard/AdminDashboardPages/Profile/AccountSettingsPage ";
-import AttendeesPage from "./components/DashBoard/AdminDashboard/AdminDashboardPages/Atendee/Attendees";
-
+import DiscoverEventsDetails from "./components/Dashboard/AttendeeDashboard/Sections/DiscoverEventsSections/DiscoverEventsDetails";
+import Analytics from "./components/Dashboard/AdminDashboard/AdminDashboardPages/Analytics/AnalyticsPage";
+import TicketsPage from "./components/Dashboard/AdminDashboard/AdminDashboardPages/Tickets/TicketsPage";
+import MyTickets from "./components/Dashboard/AttendeeDashboard/AttendeeDashboardPages/MyTickets";
+import DiscoverEvents from "./components/Dashboard/AttendeeDashboard/AttendeeDashboardPages/DiscoverEvents";
+import SavedEvents from "./components/Dashboard/AttendeeDashboard/AttendeeDashboardPages/SavedEvents";
+import Settings from "./components/Dashboard/AttendeeDashboard/AttendeeDashboardPages/Settings";
+import { TransactionsPage } from "./components/Dashboard/AdminDashboard/AdminDashboardPages/Trasanctions";
+import AccountSettingsPage from "./components/Dashboard/AdminDashboard/AdminDashboardPages/Profile/AccountSettingsPage ";
+import AttendeesPage from "./components/Dashboard/AdminDashboard/AdminDashboardPages/Atendee/Attendees";
+import EventDetail from "./pages/EventDetail";
 function App() {
   return (
     <div>
@@ -30,9 +31,10 @@ function App() {
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
         <Route path="/" element={<Home />} />
+        <Route path="/events/:eventId" element={<EventDetail />} />
 
         <Route element={<ProtectedRoute />}>
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/Dashboard" element={<Dashboard />} />
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/tickets" element={<TicketsPage />} />
           <Route path="/my-tickets" element={<MyTickets />} />

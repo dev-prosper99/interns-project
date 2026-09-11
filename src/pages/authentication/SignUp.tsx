@@ -52,7 +52,7 @@ const SignUp = () => {
       }
 
       const response = await fetch(
-        "https://ticketing-management-system-be.onrender.com/api/Auth/register",
+        "https://peacemaker001-001-site1.ltempurl.com/api/Auth/register",
         {
           method: "POST",
           headers: {
@@ -233,22 +233,26 @@ const SignUp = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={isLoading}
-                  trailingIcon={
-                    <button
-                      type="button"
-                      aria-label={
-                        isPasswordVisible ? "Hide password" : "Show password"
-                      }
-                      title={
-                        isPasswordVisible ? "Hide password" : "Show password"
-                      }
-                      onClick={() => setIsPasswordVisible((visible) => !visible)}
-                      disabled={isLoading}
-                      className="text-neutral-400 transition-colors hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
-                    >
-                      {isPasswordVisible ? <EyeOff size={18} /> : <Eye size={18} />}
-                    </button>
-                  }
+                trailingIcon={
+                  <button
+                    type="button"
+                    aria-label={
+                      isPasswordVisible ? "Hide password" : "Show password"
+                    }
+                    title={
+                      isPasswordVisible ? "Hide password" : "Show password"
+                    }
+                    onClick={() => setIsPasswordVisible((visible) => !visible)}
+                    disabled={isLoading}
+                    className="text-neutral-400 transition-colors hover:text-white disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {isPasswordVisible ? (
+                      <EyeOff size={18} />
+                    ) : (
+                      <Eye size={18} />
+                    )}
+                  </button>
+                }
               />
             </div>
 
