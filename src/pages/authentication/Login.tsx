@@ -6,12 +6,13 @@ import PhotoIcon3 from "@/assets/images/PhotoIcon3.png";
 import { Input } from "@/components/ui/input";
 import { GoogleIcon, AppleIcon } from "@/assets/icons";
 import { Button } from "@/components/ui/button";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Alert from "@/components/ui/alert";
 import { Eye, EyeOff } from "lucide-react";
 
 type AuthPayload = Record<string, unknown>;
+type LoginLocationState = { from?: string; ticketQuantities?: Record<string, number> };
 
 const asRecord = (value: unknown): AuthPayload => (typeof value === "object" && value !== null ? (value as AuthPayload) : {});
 
@@ -75,6 +76,7 @@ const Login = () => {
       } | null>(null);
 
       const navigate = useNavigate();
+      const location = useLocation();
 
       const handleLogin = async () => {
             setAlert(null);
@@ -152,10 +154,15 @@ const Login = () => {
 
                   localStorage.setItem("role", role);
 
+                  const returnState = location.state as LoginLocationState | null;
+                  const returnPath = returnState?.from?.startsWith("/") ? returnState.from : null;
+
                   if (role === "organizer") {
                         navigate("/dashboard/organizer");
                   } else if (role === "attendee") {
-                        navigate("/dashboard/attendee");
+                        navigate(returnPath || "/dashboard/attendee", {
+                              state: returnState?.ticketQuantities ? { ticketQuantities: returnState.ticketQuantities } : undefined,
+                        });
                   }
             } catch (error) {
                   if (error instanceof Error) {

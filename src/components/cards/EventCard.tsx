@@ -13,12 +13,9 @@ export interface EventCardProps {
       ticketPrice: string | number;
       soldPercentage?: number;
       ticketsLeft?: number;
-      onClick?: () => void;
 }
 
 export const EventCard = ({
-      eventId,
-      onClick,
       imageUrl,
       eventTitle,
       eventCategory,
@@ -36,18 +33,15 @@ export const EventCard = ({
       const hasValidPrice = ticketPrice !== undefined && ticketPrice !== null && ticketPrice !== "" && !isNaN(numericPrice) && numericPrice > 0;
 
       const handleGetTicket = () => {
-            if (!eventId) {
-                  navigate("/login");
-                  return;
-            }
-            navigate(`/discover-events/${eventId}`);
+            const eventSlug = eventTitle.trim().replace(/\s+/g, "-").toLowerCase();
+            navigate(`/dashboard/attendee/events/${eventSlug}`);
       };
 
       return (
             <div className="flex h-full w-full min-w-0 flex-col overflow-hidden rounded-2xl bg-neutral-950 font-poppins">
                   {/* Image */}
                   <div className="relative h-fit w-full aspect-4/3">
-                        <img onClick={onClick} src={imageUrl} alt={eventTitle} className="w-full h-full object-cover rounded-t-2xl" />
+                        <img src={imageUrl} alt={eventTitle} className="w-full h-full object-cover rounded-t-2xl" />
                         <button
                               type="button"
                               aria-label="Add to favorites"
