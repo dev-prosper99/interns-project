@@ -10,7 +10,7 @@ import { AttendeeIcon, EventIcon, RevenueIcon, TicketIcon, ExportIcon, CalenderI
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import AnalyticsHeader from "@/components/DashBoard/AdminDashboard/AdminDashboardPages/Analytics/AnalyticsHeader";
 import TopEvent from "@/components/DashBoard/AdminDashboard/AdminDashboardPages/Analytics/TopEvent";
-import Loader from "@/components/layouts/loader";
+import Loader from "@/components/layouts/Loader";
 
 const RANGE_LABELS: Record<string, string> = {
       "7": "Last 7 days",

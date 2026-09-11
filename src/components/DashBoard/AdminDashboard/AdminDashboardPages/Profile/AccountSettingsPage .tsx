@@ -3,7 +3,7 @@ import { Camera } from "lucide-react";
 import { Tabs, TextField, PasswordField, ToggleSwitch, SaveBar, initialsFrom, type TabKey, type StatusKind } from "./SettingsUI";
 
 import ResponsiveAdminSidebar from "@/components/layouts/ResponsiveAdminSidebar";
-import Loader from "@/components/layouts/loader";
+import Loader from "@/components/layouts/Loader";
 import SettingsHeader from "./SettingsHeader";
 import { getStoredAvatarUrl, storeAvatarUrl, uploadProfileImage } from "@/lib/api";
 

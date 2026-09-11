@@ -14,7 +14,7 @@ import CreateEventModal from "../DashBoard/AdminDashboard/CreateEvent/CreateEven
 import type { EventRowData } from "./Types";
 
 import ResponsiveAdminSidebar from "../layouts/ResponsiveAdminSidebar";
-import Loader from "../layouts/loader";
+import Loader from "../layouts/Loader";
 
 import { DEFAULT_PROMO_CODE, DEFAULT_PROMO_DISCOUNT, DEFAULT_REFUND_POLICY, DEFAULT_DESCRIPTION, type EventDetailData } from "./EventsDetailsTypes";
 

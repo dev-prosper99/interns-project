@@ -23,15 +23,6 @@ const AdminDashboard = () => {
                   <div className="min-w-0 flex-1 bg-neutral-900">
                         <DashboardHeader onMenuClick={() => setIsSidebarOpen(true)} />
 
-                        {isSidebarOpen && (
-                              <>
-                                    <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setIsSidebarOpen(false)} />
-                                    <div className="fixed inset-y-0 left-0 z-50 w-[min(21rem,88vw)] lg:hidden">
-                                          <Sidebar onClose={() => setIsSidebarOpen(false)} />
-                                    </div>
-                              </>
-                        )}
-
                         <div className="p-4 md:p-6">
                               <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                                     <p className="text-xl font-medium text-white md:text-2xl">Welcome back, {firstName}. Here's what's happening.</p>
