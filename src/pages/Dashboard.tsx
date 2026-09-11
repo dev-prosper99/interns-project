@@ -1,8 +1,8 @@
 import { Navigate } from "react-router-dom";
-import AdminDashboard from "@/components/Dashboard/AdminDashboard/AdminDashboard";
-import AttendeeDashboard from "@/components/Dashboard/AttendeeDashboard/AttendeeDashboard";
+import AdminDashboard from "@/components/DashBoard/AdminDashboard/AdminDashboard";
+import AttendeeDashboard from "@/components/DashBoard/AttendeeDashboard/AttendeeDashboard";
 
-const Dashboard = () => {
+const DashBoard = () => {
       const role = localStorage.getItem("role")?.trim().toLowerCase();
 
       if (role === "attendee") {
@@ -16,4 +16,4 @@ const Dashboard = () => {
       return <Navigate to="/login" replace />;
 };
 
-export default Dashboard;
+export default DashBoard;

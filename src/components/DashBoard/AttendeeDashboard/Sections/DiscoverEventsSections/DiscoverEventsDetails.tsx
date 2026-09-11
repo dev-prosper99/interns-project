@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Sidebar from "@/components/layouts/Sidebar";
-import DashboardHeader from "@/components/Dashboard/AdminDashboard/Sections/DashboardHeader";
+import DashboardHeader from "@/components/DashBoard/AdminDashboard/Sections/DashboardHeader";
 import { DashboardIcon, EventIcon, SettingsIcon, TicketIcon, LocationIcon } from "@/assets/icons";
 import { Events } from "@/constants/events";
 import { useNavigate, useParams } from "react-router-dom";

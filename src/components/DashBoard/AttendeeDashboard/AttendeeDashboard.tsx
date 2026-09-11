@@ -9,7 +9,7 @@ import SavedEventsPreview from "./Sections/DashboardSections/SavedEventsPreview"
 import SuggestedEvents from "./Sections/DashboardSections/SuggestedEvents";
 import ticketBackground from "@/assets/ticket.png";
 import { HeartIcon } from "lucide-react";
-import DashboardHeader from "@/components/Dashboard/AttendeeDashboard/DashboardHeader";
+import DashboardHeader from "@/components/DashBoard/AttendeeDashboard/DashboardHeader";
 
 const attendeeSidebarItems = [
       { label: "Dashboard", path: "/Dashboard", icon: DashboardIcon },
@@ -31,7 +31,7 @@ const AttendeeDashboard = () => {
                   </div>
 
                   <div className="min-w-0 flex-1 bg-neutral-925 pb-10">
-                        <DashboardHeader onMenuClick={() => setIsSidebarOpen(true)} title="Dashboard" />
+                        <DashboardHeader onMenuClick={() => setIsSidebarOpen(true)} title="DashBoard" />
 
                         {isSidebarOpen && (
                               <>

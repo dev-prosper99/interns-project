@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Sidebar from "@/components/layouts/Sidebar";
-import DashboardHeader from "@/components/Dashboard/AttendeeDashboard/DashboardHeader";
+import DashboardHeader from "@/components/DashBoard/AttendeeDashboard/DashboardHeader";
 import { DashboardIcon, EventIcon, SettingsIcon, TicketIcon } from "@/assets/icons";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";

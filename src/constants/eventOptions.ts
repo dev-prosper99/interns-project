@@ -1,4 +1,4 @@
-import type { EventFormData } from "../components/Dashboard/AdminDashboard/CreateEvent/types";
+import type { EventFormData } from "../components/DashBoard/AdminDashboard/CreateEvent/types";
 
 export const CATEGORIES = [
   { label: "Music", value: "Music" },
