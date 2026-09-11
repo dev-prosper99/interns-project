@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Sidebar from "@/components/layouts/Sidebar";
+import ResponsiveAdminSidebar from "@/components/layouts/ResponsiveAdminSidebar";
 import StatsCard from "@/components/DashBoard/AdminDashboard/overview/DashboardStatCard";
 import RevenueChart from "@/components/DashBoard/AdminDashboard/Sections/RevenueChart";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ import { AttendeeIcon, EventIcon, RevenueIcon, TicketIcon, ExportIcon, CalenderI
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import AnalyticsHeader from "@/components/DashBoard/AdminDashboard/AdminDashboardPages/Analytics/AnalyticsHeader";
 import TopEvent from "@/components/DashBoard/AdminDashboard/AdminDashboardPages/Analytics/TopEvent";
+import Loader from "@/components/layouts/loader";
 
 const RANGE_LABELS: Record<string, string> = {
       "7": "Last 7 days",
@@ -60,6 +61,7 @@ export default function Analytics() {
       const [loading, setLoading] = useState(true);
       const [error, setError] = useState<string | null>(null);
       const [perEvent, setPerEvent] = useState<EventAnalytics[]>([]);
+      const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
       useEffect(() => {
             let cancelled = false;
@@ -160,6 +162,8 @@ export default function Analytics() {
             },
       ];
 
+      if (loading) return <Loader />;
+
       function handleExport() {
             const rows = [["Metric", "Value", "Range"], ...liveStats.map((stat) => [stat.title, String(stat.value ?? ""), RANGE_LABELS[range]])];
             const csvContent = rows.map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(",")).join("\n");
@@ -176,14 +180,14 @@ export default function Analytics() {
 
       return (
             <div className="flex min-h-screen bg-neutral-950">
-                  <Sidebar />
-                  <main className="flex-1">
-                        <AnalyticsHeader />
+                  <ResponsiveAdminSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+                  <main className="min-w-0 flex-1">
+                        <AnalyticsHeader onMenuClick={() => setIsSidebarOpen(true)} />
 
-                        <div className="p-6 flex items-center justify-between">
-                              <p className="text-white text-[24px] font-medium">Insights across all your events</p>
+                        <div className="flex flex-col items-start gap-4 p-4 md:flex-row md:items-center md:justify-between md:p-6">
+                              <p className="text-xl font-medium text-white md:text-2xl">Insights across all your events</p>
 
-                              <div className="flex items-center gap-3">
+                              <div className="flex w-full flex-wrap items-center gap-3 md:w-auto">
                                     <Select value={range} onValueChange={(value) => setRange(value as string)}>
                                           <SelectTrigger
                                                 className="w-44 h-10 rounded-lg bg-neutral-800 border border-neutral-700
@@ -208,24 +212,19 @@ export default function Analytics() {
                                           </SelectContent>
                                     </Select>
 
-                                    <Button
-                                          variant="primary"
-                                          onClick={handleExport}
-                                          disabled={loading || !!error}
-                                          className="flex items-center gap-2 text-white h-10"
-                                    >
+                                    <Button variant="primary" onClick={handleExport} disabled={!!error} className="flex items-center gap-2 text-white h-10">
                                           <ExportIcon className="h-4 w-4" />
                                           Export
                                     </Button>
                               </div>
                         </div>
 
-                        {error && <div className="mx-6 mb-4 rounded-lg border border-red-800 bg-red-950/50 p-3 text-sm text-red-300">{error}</div>}
+                        {error && <div className="mx-4 mb-4 rounded-lg border border-red-800 bg-red-950/50 p-3 text-sm text-red-300 md:mx-6">{error}</div>}
 
                         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 p-6">
-                              {loading
-                                    ? Array.from({ length: 4 }).map((_, i) => <div key={i} className="h-24 animate-pulse rounded-lg bg-neutral-800" />)
-                                    : liveStats.map((stat) => <StatsCard key={stat.title} stat={stat} />)}
+                              {liveStats.map((stat) => (
+                                    <StatsCard key={stat.title} stat={stat} />
+                              ))}
                         </div>
 
                         <div className="p-4">

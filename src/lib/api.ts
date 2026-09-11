@@ -1,5 +1,15 @@
 const API_BASE_URL = "https://peacemaker001-001-site1.ltempurl.com";
 
+export type AuthPayload = Record<string, unknown>;
+
+export type RegisterPayload = {
+      firstname: string;
+      lastname: string;
+      email: string;
+      password: string;
+      role: "Attendee" | "Organizer";
+};
+
 export interface ProfileData {
       id: string;
       email: string;
@@ -65,6 +75,41 @@ async function parseApiResponse<T>(response: Response): Promise<T> {
       }
 
       return body as T;
+}
+
+async function parseRawApiResponse<T>(response: Response): Promise<T> {
+      const body = (await response.json().catch(() => null)) as AuthPayload | null;
+
+      if (!response.ok) {
+            throw new Error(String(body?.message || "Request failed"));
+      }
+
+      if (body?.success === false) {
+            const errors = Array.isArray(body.errors) ? body.errors : [];
+            throw new Error(String(body.message || errors[0] || "Request failed"));
+      }
+
+      return body as T;
+}
+
+export async function loginUser(email: string, password: string): Promise<AuthPayload> {
+      const response = await fetch(`${API_BASE_URL}/api/Auth/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password }),
+      });
+
+      return parseRawApiResponse<AuthPayload>(response);
+}
+
+export async function registerUser(payload: RegisterPayload): Promise<AuthPayload> {
+      const response = await fetch(`${API_BASE_URL}/api/Auth/register`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+      });
+
+      return parseRawApiResponse<AuthPayload>(response);
 }
 
 export async function getProfile(): Promise<ProfileData> {

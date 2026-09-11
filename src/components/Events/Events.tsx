@@ -13,7 +13,8 @@ import CreateEventModal from "../DashBoard/AdminDashboard/CreateEvent/CreateEven
 
 import type { EventRowData } from "./Types";
 
-import Sidebar from "../layouts/Sidebar";
+import ResponsiveAdminSidebar from "../layouts/ResponsiveAdminSidebar";
+import Loader from "../layouts/loader";
 
 import { DEFAULT_PROMO_CODE, DEFAULT_PROMO_DISCOUNT, DEFAULT_REFUND_POLICY, DEFAULT_DESCRIPTION, type EventDetailData } from "./EventsDetailsTypes";
 
@@ -37,6 +38,7 @@ export default function EventsPage() {
 
       const [editTarget, setEditTarget] = useState<EventRowData | null>(null);
       const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+      const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
       const fetchEvents = useCallback(async () => {
             setIsLoading(true);
@@ -212,12 +214,14 @@ export default function EventsPage() {
             fetchEvents();
       };
 
+      if (isLoading) return <Loader />;
+
       return (
             <div className="flex min-h-screen bg-neutral-950 text-white">
-                  <Sidebar />
+                  <ResponsiveAdminSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
-                  <main className="flex-1 ">
-                        <DashboardHeader />
+                  <main className="min-w-0 flex-1">
+                        <DashboardHeader onMenuClick={() => setIsSidebarOpen(true)} />
 
                         <div className="bg-neutral-950 p-4 md:p-8">
                               <EventsPageHeader onCreateClick={() => setIsCreateModalOpen(true)} />
@@ -225,11 +229,9 @@ export default function EventsPage() {
                               <div className="rounded-2xl p-4 md:p-8" style={{ backgroundColor: "#111213" }}>
                                     <SearchFilterBar search={search} onSearchChange={setSearch} />
 
-                                    {isLoading && <p className="text-neutral-400 text-sm py-8 text-center">Loading events...</p>}
+                                    {error && <p className="text-red-400 text-sm py-8 text-center">Couldn't load events: {error}</p>}
 
-                                    {error && !isLoading && <p className="text-red-400 text-sm py-8 text-center">Couldn't load events: {error}</p>}
-
-                                    {!isLoading && !error && (
+                                    {!error && (
                                           <>
                                                 <EventsTable
                                                       events={rows}
