@@ -36,19 +36,8 @@ const AttendeeDashboard = () => {
                         {isSidebarOpen && (
                               <>
                                     <div className="fixed inset-0 bg-black/50 z-40 lg:hidden" onClick={() => setIsSidebarOpen(false)} />
-                                    <div className="fixed left-0 top-0 h-full sm:w-64 max-w-xs z-50 lg:hidden overflow-y-auto">
-                                          <div className="p-4 bg-neutral-1000 min-h-full">
-                                                <div className="flex items-center justify-end mb-6">
-                                                      <button
-                                                            onClick={() => setIsSidebarOpen(false)}
-                                                            aria-label="Close menu"
-                                                            className="p-2 rounded-md hover:bg-white/10 text-white"
-                                                      >
-                                                            ×
-                                                      </button>
-                                                </div>
-                                                <Sidebar items={attendeeSidebarItems} />
-                                          </div>
+                                    <div className="fixed inset-y-0 left-0 z-50 w-[min(21rem,88vw)] lg:hidden">
+                                          <Sidebar items={attendeeSidebarItems} onClose={() => setIsSidebarOpen(false)} />
                                     </div>
                               </>
                         )}
@@ -57,7 +46,7 @@ const AttendeeDashboard = () => {
                               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                                     <p className="text-white sm:text-xl text-lg font-medium font-jakarta">Welcome, {firstName}👋</p>
 
-                                    <Button variant="yellow" className="md:w-auto w-1/2" onClick={() => navigate("/events")}>
+                                    <Button variant="yellow" className="md:w-auto w-1/2" onClick={() => navigate("/discover-events")}>
                                           Discover Events
                                     </Button>
                               </div>
