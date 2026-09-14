@@ -3,8 +3,6 @@ import { type Transaction, type TransactionStatus, SAMPLE_TRANSACTIONS, formatNa
 import { TransactionsTable } from "./TransactionsTable";
 import { Pagination } from "@/components/ui/paginition";
 import { TransactionDetailsModal, RefundConfirmModal } from "./TransactionsModals";
-import Sidebar from "@/components/layouts/Sidebar";
-import TransactionHeader from "./TransctionHeader";
 
 const STATUS_OPTIONS: Array<TransactionStatus | "All"> = ["All", "Completed", "Pending", "Refunded", "Failed"];
 
@@ -56,14 +54,10 @@ export default function TransactionsPage({ transactions = SAMPLE_TRANSACTIONS, o
       }
 
       return (
-            <div className="flex min-h-screen bg-neutral-950">
-                  <Sidebar />
-
-                  <main className="min-w-0 flex-1">
-                        <TransactionHeader />
-
-                        <div className="px-6 py-6 text-neutral-50">
-                              <div className="mb-5 flex items-center justify-between">
+            <div className="min-w-0 bg-neutral-950">
+                  <main className="min-w-0">
+                        <div className="px-4 py-6 text-neutral-50 md:px-6">
+                              <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
                                     <h1 className="text-lg font-semibold">Overview of your transactions</h1>
                                     <button
                                           type="button"

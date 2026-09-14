@@ -2,8 +2,7 @@ import { useCallback, useEffect, useRef, useState, type ChangeEvent } from "reac
 import { Camera } from "lucide-react";
 import { Tabs, TextField, PasswordField, ToggleSwitch, SaveBar, initialsFrom, type TabKey, type StatusKind } from "./SettingsUI";
 
-import Sidebar from "@/components/layouts/Sidebar";
-import SettingsHeader from "./SettingsHeader";
+import Loader from "@/components/layouts/Loader";
 import { getStoredAvatarUrl, storeAvatarUrl, uploadProfileImage } from "@/lib/api";
 
 // ============================================================
@@ -92,11 +91,13 @@ function useProfile(tokenProp?: string) {
 
       const [profile, setProfile] = useState<ProfileData | null>(null);
       const [loadMsg, setLoadMsg] = useState("Loading profile…");
+      const [isLoading, setIsLoading] = useState(true);
       const [saving, setSaving] = useState(false);
 
       const load = useCallback(() => {
             if (!token) {
                   setLoadMsg("You're not logged in — no auth token found.");
+                  setIsLoading(false);
                   return;
             }
             setLoadMsg("Loading profile…");
@@ -105,7 +106,8 @@ function useProfile(tokenProp?: string) {
                         setProfile(data);
                         setLoadMsg("Profile loaded.");
                   })
-                  .catch((err: Error) => setLoadMsg(`Could not load profile (${err.message}).`));
+                  .catch((err: Error) => setLoadMsg(`Could not load profile (${err.message}).`))
+                  .finally(() => setIsLoading(false));
       }, [token]);
 
       useEffect(() => {
@@ -129,7 +131,7 @@ function useProfile(tokenProp?: string) {
             [token],
       );
 
-      return { profile, loadMsg, saving, save };
+      return { profile, loadMsg, saving, isLoading, save };
 }
 
 // ============================================================
@@ -330,24 +332,20 @@ interface AccountSettingsPageProps {
 
 export default function AccountSettingsPage({ token }: AccountSettingsPageProps) {
       const [activeTab, setActiveTab] = useState<TabKey>("profile");
-      const { profile, loadMsg, saving, save } = useProfile(token);
+      const { profile, loadMsg, saving, isLoading, save } = useProfile(token);
+
+      if (isLoading) return <Loader />;
 
       return (
-            <div className="flex min-h-screen bg-neutral-950 text-neutral-100">
-                  <Sidebar />
+            <div className="min-w-0 bg-neutral-950 text-neutral-100">
+                  <div className="w-full px-5 py-8">
+                        <h1 className="mb-5 text-xl font-semibold">Manage your account and preferences</h1>
 
-                  <div className="flex min-w-0 flex-1 flex-col">
-                        <SettingsHeader onMenuClick={() => {}} />
+                        <Tabs active={activeTab} onChange={setActiveTab} />
 
-                        <div className=" w-full  px-5 py-8">
-                              <h1 className="mb-5 text-xl font-semibold">Manage your account and preferences</h1>
-
-                              <Tabs active={activeTab} onChange={setActiveTab} />
-
-                              {activeTab === "profile" && <ProfileInfoTab profile={profile} loadMsg={loadMsg} saving={saving} onSave={save} />}
-                              {activeTab === "notifications" && <NotificationsTab />}
-                              {activeTab === "security" && <SecurityTab email={profile?.email || ""} />}
-                        </div>
+                        {activeTab === "profile" && <ProfileInfoTab profile={profile} loadMsg={loadMsg} saving={saving} onSave={save} />}
+                        {activeTab === "notifications" && <NotificationsTab />}
+                        {activeTab === "security" && <SecurityTab email={profile?.email || ""} />}
                   </div>
             </div>
       );

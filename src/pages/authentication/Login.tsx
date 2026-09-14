@@ -10,8 +10,8 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Alert from "@/components/ui/alert";
 import { Eye, EyeOff } from "lucide-react";
+import { loginUser, type AuthPayload } from "@/lib/api";
 
-type AuthPayload = Record<string, unknown>;
 type LoginLocationState = { from?: string; ticketQuantities?: Record<string, number> };
 
 const asRecord = (value: unknown): AuthPayload => (typeof value === "object" && value !== null ? (value as AuthPayload) : {});
@@ -94,23 +94,8 @@ const Login = () => {
             setIsLoading(true);
 
             try {
-                  const response = await fetch("https://peacemaker001-001-site1.ltempurl.com/api/Auth/login", {
-                        method: "POST",
-                        headers: {
-                              "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({
-                              email,
-                              password,
-                        }),
-                  });
-
-                  const data = (await response.json()) as AuthPayload;
+                  const data = await loginUser(email, password);
                   const user = asRecord(data.user);
-
-                  if (!response.ok) {
-                        throw new Error(String(data.message || "Invalid email or password"));
-                  }
 
                   const authToken = getAuthToken(data);
 

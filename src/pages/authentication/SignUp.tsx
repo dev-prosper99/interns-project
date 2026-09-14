@@ -8,6 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import Alert from "@/components/ui/alert";
 import { Eye, EyeOff } from "lucide-react";
+import { registerUser } from "@/lib/api";
 
 const benefits = ["Instant ticket delivery to your inbox", "Secure and verified ticketing platform", "Access to exclusive events and experiences"];
 
@@ -47,25 +48,13 @@ const SignUp = () => {
                         return;
                   }
 
-                  const response = await fetch("https://peacemaker001-001-site1.ltempurl.com/api/Auth/register", {
-                        method: "POST",
-                        headers: {
-                              "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({
-                              firstname,
-                              lastname,
-                              email,
-                              password,
-                              role: role === "attendee" ? "Attendee" : "Organizer",
-                        }),
+                  await registerUser({
+                        firstname,
+                        lastname,
+                        email,
+                        password,
+                        role: role === "attendee" ? "Attendee" : "Organizer",
                   });
-
-                  const data = await response.json();
-
-                  if (!response.ok) {
-                        throw new Error(data.message || "Registration failed");
-                  }
 
                   const registeredFullName = fullName.trim();
                   const registeredFirstName = String(firstname || "").trim();
