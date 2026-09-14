@@ -1,11 +1,7 @@
 import { useState } from "react";
-import Sidebar from "@/components/layouts/Sidebar";
-import DashboardHeader from "@/components/DashBoard/AttendeeDashboard/DashboardHeader";
 import Profile from "@/components/DashBoard/AttendeeDashboard/Sections/SettingsSections/Profile";
 import Notifications from "@/components/DashBoard/AttendeeDashboard/Sections/SettingsSections/Notifications";
 import Security from "@/components/DashBoard/AttendeeDashboard/Sections/SettingsSections/Security";
-import { DashboardIcon, EventIcon, SettingsIcon, TicketIcon } from "@/assets/icons";
-import { HeartIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 type TabKey = "profile" | "notifications" | "security";
@@ -16,16 +12,7 @@ const TAB_ITEMS: { key: TabKey; label: string }[] = [
       { key: "security", label: "Security" },
 ];
 
-const attendeeSidebarItems = [
-      { label: "Dashboard", path: "/dashboard/attendee", icon: DashboardIcon },
-      { label: "Discover Events", path: "/dashboard/attendee/events", icon: EventIcon },
-      { label: "My Tickets", path: "/dashboard/attendee/tickets", icon: TicketIcon },
-      { label: "Saved Events", path: "/dashboard/attendee/saved-events", icon: HeartIcon },
-      { label: "Settings", path: "/dashboard/attendee/settings", icon: SettingsIcon },
-];
-
 const Settings = () => {
-      const [isSidebarOpen, setIsSidebarOpen] = useState(false);
       const [activeTab, setActiveTab] = useState<TabKey>("profile");
 
       const renderTabContent = () => {
@@ -41,50 +28,33 @@ const Settings = () => {
       };
 
       return (
-            <div className="flex min-h-screen">
-                  <div className="hidden lg:block">
-                        <Sidebar items={attendeeSidebarItems} />
-                  </div>
+            <div className="min-w-0 bg-neutral-925 pb-10">
+                  <main className="mx-auto w-full max-w-7xl px-4 py-5">
+                        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                              <p className="text-lg font-medium font-jakarta text-white sm:text-xl">Manage your account and preferences</p>
+                        </div>
 
-                  <div className="min-w-0 flex-1 bg-neutral-925 pb-10">
-                        <DashboardHeader onMenuClick={() => setIsSidebarOpen(true)} title="Settings" />
+                        <div className="mt-6 mb-3 flex flex-wrap gap-2">
+                              {TAB_ITEMS.map((tab) => {
+                                    const isActiveTab = activeTab === tab.key;
 
-                        {isSidebarOpen && (
-                              <>
-                                    <div className="fixed inset-0 z-40 bg-black/50 lg:hidden" onClick={() => setIsSidebarOpen(false)} />
-                                    <div className="fixed inset-y-0 left-0 z-50 w-[min(21rem,88vw)] lg:hidden">
-                                          <Sidebar items={attendeeSidebarItems} onClose={() => setIsSidebarOpen(false)} />
-                                    </div>
-                              </>
-                        )}
+                                    return (
+                                          <Button
+                                                key={tab.key}
+                                                type="button"
+                                                variant={isActiveTab ? "primary" : "neutral"}
+                                                size="sm"
+                                                onClick={() => setActiveTab(tab.key)}
+                                                className={`border text-white ${isActiveTab ? " bg-purple-600/24 text-purple-600 border-purple-600/24" : "bg-none border-neutral-600 "}`}
+                                          >
+                                                {tab.label}
+                                          </Button>
+                                    );
+                              })}
+                        </div>
 
-                        <main className="mx-auto w-full max-w-7xl px-4 py-5">
-                              <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                                    <p className="text-lg font-medium font-jakarta text-white sm:text-xl">Manage your account and preferences</p>
-                              </div>
-
-                              <div className="mt-6 mb-3 flex flex-wrap gap-2">
-                                    {TAB_ITEMS.map((tab) => {
-                                          const isActiveTab = activeTab === tab.key;
-
-                                          return (
-                                                <Button
-                                                      key={tab.key}
-                                                      type="button"
-                                                      variant={isActiveTab ? "primary" : "neutral"}
-                                                      size="sm"
-                                                      onClick={() => setActiveTab(tab.key)}
-                                                      className={`border text-white ${isActiveTab ? " bg-purple-600/24 text-purple-600 border-purple-600/24" : "bg-none border-neutral-600 "}`}
-                                                >
-                                                      {tab.label}
-                                                </Button>
-                                          );
-                                    })}
-                              </div>
-
-                              <div className="mt-5 w-full font-poppins">{renderTabContent()}</div>
-                        </main>
-                  </div>
+                        <div className="mt-5 w-full font-poppins">{renderTabContent()}</div>
+                  </main>
             </div>
       );
 };

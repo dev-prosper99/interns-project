@@ -147,7 +147,10 @@ const DiscoverEventsDetails = () => {
             ticketQuantities.vvip * Number(event?.vvip_ticketPrice ?? 0);
 
       const formattedTotalTicketAmount = `₦${totalTicketAmount.toLocaleString("en-NG")}`;
-      const isLoggedIn = Boolean(localStorage.getItem("token"));
+      const isAttendee = Boolean(localStorage.getItem("token")) && localStorage.getItem("role")?.trim().toLowerCase() === "attendee";
+      const loginMessage = localStorage.getItem("token")
+            ? "Please log in with an attendee account to proceed to checkout."
+            : "Please log in as an attendee to proceed to checkout.";
 
       if (isLoading) return <Loader />;
 
@@ -471,13 +474,14 @@ const DiscoverEventsDetails = () => {
                                                                   variant="yellow"
                                                                   className="w-full"
                                                                   disabled={
-                                                                        isLoggedIn &&
+                                                                        isAttendee &&
                                                                         ticketQuantities.regular === 0 &&
                                                                         ticketQuantities.vip === 0 &&
                                                                         ticketQuantities.vvip === 0
                                                                   }
                                                                   onClick={() => {
-                                                                        if (!isLoggedIn) {
+                                                                        if (!isAttendee) {
+                                                                              window.alert(loginMessage);
                                                                               navigate("/login", {
                                                                                     state: { from: location.pathname, ticketQuantities },
                                                                               });
@@ -486,7 +490,7 @@ const DiscoverEventsDetails = () => {
                                                                         setIsOpen(true);
                                                                   }}
                                                             >
-                                                                  {isLoggedIn ? "Proceed to checkout" : "Login to continue"}
+                                                                  {isAttendee ? "Proceed to checkout" : "Login to continue"}
                                                             </Button>
                                                       </div>
                                                 </div>

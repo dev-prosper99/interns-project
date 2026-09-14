@@ -2,9 +2,7 @@ import { useCallback, useEffect, useRef, useState, type ChangeEvent } from "reac
 import { Camera } from "lucide-react";
 import { Tabs, TextField, PasswordField, ToggleSwitch, SaveBar, initialsFrom, type TabKey, type StatusKind } from "./SettingsUI";
 
-import ResponsiveAdminSidebar from "@/components/layouts/ResponsiveAdminSidebar";
 import Loader from "@/components/layouts/Loader";
-import SettingsHeader from "./SettingsHeader";
 import { getStoredAvatarUrl, storeAvatarUrl, uploadProfileImage } from "@/lib/api";
 
 // ============================================================
@@ -334,27 +332,20 @@ interface AccountSettingsPageProps {
 
 export default function AccountSettingsPage({ token }: AccountSettingsPageProps) {
       const [activeTab, setActiveTab] = useState<TabKey>("profile");
-      const [isSidebarOpen, setIsSidebarOpen] = useState(false);
       const { profile, loadMsg, saving, isLoading, save } = useProfile(token);
 
       if (isLoading) return <Loader />;
 
       return (
-            <div className="flex min-h-screen bg-neutral-950 text-neutral-100">
-                  <ResponsiveAdminSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
+            <div className="min-w-0 bg-neutral-950 text-neutral-100">
+                  <div className="w-full px-5 py-8">
+                        <h1 className="mb-5 text-xl font-semibold">Manage your account and preferences</h1>
 
-                  <div className="flex min-w-0 flex-1 flex-col">
-                        <SettingsHeader onMenuClick={() => setIsSidebarOpen(true)} />
+                        <Tabs active={activeTab} onChange={setActiveTab} />
 
-                        <div className=" w-full  px-5 py-8">
-                              <h1 className="mb-5 text-xl font-semibold">Manage your account and preferences</h1>
-
-                              <Tabs active={activeTab} onChange={setActiveTab} />
-
-                              {activeTab === "profile" && <ProfileInfoTab profile={profile} loadMsg={loadMsg} saving={saving} onSave={save} />}
-                              {activeTab === "notifications" && <NotificationsTab />}
-                              {activeTab === "security" && <SecurityTab email={profile?.email || ""} />}
-                        </div>
+                        {activeTab === "profile" && <ProfileInfoTab profile={profile} loadMsg={loadMsg} saving={saving} onSave={save} />}
+                        {activeTab === "notifications" && <NotificationsTab />}
+                        {activeTab === "security" && <SecurityTab email={profile?.email || ""} />}
                   </div>
             </div>
       );

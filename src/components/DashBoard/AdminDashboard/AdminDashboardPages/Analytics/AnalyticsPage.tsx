@@ -1,14 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import ResponsiveAdminSidebar from "@/components/layouts/ResponsiveAdminSidebar";
 import StatsCard from "@/components/DashBoard/AdminDashboard/overview/DashboardStatCard";
 import RevenueChart from "@/components/DashBoard/AdminDashboard/Sections/RevenueChart";
 import { Button } from "@/components/ui/button";
 import CategoryChart from "@/components/DashBoard/AdminDashboard/Sections/CategoryChart";
 import { AttendeeIcon, EventIcon, RevenueIcon, TicketIcon, ExportIcon, CalenderIcon } from "@/assets/icons";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import AnalyticsHeader from "@/components/DashBoard/AdminDashboard/AdminDashboardPages/Analytics/AnalyticsHeader";
 import TopEvent from "@/components/DashBoard/AdminDashboard/AdminDashboardPages/Analytics/TopEvent";
 import Loader from "@/components/layouts/Loader";
 
@@ -61,7 +59,6 @@ export default function Analytics() {
       const [loading, setLoading] = useState(true);
       const [error, setError] = useState<string | null>(null);
       const [perEvent, setPerEvent] = useState<EventAnalytics[]>([]);
-      const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
       useEffect(() => {
             let cancelled = false;
@@ -179,11 +176,8 @@ export default function Analytics() {
       }
 
       return (
-            <div className="flex min-h-screen bg-neutral-950">
-                  <ResponsiveAdminSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-                  <main className="min-w-0 flex-1">
-                        <AnalyticsHeader onMenuClick={() => setIsSidebarOpen(true)} />
-
+            <div className="min-w-0 bg-neutral-950">
+                  <main className="min-w-0">
                         <div className="flex flex-col items-start gap-4 p-4 md:flex-row md:items-center md:justify-between md:p-6">
                               <p className="text-xl font-medium text-white md:text-2xl">Insights across all your events</p>
 

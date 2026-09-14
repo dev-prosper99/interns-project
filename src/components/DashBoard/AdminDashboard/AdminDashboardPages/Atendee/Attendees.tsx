@@ -1,7 +1,5 @@
 import { useMemo, useState } from "react";
-import ResponsiveAdminSidebar from "@/components/layouts/ResponsiveAdminSidebar";
 import { ExportIcon, SearchIcon, MailIcon, EyeIcon } from "@/assets/icons";
-import AttendeeHeader from "./AttendeeHeader";
 import { ATTENDEES, TIER_SUBTITLE, type Attendee, type Status } from "./Data";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -105,7 +103,6 @@ function Field({ label, value, valueClass }: { label: string; value: string; val
 export default function AttendeesPage() {
       const [search, setSearch] = useState("");
       const [selected, setSelected] = useState<Attendee | null>(null);
-      const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
       const filtered = useMemo(() => {
             const q = search.trim().toLowerCase();
@@ -114,12 +111,8 @@ export default function AttendeesPage() {
       }, [search]);
 
       return (
-            <div className="flex min-h-screen bg-neutral-950">
-                  <ResponsiveAdminSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-
-                  <div className="flex min-w-0 flex-1 flex-col">
-                        <AttendeeHeader onMenuClick={() => setIsSidebarOpen(true)} />
-
+            <div className="min-w-0 bg-neutral-950">
+                  <div className="min-w-0">
                         <main className="flex-1 p-4 md:p-6">
                               <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
                                     <div>

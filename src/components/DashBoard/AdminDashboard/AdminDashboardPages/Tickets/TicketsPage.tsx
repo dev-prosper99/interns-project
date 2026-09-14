@@ -2,8 +2,6 @@ import { useEffect, useMemo, useState } from "react";
 import { WalletIcon, TicketIcon, SearchIcon } from "@/assets/icons";
 import { Input } from "@/components/ui/input";
 
-import TicketHeader from "./TicketHeader";
-import ResponsiveAdminSidebar from "@/components/layouts/ResponsiveAdminSidebar";
 import { Pagination } from "@/components/ui/paginition";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { StatCard } from "./StatCard";
@@ -106,7 +104,6 @@ export default function TicketsPage() {
 
       const [editingTicket, setEditingTicket] = useState<TicketTier | null>(null);
       const [dialogOpen, setDialogOpen] = useState(false);
-      const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
       const events = useMemo(() => Array.from(new Set(tickets.map((t) => t.event))), [tickets]);
       useEffect(() => {
@@ -181,12 +178,8 @@ export default function TicketsPage() {
       };
 
       return (
-            <div className="flex bg-neutral-950 min-h-screen text-white">
-                  <ResponsiveAdminSidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
-
-                  <div className="min-w-0 flex-1">
-                        <TicketHeader onMenuClick={() => setIsSidebarOpen(true)} />
-
+            <div className="min-w-0 bg-neutral-950 text-white">
+                  <div className="min-w-0">
                         <div className="p-4 md:p-6">
                               <div className="rounded-xl border border-neutral-800 bg-neutral-900/50 p-4 md:p-6">
                                     <h2 className="text-lg font-medium mb-5">Ticket Management</h2>
@@ -267,25 +260,25 @@ export default function TicketsPage() {
                                                 </SelectContent>
                                           </Select>
                                     </div>
+
+                                    {loadError && <p className="mb-4 text-sm text-red-400">{loadError}</p>}
+
+                                    <div className="mt-6">
+                                          <Pagination items={filteredTickets}>
+                                                {(paginatedTickets) => <TicketsTable tickets={paginatedTickets} onEdit={handleEditClick} />}
+                                          </Pagination>
+                                    </div>
                               </div>
 
-                              {loadError && <p className="mb-4 text-sm text-red-400">{loadError}</p>}
-
-                              <div className="mt-6">
-                                    <Pagination items={filteredTickets}>
-                                          {(paginatedTickets) => <TicketsTable tickets={paginatedTickets} onEdit={handleEditClick} />}
-                                    </Pagination>
-                              </div>
+                              <EditTicketDialog
+                                    ticket={editingTicket}
+                                    open={dialogOpen}
+                                    onOpenChange={(open) => {
+                                          setDialogOpen(open);
+                                    }}
+                                    onSave={handleSave}
+                              />
                         </div>
-
-                        <EditTicketDialog
-                              ticket={editingTicket}
-                              open={dialogOpen}
-                              onOpenChange={(open) => {
-                                    setDialogOpen(open);
-                              }}
-                              onSave={handleSave}
-                        />
                   </div>
             </div>
       );

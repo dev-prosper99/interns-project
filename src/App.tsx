@@ -19,6 +19,7 @@ import AccountSettingsPage from "./components/DashBoard/AdminDashboard/AdminDash
 import AttendeesPage from "./components/DashBoard/AdminDashboard/AdminDashboardPages/Atendee/Attendees";
 import AttendeeDashboard from "@/pages/AttendeeDashboard";
 import AdminDashboard from "@/pages/AdminDashboard";
+import DashboardLayout from "./components/layouts/DashboardLayout";
 
 function App() {
       return (
@@ -34,18 +35,20 @@ function App() {
                         <Route path="/dashboard/attendee/events/:title" element={<DiscoverEventsDetails />} />
 
                         <Route element={<ProtectedRoute />}>
-                              <Route path="/dashboard/attendee" element={<AttendeeDashboard />} />
-                              <Route path="/dashboard/attendee/tickets" element={<MyTickets />} />
-                              <Route path="/dashboard/attendee/events" element={<DiscoverEvents />} />
-                              <Route path="/dashboard/attendee/settings" element={<Settings />} />
-                              <Route path="/dashboard/attendee/saved-events" element={<SavedEvents />} />
-                              <Route path="/dashboard/organizer" element={<AdminDashboard />} />
-                              <Route path="/dashboard/organizer/analytics" element={<Analytics />} />
-                              <Route path="/dashboard/organizer/tickets" element={<TicketsPage />} />
-                              <Route path="/dashboard/organizer/events" element={<Events />} />
-                              <Route path="/dashboard/organizer/settings" element={<AccountSettingsPage />} />
-                              <Route path="/dashboard/organizer/transactions" element={<TransactionsPage />} />
-                              <Route path="/dashboard/organizer/attendees" element={<AttendeesPage />} />
+                              <Route element={<DashboardLayout />}>
+                                    <Route path="/dashboard/attendee" element={<AttendeeDashboard />} />
+                                    <Route path="/dashboard/attendee/tickets" element={<MyTickets />} />
+                                    <Route path="/dashboard/attendee/events" element={<DiscoverEvents />} />
+                                    <Route path="/dashboard/attendee/settings" element={<Settings />} />
+                                    <Route path="/dashboard/attendee/saved-events" element={<SavedEvents />} />
+                                    <Route path="/dashboard/organizer" element={<AdminDashboard />} />
+                                    <Route path="/dashboard/organizer/analytics" element={<Analytics />} />
+                                    <Route path="/dashboard/organizer/tickets" element={<TicketsPage />} />
+                                    <Route path="/dashboard/organizer/events" element={<Events />} />
+                                    <Route path="/dashboard/organizer/settings" element={<AccountSettingsPage />} />
+                                    <Route path="/dashboard/organizer/transactions" element={<TransactionsPage />} />
+                                    <Route path="/dashboard/organizer/attendees" element={<AttendeesPage />} />
+                              </Route>
                         </Route>
 
                         <Route path="*" element={<div>404 Not Found</div>} />
