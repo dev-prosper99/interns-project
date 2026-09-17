@@ -203,8 +203,6 @@ export default function EventsPage() {
             setUnpublishTarget(null);
       };
 
-      // Called when CreateEventModal closes, whether from create or edit flow —
-      // refetches so the table/list reflects the latest data without a manual reload
       const handleCreateOrEditModalClose = () => {
             setEditTarget(null);
             setIsCreateModalOpen(false);
