@@ -38,6 +38,7 @@ export default function Sidebar({ items = defaultNavItems, logoSrc = logo, logou
       const [showLogoutMenu, setShowLogoutMenu] = useState(false);
       const navigate = useNavigate();
       const location = useLocation();
+
       const activePath = items.reduce<string | null>((currentPath, item) => {
             const matches = item.isActive
                   ? item.isActive(location.pathname, item.path)
@@ -46,7 +47,13 @@ export default function Sidebar({ items = defaultNavItems, logoSrc = logo, logou
             return matches && (!currentPath || item.path.length > currentPath.length) ? item.path : currentPath;
       }, null);
 
-      const displayName = (localStorage.getItem("fullName") || localStorage.getItem("firstName") || "User").trim().replace(/\s+/g, " ") || "User";
+      let displayName = (localStorage.getItem("fullName") || "").trim().replace(/\s+/g, " ");
+
+      if (!displayName) {
+            const firstName = (localStorage.getItem("firstName") || "").trim();
+            const lastName = (localStorage.getItem("lastName") || "").trim();
+            displayName = `${firstName} ${lastName}`.trim() || "User";
+      }
 
       const userEmail = (localStorage.getItem("email") || "your@email.com").trim() || "your@email.com";
       const profilePath = localStorage.getItem("role")?.trim().toLowerCase() === "attendee" ? "/dashboard/attendee/settings" : "/dashboard/organizer/settings";
@@ -89,7 +96,10 @@ export default function Sidebar({ items = defaultNavItems, logoSrc = logo, logou
                                     return (
                                           <button
                                                 key={label}
-                                                onClick={() => navigate(path)}
+                                                onClick={() => {
+                                                      onClose?.();
+                                                      navigate(path);
+                                                }}
                                                 className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-left
                                                       ${isActive ? " text-white bg-purple-500 font-bold" : "text-neutral-400 hover:text-white"}`}
                                           >

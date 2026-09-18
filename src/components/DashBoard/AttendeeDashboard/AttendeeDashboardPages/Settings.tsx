@@ -29,7 +29,7 @@ const Settings = () => {
 
       return (
             <div className="min-w-0 bg-neutral-925 pb-10">
-                  <main className="mx-auto w-full max-w-7xl px-4 py-5">
+                  <main className="mx-auto w-full px-4 py-5">
                         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                               <p className="text-lg font-medium font-jakarta text-white sm:text-xl">Manage your account and preferences</p>
                         </div>

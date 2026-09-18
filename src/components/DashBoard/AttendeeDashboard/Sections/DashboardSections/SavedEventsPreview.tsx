@@ -7,7 +7,7 @@ export default function SavedEventsPreview() {
                   <div className="bg-neutral-1000 py-4 rounded-2xl w-full">
                         <div className="flex items-center justify-between border-b border-neutral-900 px-4 pb-2">
                               <p className="text-white text-sm">Saved Events</p>
-                              <a href="/events" className="text-purple-500 hover:underline text-xs">
+                              <a href="/dashboard/attendee/saved-events" className="text-purple-500 hover:underline text-xs">
                                     View all
                               </a>
                         </div>
