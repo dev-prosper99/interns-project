@@ -33,19 +33,19 @@ interface EventsApiResponse {
       };
 }
 
-function SectionHeader({ onScroll }: { title: string; subtitle: string; onScroll: (direction: "left" | "right") => void }) {
+function SectionHeader({ title, subtitle, onScroll }: { title: string; subtitle: string; onScroll: (direction: "left" | "right") => void }) {
       return (
-            <div className="flex items-center max-w-6xl mx-auto justify-between mb-8">
+            <div className="flex items-center justify-between mb-8">
                   <div>
-                        <h2 className="text-white text-2xl font-bold">Event near you</h2>
-                        <p className="text-neutral-400 text-sm mt-1">Dont miss what is happening around you</p>
+                        <h2 className="text-white text-2xl font-bold">{title}</h2>
+                        <p className="text-neutral-400 text-sm mt-1">{subtitle}</p>
                   </div>
                   <div className="flex gap-2">
                         <button
                               type="button"
                               aria-label="Scroll events left"
                               onClick={() => onScroll("left")}
-                              className="w-12.5 h-12.5 rounded-lg bg-neutral-900 flex items-center justify-center hover:bg-neutral-800"
+                              className="w-12.5 h-12.5 rounded-lg bg-neutral-900 flex items-center justify-center hover:bg-neutral-800 transition-colors"
                         >
                               <LeftArrow className="w-5 h-5 text-white" />
                         </button>
@@ -53,7 +53,7 @@ function SectionHeader({ onScroll }: { title: string; subtitle: string; onScroll
                               type="button"
                               aria-label="Scroll events right"
                               onClick={() => onScroll("right")}
-                              className="w-12.5 h-12.5 rounded-lg bg-neutral-900 flex items-center justify-center hover:bg-neutral-800"
+                              className="w-12.5 h-12.5 rounded-lg bg-neutral-900 flex items-center justify-center hover:bg-neutral-800 transition-colors"
                         >
                               <RightArrow className="w-5 h-5 text-white" />
                         </button>
@@ -62,7 +62,7 @@ function SectionHeader({ onScroll }: { title: string; subtitle: string; onScroll
       );
 }
 
-export default function UpcomingEvents() {
+export default function EventsNearYou() {
       const eventsTrackRef = useRef<HTMLDivElement>(null);
       const [events, setEvents] = useState<EventListItem[]>([]);
       const [isLoading, setIsLoading] = useState(true);
@@ -70,7 +70,6 @@ export default function UpcomingEvents() {
 
       useEffect(() => {
             const controller = new AbortController();
-
             async function fetchEvents() {
                   setIsLoading(true);
                   setError(null);
@@ -79,22 +78,17 @@ export default function UpcomingEvents() {
                               Page: "1",
                               PageSize: "20",
                         });
-
                         const res = await fetch(`${API_BASE_URL}/api/Events?${params.toString()}`, {
                               headers: { Accept: "application/json" },
                               signal: controller.signal,
                         });
-
                         if (!res.ok) {
                               throw new Error(`Request failed with status ${res.status}`);
                         }
-
                         const json: EventsApiResponse = await res.json();
-
                         if (!json.success) {
                               throw new Error(json.message || "Failed to load events");
                         }
-
                         setEvents(json.data.items);
                   } catch (err) {
                         if ((err as Error).name !== "AbortError") {
@@ -104,7 +98,6 @@ export default function UpcomingEvents() {
                         setIsLoading(false);
                   }
             }
-
             fetchEvents();
             return () => controller.abort();
       }, []);
@@ -117,24 +110,18 @@ export default function UpcomingEvents() {
       };
 
       return (
-            <div className="pl-6 md:pl-30 py-16 bg-neutral-950">
-                  <div className="max-w-6xl mx-auto">
-                        <div className="pr-6 md:pr-30">
-                              <SectionHeader title="Upcoming Events" subtitle="Don't miss upcoming events" onScroll={scrollEvents} />
-                        </div>
-
+            <div className="py-16 bg-neutral-950">
+                  <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <SectionHeader title="Events Near You" subtitle="Don't miss what is happening around you" onScroll={scrollEvents} />
                         {isLoading && <p className="text-neutral-400 text-sm">Loading events...</p>}
-
                         {error && !isLoading && <p className="text-red-400 text-sm">Error loading events. Please refresh</p>}
-
-                        {!isLoading && !error && events.length === 0 && <p className="text-neutral-400 text-sm">No upcoming events yet.</p>}
-
+                        {!isLoading && !error && events.length === 0 && <p className="text-neutral-400 text-sm">No events near you yet.</p>}
                         {!isLoading && !error && events.length > 0 && (
                               <div
                                     ref={eventsTrackRef}
                                     className="flex w-full min-w-0 gap-6 overflow-x-auto overscroll-x-contain scroll-smooth no-scrollbar pb-2"
                               >
-                                    {events.slice(5, 10).map((event) => {
+                                    {events.slice(5, 11).map((event) => {
                                           const date = new Date(event.eventDate);
                                           return (
                                                 <div
