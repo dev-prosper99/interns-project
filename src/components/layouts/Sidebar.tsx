@@ -89,7 +89,10 @@ export default function Sidebar({ items = defaultNavItems, logoSrc = logo, logou
                                     return (
                                           <button
                                                 key={label}
-                                                onClick={() => navigate(path)}
+                                                onClick={() => {
+                                                      onClose?.();
+                                                      navigate(path);
+                                                }}
                                                 className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-left
                                                       ${isActive ? " text-white bg-purple-500 font-bold" : "text-neutral-400 hover:text-white"}`}
                                           >

@@ -125,7 +125,7 @@ export default function AttendeesPage() {
                                     </Button>
                               </div>
 
-                              <div className="mb-4 flex flex-wrap gap-3">
+                              <div className="mb-4 flex flex-wrap gap-3 h-full">
                                     <div className="relative min-w-55 flex-1">
                                           <SearchIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-500" />
                                           <Input
@@ -135,22 +135,33 @@ export default function AttendeesPage() {
                                                 className="border-white/10 pl-9 text-neutral-200 placeholder:text-neutral-500 focus-visible:border-violet-500"
                                           />
                                     </div>
-                                    <Select defaultValue="all-events">
-                                          <SelectTrigger className="border-white/10 bg-neutral-900 text-neutral-300">
-                                                <SelectValue placeholder="All Events" />
-                                          </SelectTrigger>
-                                          <SelectContent>
-                                                <SelectItem value="all-events">All Events</SelectItem>
-                                          </SelectContent>
-                                    </Select>
-                                    <Select defaultValue="all-status">
-                                          <SelectTrigger className="border-white/10 bg-neutral-900 text-neutral-300">
-                                                <SelectValue placeholder="All Status" />
-                                          </SelectTrigger>
-                                          <SelectContent>
-                                                <SelectItem value="all-status">All Status</SelectItem>
-                                          </SelectContent>
-                                    </Select>
+                                    <div className="flex items-center gap-4">
+                                          <Select defaultValue="All events">
+                                                <SelectTrigger className="border-white/10 bg-neutral-900 text-neutral-300 min-w-35">
+                                                      <SelectValue placeholder="Select Event" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                      <SelectItem value="all-events">All Events</SelectItem>
+                                                      <SelectItem value="upcoming">Upcoming Events</SelectItem>
+                                                      <SelectItem value="past">Past Events</SelectItem>
+                                                      <SelectItem value="drafts">Drafts</SelectItem>
+                                                      <SelectItem value="cancelled">Cancelled</SelectItem>
+                                                </SelectContent>
+                                          </Select>
+
+                                          {/* Status Select */}
+                                          <Select defaultValue="All status">
+                                                <SelectTrigger className="border-white/10 bg-neutral-900 text-neutral-300 min-w-35]">
+                                                      <SelectValue placeholder="Select Status" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                      <SelectItem value="all-status">All Status</SelectItem>
+                                                      <SelectItem value="active">Confirmed</SelectItem>
+                                                      <SelectItem value="inactive">Cancelled</SelectItem>
+                                                      <SelectItem value="inactive">Checked in</SelectItem>
+                                                </SelectContent>
+                                          </Select>
+                                    </div>
                               </div>
 
                               <div className="overflow-hidden rounded-xl border border-white/10 bg-neutral-1000">

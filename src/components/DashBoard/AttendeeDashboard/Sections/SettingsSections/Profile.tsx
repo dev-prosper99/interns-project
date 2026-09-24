@@ -138,9 +138,13 @@ export default function Profile() {
                                     <Input
                                           label="Phone number"
                                           type="tel"
+                                          maxLength={11}
                                           placeholder="Phone"
                                           value={phoneNumber}
-                                          onChange={(event) => setPhoneNumber(event.target.value)}
+                                          onChange={(event) => {
+                                                const onlyNumbers = event.target.value.replace(/\D/g, "");
+                                                setPhoneNumber(onlyNumbers.slice(0, 11));
+                                          }}
                                     />
                               </div>
 

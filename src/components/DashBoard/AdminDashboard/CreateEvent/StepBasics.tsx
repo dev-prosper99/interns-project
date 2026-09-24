@@ -128,8 +128,22 @@ export default function StepBasics({ form, update }: StepBasicsProps) {
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
-                        <TextInput label="End Date (Optional)" type="date" value={form.endDate} onChange={(e) => update({ endDate: e.target.value })} />
-                        <TextInput label="Start Time" required type="time" value={form.startTime} onChange={(e) => update({ startTime: e.target.value })} />
+                        <TextInput
+                              label="Start Date"
+                              required
+                              type="date"
+                              max="9999-12-31"
+                              value={form.startDate}
+                              onChange={(e) => update({ startDate: e.target.value })}
+                        />
+
+                        <TextInput
+                              label="End Date (Optional)"
+                              type="date"
+                              max="9999-12-31"
+                              value={form.endDate}
+                              onChange={(e) => update({ endDate: e.target.value })}
+                        />
                   </div>
 
                   <TextInput
