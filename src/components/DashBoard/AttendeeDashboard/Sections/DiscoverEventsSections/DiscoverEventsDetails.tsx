@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import Sidebar from "@/components/layouts/Sidebar";
-import DashboardHeader from "@/components/DashBoard/AdminDashboard/Sections/DashboardHeader";
 import { DashboardIcon, EventIcon, SettingsIcon, TicketIcon, LocationIcon } from "@/assets/icons";
 import { Events } from "@/constants/events";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -10,6 +9,7 @@ import { FaMinus } from "react-icons/fa";
 import { PiPlus } from "react-icons/pi";
 import GetTicketModal from "./GetTicketModal";
 import Loader from "@/components/layouts/Loader";
+import DashboardHeader from "@/components/DashBoard/AttendeeDashboard/DashboardHeader";
 
 const attendeeSidebarItems = [
       { label: "Dashboard", path: "/dashboard/attendee", icon: DashboardIcon },
@@ -162,7 +162,7 @@ const DiscoverEventsDetails = () => {
                   </div>
 
                   <div className="min-w-0 flex-1 bg-neutral-925 pb-10">
-                        <DashboardHeader onMenuClick={() => setIsSidebarOpen(true)} />
+                        <DashboardHeader title={event?.eventTitle} onMenuClick={() => setIsSidebarOpen(true)} />
 
                         {isSidebarOpen && (
                               <>

@@ -8,28 +8,31 @@ import DeleteEventModal from "./DeleteEventModal";
 import UnpublishEventModal from "./UnpublishEventModal";
 import EventDetails from "./EventsDetails";
 import CreateEventModal from "../DashBoard/AdminDashboard/CreateEvent/CreateEventModal";
-
 import type { EventRowData } from "./Types";
 import Loader from "../layouts/Loader";
-import { DEFAULT_PROMO_CODE, DEFAULT_PROMO_DISCOUNT, DEFAULT_REFUND_POLICY, DEFAULT_DESCRIPTION, type EventDetailData } from "./EventsDetailsTypes";
+import { DEFAULT_REFUND_POLICY, DEFAULT_DESCRIPTION, type EventDetailData } from "./EventsDetailsTypes";
+import type { RawApiEvent, RawApiTicket } from "./Types";
 
 const API_BASE_URL = "https://peacemaker001-001-site1.ltempurl.com";
+
+interface EventApiResponse {
+      success?: boolean;
+      message?: string;
+      data?: RawApiEvent | RawApiEvent[] | { items?: RawApiEvent[] };
+}
 
 export default function EventsPage() {
       const [search, setSearch] = useState("");
       const [rows, setRows] = useState<EventRowData[]>([]);
       const [isLoading, setIsLoading] = useState(true);
       const [error, setError] = useState<string | null>(null);
-
       const [statusOverrides, setStatusOverrides] = useState<Record<string | number, string>>({});
       const [deleteTarget, setDeleteTarget] = useState<EventRowData | null>(null);
       const [unpublishTarget, setUnpublishTarget] = useState<EventRowData | null>(null);
-
       const [viewTargetId, setViewTargetId] = useState<string | number | null>(null);
       const [viewTarget, setViewTarget] = useState<EventDetailData | null>(null);
       const [viewLoading, setViewLoading] = useState(false);
-
-      const [editTarget, setEditTarget] = useState<EventRowData | null>(null);
+      const [editTarget, setEditTarget] = useState<any>(null);
       const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
       const fetchEvents = useCallback(async () => {
@@ -37,24 +40,22 @@ export default function EventsPage() {
             setError(null);
             try {
                   const token = localStorage.getItem("token");
+                  const cleanToken = token ? (token.startsWith("Bearer ") ? token.slice(7) : token) : "";
                   const userId = localStorage.getItem("userId");
-
                   if (!userId) {
                         setError("Not logged in");
                         setIsLoading(false);
                         return;
                   }
 
-                  // Appending query parameters as many ASP.NET controllers require default page params
                   const queryParams = new URLSearchParams({
                         Page: "1",
                         PageSize: "50",
                   });
-
                   const response = await fetch(`${API_BASE_URL}/api/Events/my-events/${userId}?${queryParams.toString()}`, {
                         method: "GET",
                         headers: {
-                              ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                              ...(cleanToken ? { Authorization: `Bearer ${cleanToken}` } : {}),
                               Accept: "application/json",
                         },
                   });
@@ -63,36 +64,41 @@ export default function EventsPage() {
                         throw new Error(`Request failed with status ${response.status}`);
                   }
 
-                  const result = await response.json();
-
+                  const result = (await response.json()) as EventApiResponse;
                   if (!result.success) {
                         throw new Error(result.message || "Failed to load events");
                   }
 
-                  const rawItems = Array.isArray(result.data) ? result.data : (result.data?.items ?? []);
+                  const rawData = result.data;
+                  const rawItems: RawApiEvent[] = Array.isArray(rawData)
+                        ? rawData
+                        : rawData && typeof rawData === "object" && "items" in rawData && Array.isArray(rawData.items)
+                          ? rawData.items
+                          : [];
 
-                  const mappedEvents: EventRowData[] = rawItems.map((event: any) => {
-                        const eventDateObj = event.eventDate ? new Date(event.eventDate) : null;
+                  const mappedEvents: EventRowData[] = rawItems.map((event: RawApiEvent) => {
+                        const rawDate = event.eventDate || event.EventDate || event.availabilityStart;
+                        const eventDateObj = rawDate ? new Date(rawDate) : null;
                         const isValidDate = eventDateObj && !Number.isNaN(eventDateObj.getTime());
-
+                        const realId = event.id ?? event.Id ?? "";
+                        const venueName = event.venue ?? event.Venue;
+                        const cityName = event.city ?? event.City;
                         return {
-                              id: event.id,
-                              title: event.title ?? "Untitled Event",
-                              venue: [event.venue, event.city].filter(Boolean).join(", ") || "No venue set",
+                              id: realId,
+                              title: event.title ?? event.Title ?? "Untitled Event",
+                              venue: [venueName, cityName].filter(Boolean).join(", ") || "No venue set",
                               date: isValidDate ? eventDateObj.toLocaleDateString() : "TBD",
                               time: isValidDate ? eventDateObj.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "TBD",
                               category: event.eventCategory || event.category || "Event",
-                              image: event.bannerUrl || null,
-                              bannerUrl: event.bannerUrl || null,
-                              revenue: "₦0",
-                              status: statusOverrides[event.id] ?? event.status ?? "Draft",
+                              image: event.bannerUrl || event.image || "",
+                              bannerUrl: event.bannerUrl || event.image || null,
+                              revenue: "₦0.00",
+                              status: statusOverrides[realId] ?? event.status ?? "Draft",
                         };
                   });
-
                   setRows(mappedEvents);
-            } catch (err) {
-                  console.error("Fetch events error:", err);
-                  setError((err as Error).message || "Failed to load events");
+            } catch (err: unknown) {
+                  setError(err instanceof Error ? err.message : "Failed to load events");
             } finally {
                   setIsLoading(false);
             }
@@ -109,55 +115,84 @@ export default function EventsPage() {
             }
 
             let cancelled = false;
-
             const fetchEventDetails = async () => {
                   setViewLoading(true);
                   try {
                         const token = localStorage.getItem("token");
-
+                        const cleanToken = token ? (token.startsWith("Bearer ") ? token.slice(7) : token) : "";
                         const response = await fetch(`${API_BASE_URL}/api/Events/${viewTargetId}`, {
                               method: "GET",
                               headers: {
-                                    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                                    ...(cleanToken ? { Authorization: `Bearer ${cleanToken}` } : {}),
                                     Accept: "application/json",
                               },
                         });
-
-                        const result = await response.json();
-
-                        if (!response.ok || !result.success) {
+                        const result = (await response.json()) as { success?: boolean; message?: string; data?: RawApiEvent };
+                        if (!response.ok || !result.success || !result.data) {
                               throw new Error(result?.message || "Failed to load event details");
                         }
 
                         const event = result.data;
-                        const startDate = event.eventDate ? new Date(event.eventDate) : null;
+                        const rawDate = event.eventDate || event.EventDate || event.availabilityStart;
+                        const startDate = rawDate ? new Date(rawDate) : null;
                         const isValidDate = startDate && !Number.isNaN(startDate.getTime());
 
                         if (cancelled) return;
 
+                        let savedMeta: Record<string, unknown> | null = null;
+                        try {
+                              const metaStr = localStorage.getItem(`event_meta_${event.id ?? viewTargetId}`);
+                              if (metaStr) savedMeta = JSON.parse(metaStr) as Record<string, unknown>;
+                              if (!savedMeta) {
+                                    const cacheStr = localStorage.getItem(`event_cache_${event.id ?? viewTargetId}`);
+                                    if (cacheStr) savedMeta = JSON.parse(cacheStr) as Record<string, unknown>;
+                              }
+                        } catch {
+                              console.error();
+                        }
+
+                        const resolvedPromoCode = String(event.promoCode || event.PromoCode || event.promo_code || savedMeta?.promoCode || "");
+                        const rawDiscount = event.discount ?? event.Discount ?? event.promoDiscount ?? savedMeta?.discount ?? "";
+                        const resolvedPromoDiscount = rawDiscount
+                              ? String(rawDiscount).includes("%")
+                                    ? String(rawDiscount)
+                                    : `${rawDiscount}% off`
+                              : "0% off";
+
+                        const resolvedRefund = String(event.eventPolicy || event.refundPolicy || savedMeta?.refundPolicy || DEFAULT_REFUND_POLICY);
+                        const resolvedDescription = String(event.description || savedMeta?.description || DEFAULT_DESCRIPTION);
+
+                        const rawTicketTypes = (event.ticketTypes ?? savedMeta?.tiers ?? []) as RawApiTicket[];
+                        const mappedTiers = rawTicketTypes.map((ticket: RawApiTicket) => ({
+                              id: String(ticket.id ?? ticket.Id ?? ""),
+                              name: String(ticket.name ?? ticket.Name ?? ""),
+                              price: `₦${Number(ticket.price ?? ticket.Price ?? 0).toLocaleString("en-NG")}`,
+                              ticketsAvailable:
+                                    ticket.totalQuantity != null || ticket.quantity != null ? `${ticket.totalQuantity ?? ticket.quantity} tickets` : undefined,
+                              subtitle: (ticket.description ?? ticket.Description) ? String(ticket.description ?? ticket.Description) : undefined,
+                        }));
+
+                        const currentId = event.id ?? event.Id ?? viewTargetId;
+
                         setViewTarget({
-                              id: event.id,
-                              status: statusOverrides[event.id] ?? event.status ?? "Draft",
-                              title: event.title ?? "Untitled Event",
+                              id: currentId,
+                              status: statusOverrides[currentId] ?? event.status ?? "Draft",
+                              title: event.title ?? event.Title ?? "Untitled Event",
                               category: event.eventCategory || event.category || "Event",
-                              venue: event.venue ?? "No venue specified",
-                              state: event.state ?? "",
-                              numberAttending: event.numberAttending ?? 0,
+                              venue: event.venue ?? event.Venue ?? "No venue specified",
+                              state: event.state ?? event.State ?? "",
+                              numberAttending: String(event.numberAttending ?? event.NumberAttending ?? 0),
                               startDate: isValidDate ? startDate.toLocaleDateString() : "TBD",
                               startTime: isValidDate ? startDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "TBD",
-                              bannerUrl: event.bannerUrl || null,
-                              promoCode: DEFAULT_PROMO_CODE,
-                              promoDiscount: DEFAULT_PROMO_DISCOUNT,
-                              refundPolicy: event.eventPolicy || DEFAULT_REFUND_POLICY,
-                              description: event.description || DEFAULT_DESCRIPTION,
-                              ticketTiers: (event.ticketTypes ?? []).map((ticket: any) => ({
-                                    id: ticket.id,
-                                    name: ticket.name,
-                                    price: `₦${Number(ticket.price || 0).toLocaleString("en-NG")}`,
-                              })),
+                              bannerUrl: event.bannerUrl || event.BannerUrl || "",
+                              promoCode: resolvedPromoCode,
+                              promoDiscount: resolvedPromoDiscount,
+                              refundPolicy: resolvedRefund,
+                              description: resolvedDescription,
+                              ticketTiers: mappedTiers,
                         });
-                  } catch (err) {
-                        console.error("Failed to load event details:", err);
+                  } catch {
+                        console.error();
                         if (!cancelled) setViewTarget(null);
                   } finally {
                         if (!cancelled) setViewLoading(false);
@@ -173,40 +208,33 @@ export default function EventsPage() {
 
       const handleConfirmDelete = async () => {
             if (!deleteTarget) return;
-
             try {
                   const token = localStorage.getItem("token");
-
+                  const cleanToken = token ? (token.startsWith("Bearer ") ? token.slice(7) : token) : "";
                   const response = await fetch(`${API_BASE_URL}/api/Events/${deleteTarget.id}`, {
                         method: "DELETE",
                         headers: {
-                              ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                              ...(cleanToken ? { Authorization: `Bearer ${cleanToken}` } : {}),
                         },
                   });
-
-                  const result = await response.json();
-
+                  const result = (await response.json()) as { message?: string };
                   if (!response.ok) {
                         throw new Error(result?.message || "Failed to delete event");
                   }
-
                   setRows((prev) => prev.filter((event) => event.id !== deleteTarget.id));
                   setDeleteTarget(null);
-            } catch (error) {
-                  console.error("Delete failed:", error);
+            } catch {
+                  console.error();
             }
       };
 
       const handleConfirmUnpublish = () => {
             if (!unpublishTarget) return;
-
             setStatusOverrides((prev) => ({
                   ...prev,
                   [unpublishTarget.id]: "Draft",
             }));
-
             setRows((prev) => prev.map((row) => (row.id === unpublishTarget.id ? { ...row, status: "Draft" } : row)));
-
             setUnpublishTarget(null);
       };
 
@@ -219,7 +247,6 @@ export default function EventsPage() {
       const filteredRows = useMemo(() => {
             const query = search.toLowerCase().trim();
             if (!query) return rows;
-
             return rows.filter((event) => [event.title, event.venue, event.category, event.status].some((field) => field?.toLowerCase().includes(query)));
       }, [rows, search]);
 
@@ -230,10 +257,8 @@ export default function EventsPage() {
                   <main className="min-w-0 flex-1 flex flex-col">
                         <div className="bg-neutral-950 p-4 md:p-8 flex-1 flex flex-col">
                               <EventsPageHeader onCreateClick={() => setIsCreateModalOpen(true)} />
-
                               <div className="rounded-2xl p-4 md:p-8 flex-1 flex flex-col border border-white/5" style={{ backgroundColor: "#111213" }}>
                                     <SearchFilterBar search={search} onSearchChange={setSearch} />
-
                                     {error && !isLoading && (
                                           <div className="flex-1 flex flex-col items-center justify-center py-16 text-center">
                                                 <p className="text-red-400 text-sm mb-4">Error loading events. please try again</p>
@@ -246,7 +271,6 @@ export default function EventsPage() {
                                                 </button>
                                           </div>
                                     )}
-
                                     {!error && (
                                           <>
                                                 {rows.length === 0 && (
@@ -257,7 +281,6 @@ export default function EventsPage() {
                                                             </p>
                                                       </div>
                                                 )}
-
                                                 {rows.length > 0 && filteredRows.length === 0 && (
                                                       <div className="flex-1 flex flex-col items-center justify-center py-16 text-center">
                                                             <p className="text-neutral-400 text-sm">
@@ -265,29 +288,29 @@ export default function EventsPage() {
                                                             </p>
                                                       </div>
                                                 )}
-
                                                 {filteredRows.length > 0 && (
                                                       <>
-                                                            <div className="hidden md:block">
-                                                                  <EventsTable
-                                                                        events={filteredRows}
-                                                                        onViewClick={(row) => setViewTargetId(row.id)}
-                                                                        onDeleteClick={setDeleteTarget}
-                                                                        onUnpublishClick={setUnpublishTarget}
-                                                                        onEditClick={setEditTarget}
-                                                                  />
+                                                            <div className="flex-1 flex flex-col">
+                                                                  <div className="hidden md:block">
+                                                                        <EventsTable
+                                                                              events={filteredRows}
+                                                                              onViewClick={(row) => setViewTargetId(row.id)}
+                                                                              onDeleteClick={(row) => setDeleteTarget(row)}
+                                                                              onUnpublishClick={(row) => setUnpublishTarget(row)}
+                                                                              onEditClick={(row) => setEditTarget(row)}
+                                                                        />
+                                                                  </div>
+                                                                  <div className="block md:hidden">
+                                                                        <EventCardList
+                                                                              events={filteredRows}
+                                                                              onViewClick={(row) => setViewTargetId(row.id)}
+                                                                              onDeleteClick={(row) => setDeleteTarget(row)}
+                                                                              onUnpublishClick={(row) => setUnpublishTarget(row)}
+                                                                              onEditClick={(row) => setEditTarget(row)}
+                                                                        />
+                                                                  </div>
                                                             </div>
-
-                                                            <div className="block md:hidden">
-                                                                  <EventCardList
-                                                                        events={filteredRows}
-                                                                        onViewClick={(row) => setViewTargetId(row.id)}
-                                                                        onDeleteClick={setDeleteTarget}
-                                                                        onUnpublishClick={setUnpublishTarget}
-                                                                  />
-                                                            </div>
-
-                                                            <EventsPagination />
+                                                            <EventsPagination className="mt-auto" />
                                                       </>
                                                 )}
                                           </>
@@ -295,19 +318,22 @@ export default function EventsPage() {
                               </div>
                         </div>
                   </main>
-
                   {deleteTarget && <DeleteEventModal onCancel={() => setDeleteTarget(null)} onConfirm={handleConfirmDelete} />}
-
-                  {(editTarget || isCreateModalOpen) && <CreateEventModal isOpen={true} eventId={editTarget?.id} onClose={handleCreateOrEditModalClose} />}
-
+                  {(editTarget || isCreateModalOpen) && (
+                        <CreateEventModal
+                              key={editTarget ? `edit-${editTarget.id}` : "create"}
+                              isOpen={true}
+                              eventId={editTarget?.id}
+                              initialData={editTarget}
+                              onClose={handleCreateOrEditModalClose}
+                        />
+                  )}
                   {unpublishTarget && <UnpublishEventModal onCancel={() => setUnpublishTarget(null)} onConfirm={handleConfirmUnpublish} />}
-
                   {viewLoading && !viewTarget && viewTargetId !== null && (
                         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
                               <p className="text-neutral-300 text-sm">Loading event...</p>
                         </div>
                   )}
-
                   {viewTarget && (
                         <div
                               className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/60 px-4 py-8"
@@ -320,7 +346,7 @@ export default function EventsPage() {
                                           onBack={() => setViewTargetId(null)}
                                           onEdit={() => {
                                                 const target = rows.find((r) => r.id === viewTarget.id) || ({ id: viewTarget.id } as EventRowData);
-                                                setEditTarget(target);
+                                                setEditTarget({ ...target, ...viewTarget });
                                                 setViewTargetId(null);
                                           }}
                                     />
