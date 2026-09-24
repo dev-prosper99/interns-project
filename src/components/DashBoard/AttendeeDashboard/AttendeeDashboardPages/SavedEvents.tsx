@@ -9,7 +9,7 @@ const SavedEvents = () => {
 
       return (
             <div className="min-w-0 bg-neutral-925 pb-10">
-                  <main className="mx-auto w-full max-w-7xl px-4 py-5 ">
+                  <main className="mx-auto w-full px-4 py-5 ">
                         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                               <p className="text-white sm:text-xl text-lg font-medium font-jakarta">All events in your wish list</p>
 

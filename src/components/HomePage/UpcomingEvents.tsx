@@ -195,7 +195,7 @@ export default function UpcomingEvents() {
 
                         {isLoading && <p className="text-neutral-400 text-sm">Loading events...</p>}
 
-                        {error && !isLoading && <p className="text-red-400 text-sm">Couldn't load events: {error}</p>}
+                        {error && !isLoading && <p className="text-red-400 text-sm">Error loading events. Please refresh</p>}
 
                         {!isLoading && !error && events.length === 0 && <p className="text-neutral-400 text-sm">No upcoming events yet.</p>}
 
@@ -204,7 +204,7 @@ export default function UpcomingEvents() {
                                     ref={eventsTrackRef}
                                     className="flex w-full min-w-0 gap-6 overflow-x-auto overscroll-x-contain scroll-smooth no-scrollbar pb-2"
                               >
-                                    {events.map((event) => {
+                                    {events.slice(0, 6).map((event) => {
                                           const date = new Date(event.eventDate);
                                           return (
                                                 <div

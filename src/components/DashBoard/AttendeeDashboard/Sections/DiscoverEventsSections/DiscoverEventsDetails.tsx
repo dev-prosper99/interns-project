@@ -5,17 +5,18 @@ import { DashboardIcon, EventIcon, SettingsIcon, TicketIcon, LocationIcon } from
 import { Events } from "@/constants/events";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Share2 } from "lucide-react";
+import { HeartIcon, Share2 } from "lucide-react";
 import { FaMinus } from "react-icons/fa";
 import { PiPlus } from "react-icons/pi";
 import GetTicketModal from "./GetTicketModal";
 import Loader from "@/components/layouts/Loader";
 
 const attendeeSidebarItems = [
-      { label: "Dashboard", path: "/Dashboard", icon: DashboardIcon },
-      { label: "Discover Events", path: "/discover-events", icon: EventIcon },
-      { label: "My Tickets", path: "/my-tickets", icon: TicketIcon },
-      { label: "Settings", path: "/my-settings", icon: SettingsIcon },
+      { label: "Dashboard", path: "/dashboard/attendee", icon: DashboardIcon },
+      { label: "Discover Events", path: "/dashboard/attendee/events", icon: EventIcon },
+      { label: "My Tickets", path: "/dashboard/attendee/tickets", icon: TicketIcon },
+      { label: "Saved Events", path: "/dashboard/attendee/saved-events", icon: HeartIcon },
+      { label: "Settings", path: "/dashboard/attendee/settings", icon: SettingsIcon },
 ];
 
 type TicketType = "regular" | "vip" | "vvip";

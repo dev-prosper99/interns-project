@@ -25,7 +25,7 @@ const MyTickets = () => {
 
       return (
             <div className="min-w-0 bg-neutral-925 pb-10">
-                  <main className="mx-auto w-full max-w-7xl py-5 px-4 ">
+                  <main className="mx-auto w-full py-5 px-4 ">
                         <p className="text-lg font-medium font-jakarta text-white sm:text-xl">All your purchased tickets in one place</p>
 
                         <div className="mt-5 w-full font-poppins">

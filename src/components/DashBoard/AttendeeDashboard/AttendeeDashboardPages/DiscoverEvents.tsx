@@ -125,7 +125,7 @@ const DiscoverEvents = () => {
 
       return (
             <div className="min-w-0 bg-neutral-925 pb-10">
-                  <main className="mx-auto w-full max-w-7xl px-4 py-5">
+                  <main className="mx-auto w-full px-4 py-5">
                         <p className="text-lg font-medium font-jakarta text-white sm:text-xl">Find your next unforgettable experience</p>
 
                         <div className="mt-5 w-full font-poppins">
