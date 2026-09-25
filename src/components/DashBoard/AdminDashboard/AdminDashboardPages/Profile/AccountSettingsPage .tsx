@@ -255,7 +255,15 @@ function ProfileInfoTab({
                   <div className="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2">
                         <TextField id="fullName" label="Full Name" value={fullName} onChange={setFullName} />
                         <TextField id="email" label="Email Address" value={profile?.email || ""} disabled />
-                        <TextField id="phoneNumber" label="Phone Number" value={phoneNumber} onChange={setPhoneNumber} />
+                        <TextField
+                              id="phoneNumber"
+                              label="Phone Number"
+                              value={phoneNumber}
+                              onChange={(value) => {
+                                    const onlyNumbers = value.replace(/\D/g, "");
+                                    setPhoneNumber(onlyNumbers.slice(0, 11));
+                              }}
+                        />
                         <TextField id="city" label="City" value={city} onChange={setCity} />
                   </div>
 
