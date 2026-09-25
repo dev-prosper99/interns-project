@@ -20,6 +20,7 @@ import AttendeesPage from "./components/DashBoard/AdminDashboard/AdminDashboardP
 import AttendeeDashboard from "@/pages/AttendeeDashboard";
 import AdminDashboard from "@/pages/AdminDashboard";
 import DashboardLayout from "./components/layouts/DashboardLayout";
+import DeliveryLogsPage from "@/components/DashBoard/AdminDashboard/AdminDashboardPages/DeliveryLogs/DeliveryLogsPage";
 
 function App() {
       return (
@@ -31,7 +32,6 @@ function App() {
                         <Route path="/about-us" element={<AboutUs />} />
                         <Route path="/sign-up" element={<SignUp />} />
                         <Route path="/login" element={<Login />} />
-                        <Route path="/" element={<Home />} />
                         <Route path="/dashboard/attendee/events/:title" element={<DiscoverEventsDetails />} />
 
                         <Route element={<ProtectedRoute />}>
@@ -45,6 +45,7 @@ function App() {
                                     <Route path="/dashboard/organizer/analytics" element={<Analytics />} />
                                     <Route path="/dashboard/organizer/tickets" element={<TicketsPage />} />
                                     <Route path="/dashboard/organizer/events" element={<Events />} />
+                                    <Route path="/dashboard/organizer/delivery-logs" element={<DeliveryLogsPage />} />
                                     <Route path="/dashboard/organizer/settings" element={<AccountSettingsPage />} />
                                     <Route path="/dashboard/organizer/transactions" element={<TransactionsPage />} />
                                     <Route path="/dashboard/organizer/attendees" element={<AttendeesPage />} />

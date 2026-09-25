@@ -22,72 +22,12 @@ interface EventsApiResponse {
       errors: string[];
       data: {
             items: EventListItem[];
-            totalCount: number;
-            page: number;
-            pageSize: number;
-            totalPages: number;
-            hasNextPage: boolean;
-            hasPreviousPage: boolean;
       };
-}
-
-interface TicketType {
-      id: string;
-      name: string;
-      description: string;
-      price: number;
-      totalQuantity: number;
-}
-
-interface EventDetail {
-      id: string;
-      title: string;
-      description: string;
-      venue: string;
-      state: string;
-      city: string;
-      eventDate: string;
-      bannerUrl: string | null;
-      eventPolicy: string;
-      availabilityStart: string;
-      availabilityEnd: string;
-      status: string;
-      organizerName: string;
-      ticketTypes: TicketType[];
-}
-
-interface EventDetailApiResponse {
-      status: number;
-      success: boolean;
-      message: string;
-      errors: string[];
-      data: EventDetail;
 }
 
 interface EventWithPrice extends EventListItem {
       minPrice: number | null;
       priceLoading: boolean;
-}
-
-async function fetchEventMinPrice(eventId: string, signal: AbortSignal): Promise<number | null> {
-      try {
-            const res = await fetch(`${API_BASE_URL}/api/Events/${eventId}`, {
-                  headers: { Accept: "application/json" },
-                  signal,
-            });
-
-            if (!res.ok) return null;
-
-            const json: EventDetailApiResponse = await res.json();
-            if (!json.success) return null;
-
-            const prices = json.data.ticketTypes?.map((t) => t.price) ?? [];
-            if (prices.length === 0) return null;
-
-            return Math.min(...prices);
-      } catch {
-            return null;
-      }
 }
 
 export default function Upcoming() {
@@ -97,6 +37,7 @@ export default function Upcoming() {
 
       useEffect(() => {
             const controller = new AbortController();
+            let isMounted = true;
 
             async function fetchEvents() {
                   setIsLoading(true);
@@ -104,9 +45,8 @@ export default function Upcoming() {
                   try {
                         const params = new URLSearchParams({
                               Page: "1",
-                              PageSize: "10",
+                              PageSize: "3",
                         });
-
                         const res = await fetch(`${API_BASE_URL}/api/Events?${params.toString()}`, {
                               headers: { Accept: "application/json" },
                               signal: controller.signal,
@@ -117,34 +57,36 @@ export default function Upcoming() {
                         }
 
                         const json: EventsApiResponse = await res.json();
-
-                        if (!json.success) {
+                        if (!json.success || !json.data?.items) {
                               throw new Error(json.message || "Failed to load events");
                         }
 
-                        const withPricePlaceholders: EventWithPrice[] = json.data.items.map((item) => ({
+                        if (!isMounted) return;
+
+                        const mappedEvents: EventWithPrice[] = json.data.items.slice(0, 3).map((item) => ({
                               ...item,
-                              minPrice: null,
-                              priceLoading: true,
+                              minPrice: 0,
+                              priceLoading: false,
                         }));
 
-                        setEvents(withPricePlaceholders);
-                        setIsLoading(false);
-
-                        withPricePlaceholders.forEach(async (item) => {
-                              const minPrice = await fetchEventMinPrice(item.id, controller.signal);
-                              setEvents((prev) => prev.map((e) => (e.id === item.id ? { ...e, minPrice, priceLoading: false } : e)));
-                        });
-                  } catch (err) {
-                        if ((err as Error).name !== "AbortError") {
+                        setEvents(mappedEvents);
+                  } catch (err: unknown) {
+                        if ((err as Error).name !== "AbortError" && isMounted) {
                               setError((err as Error).message || "Something went wrong");
                         }
-                        setIsLoading(false);
+                  } finally {
+                        if (isMounted) {
+                              setIsLoading(false);
+                        }
                   }
             }
 
             fetchEvents();
-            return () => controller.abort();
+
+            return () => {
+                  isMounted = false;
+                  controller.abort();
+            };
       }, []);
 
       return (
@@ -160,14 +102,12 @@ export default function Upcoming() {
                               {isLoading && <p className="text-neutral-400 text-sm">Loading events...</p>}
                               {error && !isLoading && <p className="text-red-400 text-sm">{error}</p>}
                               {!isLoading && !error && events.length === 0 && <p className="text-neutral-400 text-sm">No upcoming events found.</p>}
-
                               {!isLoading &&
                                     !error &&
-                                    events.slice(0, 3).map((event) => {
+                                    events.map((event) => {
                                           const date = new Date(event.eventDate);
                                           const formattedDate = date.toLocaleDateString();
                                           const formattedTime = date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-
                                           return (
                                                 <div
                                                       className="flex items-start gap-3 border-b w-full border-neutral-900 pb-4 last:border-none last:pb-0"
@@ -192,13 +132,15 @@ export default function Upcoming() {
                                                                         <div className="rounded-2xl bg-green-400/20 text-green-600/80 font-normal text-xs px-3 py-0.5">
                                                                               Regular
                                                                         </div>
-                                                                        <span className="text-neutral-400 text-xs">×2</span>
+                                                                        <span className="text-neutral-400 text-xs"> 2</span>
                                                                   </div>
                                                             </div>
                                                             <div className="flex flex-col items-end gap-1">
                                                                   <p className="sm:block hidden text-neutral-400 text-sm">Paid</p>
                                                                   <p className="text-orange-600 text-lg font-bold">
-                                                                        {event.priceLoading ? "..." : `₦${Number(event.minPrice ?? 0).toLocaleString("en-NG")}`}
+                                                                        {event.minPrice === 0
+                                                                              ? "Free"
+                                                                              : `₦${Number(event.minPrice ?? 0).toLocaleString("en-NG")}`}
                                                                   </p>
                                                             </div>
                                                       </div>

@@ -1,6 +1,6 @@
 import { useState, type ComponentType, type CSSProperties } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { UserRound, X } from "lucide-react";
+import { UserRound, X, MailCheck } from "lucide-react";
 import { DashboardIcon, EventIcon, TicketIcon, AnalyticsIcon, TransactionIcon, AttendeeIcon, SettingsIcon, LogoutIcon, DownarrowIcon } from "@/assets/icons";
 import logo from "@/assets/images/logo.png";
 import { clearAuthStorage, getStoredAvatarUrl } from "@/lib/api";
@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 type SidebarIcon = ComponentType<{
       color?: string;
       style?: CSSProperties;
+      className?: string;
 }>;
 
 export type SidebarItem = {
@@ -25,6 +26,8 @@ export type SidebarProps = {
       onClose?: () => void;
 };
 
+const DeliveryLogsIcon: SidebarIcon = (props) => <MailCheck {...props} />;
+
 const defaultNavItems: SidebarItem[] = [
       { label: "Dashboard", icon: DashboardIcon, path: "/dashboard/organizer" },
       { label: "Events", icon: EventIcon, path: "/dashboard/organizer/events" },
@@ -32,6 +35,7 @@ const defaultNavItems: SidebarItem[] = [
       { label: "Analytics", icon: AnalyticsIcon, path: "/dashboard/organizer/analytics" },
       { label: "Transactions", icon: TransactionIcon, path: "/dashboard/organizer/transactions" },
       { label: "Attendees", icon: AttendeeIcon, path: "/dashboard/organizer/attendees" },
+      { label: "Delivery Logs", icon: DeliveryLogsIcon, path: "/dashboard/organizer/delivery-logs" },
       { label: "Settings", icon: SettingsIcon, path: "/dashboard/organizer/settings" },
 ];
 
@@ -45,12 +49,10 @@ export default function Sidebar({ items = defaultNavItems, logoSrc = logo, logou
             const matches = item.isActive
                   ? item.isActive(location.pathname, item.path)
                   : location.pathname === item.path || location.pathname.startsWith(`${item.path}/`);
-
             return matches && (!currentPath || item.path.length > currentPath.length) ? item.path : currentPath;
       }, null);
 
       let displayName = (localStorage.getItem("fullName") || "").trim().replace(/\s+/g, " ");
-
       if (!displayName) {
             const firstName = (localStorage.getItem("firstName") || "").trim();
             const lastName = (localStorage.getItem("lastName") || "").trim();
@@ -60,7 +62,6 @@ export default function Sidebar({ items = defaultNavItems, logoSrc = logo, logou
       const userEmail = (localStorage.getItem("email") || "your@email.com").trim() || "your@email.com";
       const profilePath = localStorage.getItem("role")?.trim().toLowerCase() === "attendee" ? "/dashboard/attendee/settings" : "/dashboard/organizer/settings";
       const avatarUrl = getStoredAvatarUrl(localStorage.getItem("email") || undefined);
-
       const initials =
             displayName
                   .split(" ")
@@ -79,7 +80,7 @@ export default function Sidebar({ items = defaultNavItems, logoSrc = logo, logou
 
       return (
             <>
-                  <aside className="sticky top-0 z-30 flex h-dvh min-h-dvh w-full shrink-0 flex-col overflow-y-auto overscroll-contain bg-neutral-1000 px-3 py-5 lg:w-60 xl:w-64">
+                  <aside className="sticky top-0 z-30 flex h-dvh min-h-dvh w-full shrink-0 flex-col overflow-y-auto overscroll-contain bg-neutral-1000 px-3 py-5 lg:w-60 xl:w-64 border-r border-neutral-900">
                         <div className="flex min-h-0 flex-1 flex-col">
                               <div className="mb-8 flex items-center justify-between gap-3 px-2">
                                     <img src={logoSrc} alt="Logo" className="h-8 w-auto" />
@@ -94,7 +95,6 @@ export default function Sidebar({ items = defaultNavItems, logoSrc = logo, logou
                                           </button>
                                     )}
                               </div>
-
                               <nav className="flex flex-col gap-1" aria-label="Main navigation">
                                     {items.map(({ label, icon: Icon, path }) => {
                                           const isActive = activePath === path;
@@ -106,12 +106,18 @@ export default function Sidebar({ items = defaultNavItems, logoSrc = logo, logou
                                                             onClose?.();
                                                             navigate(path);
                                                       }}
-                                                      className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-left ${
-                                                            isActive ? "text-white bg-purple-500 font-bold" : "text-neutral-400 hover:text-white"
+                                                      className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-left transition-colors ${
+                                                            isActive
+                                                                  ? "text-white bg-purple-600 font-semibold shadow-md shadow-purple-900/20"
+                                                                  : "text-neutral-400 hover:text-white hover:bg-neutral-900"
                                                       }`}
                                                 >
-                                                      <Icon color={isActive ? "white" : "#A2A4A9"} style={{ fontWeight: isActive ? 700 : 400 }} />
-                                                      {label}
+                                                      <Icon
+                                                            color={isActive ? "white" : "#A2A4A9"}
+                                                            className="w-5 h-5 shrink-0"
+                                                            style={{ fontWeight: isActive ? 700 : 400 }}
+                                                      />
+                                                      <span className="truncate">{label}</span>
                                                 </button>
                                           );
                                     })}
@@ -181,22 +187,11 @@ export default function Sidebar({ items = defaultNavItems, logoSrc = logo, logou
                   {showLogoutModal && (
                         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4">
                               <div
-                                    className="w-full max-w-100 rounded-2xl border py-8 px-4 sm:px-8 flex flex-col items-center gap-8 shadow-2xl"
-                                    style={{ backgroundColor: "#111213", borderColor: "#282A2D" }}
+                                    className="w-full max-w-100 rounded-2xl border py-8 px-4 sm:px-8 flex flex-col items-center gap-8 shadow-2xl bg-neutral-1000 border-neutral-800"
                                     onClick={(e) => e.stopPropagation()}
                               >
-                                    <div
-                                          className="flex items-center justify-center rounded-full"
-                                          style={{
-                                                width: 40,
-                                                height: 40,
-                                                padding: 8,
-                                                backgroundColor: "#DD514D3D",
-                                          }}
-                                    >
-                                          <span style={{ color: "#D42620" }}>
-                                                <LogoutIcon />
-                                          </span>
+                                    <div className="flex items-center justify-center rounded-full w-10 h-10 p-2 bg-red-500/20 text-red-500">
+                                          <LogoutIcon />
                                     </div>
                                     <div className="text-center">
                                           <p className="text-white text-lg font-semibold mb-1">Log Out?</p>

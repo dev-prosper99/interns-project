@@ -68,21 +68,22 @@ interface EventWithPrice extends EventListItem {
       priceLoading: boolean;
 }
 
-async function fetchEventMinPrice(eventId: string, signal: AbortSignal): Promise<number | null> {
+async function fetchEventMinPrice(eventId: string, signal?: AbortSignal): Promise<number | null> {
       try {
-            const res = await fetch(`${API_BASE_URL}/api/Events/${eventId}`, {
-                  headers: { Accept: "application/json" },
+            const token = localStorage.getItem("token");
+            const cleanToken = token ? (token.startsWith("Bearer ") ? token.slice(7).trim() : token.trim()) : "";
+            const res = await fetch(`${API_BASE_URL}/api/Events/${encodeURIComponent(eventId)}`, {
+                  headers: {
+                        Accept: "application/json",
+                        ...(cleanToken ? { Authorization: `Bearer ${cleanToken}` } : {}),
+                  },
                   signal,
             });
-
             if (!res.ok) return null;
-
             const json: EventDetailApiResponse = await res.json();
-            if (!json.success) return null;
-
+            if (!json.success || !json.data) return null;
             const prices = json.data.ticketTypes?.map((t) => t.price) ?? [];
             if (prices.length === 0) return null;
-
             return Math.min(...prices);
       } catch {
             return null;
@@ -96,6 +97,7 @@ export default function SuggestedEvents() {
 
       useEffect(() => {
             const controller = new AbortController();
+            let isMounted = true;
 
             async function fetchEvents() {
                   setIsLoading(true);
@@ -103,47 +105,56 @@ export default function SuggestedEvents() {
                   try {
                         const params = new URLSearchParams({
                               Page: "1",
-                              PageSize: "10",
+                              PageSize: "6",
                         });
-
                         const res = await fetch(`${API_BASE_URL}/api/Events?${params.toString()}`, {
                               headers: { Accept: "application/json" },
                               signal: controller.signal,
                         });
-
                         if (!res.ok) {
                               throw new Error(`Request failed with status ${res.status}`);
                         }
-
                         const json: EventsApiResponse = await res.json();
-
                         if (!json.success) {
                               throw new Error(json.message || "Failed to load events");
                         }
 
-                        const withPricePlaceholders: EventWithPrice[] = json.data.items.map((item) => ({
+                        const candidateItems = json.data.items.slice(3, 5);
+                        const displayedItems = candidateItems.length > 0 ? candidateItems : json.data.items.slice(0, 2);
+
+                        const withPricePlaceholders: EventWithPrice[] = displayedItems.map((item) => ({
                               ...item,
                               minPrice: null,
                               priceLoading: true,
                         }));
 
+                        if (!isMounted) return;
                         setEvents(withPricePlaceholders);
                         setIsLoading(false);
 
-                        withPricePlaceholders.forEach(async (item) => {
+                        for (const item of displayedItems) {
+                              if (!isMounted) break;
                               const minPrice = await fetchEventMinPrice(item.id, controller.signal);
-                              setEvents((prev) => prev.map((e) => (e.id === item.id ? { ...e, minPrice, priceLoading: false } : e)));
-                        });
-                  } catch (err) {
-                        if ((err as Error).name !== "AbortError") {
+                              if (isMounted) {
+                                    setEvents((prev) => prev.map((e) => (e.id === item.id ? { ...e, minPrice, priceLoading: false } : e)));
+                              }
+                        }
+                  } catch (err: unknown) {
+                        if ((err as Error).name !== "AbortError" && isMounted) {
                               setError((err as Error).message || "Something went wrong");
                         }
-                        setIsLoading(false);
+                        if (isMounted) {
+                              setIsLoading(false);
+                        }
                   }
             }
 
             fetchEvents();
-            return () => controller.abort();
+
+            return () => {
+                  isMounted = false;
+                  controller.abort();
+            };
       }, []);
 
       return (
@@ -159,14 +170,12 @@ export default function SuggestedEvents() {
                               {isLoading && <p className="text-neutral-400 text-sm">Loading events...</p>}
                               {error && !isLoading && <p className="text-red-400 text-sm">{error}</p>}
                               {!isLoading && !error && events.length === 0 && <p className="text-neutral-400 text-sm">No events found.</p>}
-
                               {!isLoading &&
                                     !error &&
-                                    events.slice(4, 6).map((event) => {
+                                    events.map((event) => {
                                           const date = new Date(event.eventDate);
                                           const formattedDate = date.toLocaleDateString();
                                           const formattedTime = date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-
                                           return (
                                                 <div
                                                       className="flex items-start gap-3 border-b w-full border-neutral-900 pb-4 last:border-none last:pb-0"
@@ -185,7 +194,11 @@ export default function SuggestedEvents() {
                                                                         <EventIcon className="text-orange-600" /> {formattedDate} - {formattedTime}
                                                                   </p>
                                                                   <p className="text-orange-600 text-lg font-bold">
-                                                                        {event.priceLoading ? "..." : `₦${Number(event.minPrice ?? 0).toLocaleString("en-NG")}`}
+                                                                        {event.priceLoading
+                                                                              ? "..."
+                                                                              : event.minPrice === 0
+                                                                                ? "Free"
+                                                                                : `₦${Number(event.minPrice ?? 0).toLocaleString("en-NG")}`}
                                                                   </p>
                                                             </div>
                                                       </div>

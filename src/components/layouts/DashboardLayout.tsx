@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
-import { HeartIcon } from "lucide-react";
+import { HeartIcon, MailCheck } from "lucide-react";
 import { DashboardIcon, EventIcon, SettingsIcon, TicketIcon, AnalyticsIcon, TransactionIcon, AttendeeIcon } from "@/assets/icons";
 import Sidebar, { type SidebarItem } from "./Sidebar";
 import DashboardHeader from "@/components/DashBoard/AttendeeDashboard/DashboardHeader";
+
+const DeliveryLogsIcon: SidebarItem["icon"] = (props) => <MailCheck {...props} />;
 
 const attendeeItems: SidebarItem[] = [
       { label: "Dashboard", path: "/dashboard/attendee", icon: DashboardIcon },
@@ -20,6 +22,7 @@ const organizerItems: SidebarItem[] = [
       { label: "Analytics", path: "/dashboard/organizer/analytics", icon: AnalyticsIcon },
       { label: "Transactions", path: "/dashboard/organizer/transactions", icon: TransactionIcon },
       { label: "Attendees", path: "/dashboard/organizer/attendees", icon: AttendeeIcon },
+      { label: "Delivery Logs", path: "/dashboard/organizer/delivery-logs", icon: DeliveryLogsIcon },
       { label: "Settings", path: "/dashboard/organizer/settings", icon: SettingsIcon },
 ];
 
@@ -35,6 +38,7 @@ const pageTitles: Record<string, string> = {
       "/dashboard/organizer/analytics": "Analytics",
       "/dashboard/organizer/transactions": "Transactions",
       "/dashboard/organizer/attendees": "Attendees",
+      "/dashboard/organizer/delivery-logs": "Delivery Logs",
       "/dashboard/organizer/settings": "Settings",
 };
 
@@ -49,23 +53,25 @@ export default function DashboardLayout() {
                   .sort(([firstPath], [secondPath]) => secondPath.length - firstPath.length)[0]?.[1] || "Dashboard";
 
       return (
-            <div className="flex min-h-screen min-w-0 bg-neutral-950">
-                  <div className="hidden lg:block">
+            <div className="flex min-h-screen min-w-0 bg-neutral-950 font-poppins">
+                  <div className="hidden lg:block shrink-0">
                         <Sidebar items={items} />
                   </div>
 
                   {isSidebarOpen && (
                         <>
-                              <div className="fixed inset-0 z-40 bg-black/50 lg:hidden" onClick={() => setIsSidebarOpen(false)} />
+                              <div className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden" onClick={() => setIsSidebarOpen(false)} />
                               <div className="fixed inset-y-0 left-0 z-50 w-[min(21rem,88vw)] lg:hidden">
                                     <Sidebar items={items} onClose={() => setIsSidebarOpen(false)} />
                               </div>
                         </>
                   )}
 
-                  <main className="min-w-0 flex-1">
+                  <main className="min-w-0 flex-1 flex flex-col">
                         <DashboardHeader title={title} onMenuClick={() => setIsSidebarOpen(true)} />
-                        <Outlet />
+                        <div className="min-w-0 flex-1">
+                              <Outlet />
+                        </div>
                   </main>
             </div>
       );
