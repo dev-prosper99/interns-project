@@ -164,7 +164,7 @@ export default function DeliveryLogsPage() {
 
       return (
             <div className="min-w-0 bg-neutral-950 min-h-screen text-white font-poppins">
-                  <main className="mx-auto w-full max-w-7xl px-4 py-8 md:px-8">
+                  <main className="mx-auto w-full px-4 py-8 md:px-8">
                         {isForbidden ? (
                               <div className="flex min-h-[50vh] flex-col items-center justify-center rounded-2xl border border-neutral-800 bg-neutral-1000 p-8 text-center">
                                     <div className="flex h-16 w-16 items-center justify-center rounded-full bg-red-500/10 border border-red-500/20 text-red-400 mb-4">
