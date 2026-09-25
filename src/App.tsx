@@ -19,6 +19,7 @@ import AccountSettingsPage from "./components/DashBoard/AdminDashboard/AdminDash
 import AttendeesPage from "./components/DashBoard/AdminDashboard/AdminDashboardPages/Atendee/Attendees";
 import AttendeeDashboard from "@/pages/AttendeeDashboard";
 import AdminDashboard from "@/pages/AdminDashboard";
+import NotFound from "@/pages/NotFound";
 import DashboardLayout from "./components/layouts/DashboardLayout";
 import DeliveryLogsPage from "@/components/DashBoard/AdminDashboard/AdminDashboardPages/DeliveryLogs/DeliveryLogsPage";
 
@@ -52,7 +53,7 @@ function App() {
                               </Route>
                         </Route>
 
-                        <Route path="*" element={<div>404 Not Found</div>} />
+                        <Route path="*" element={<NotFound />} />
                   </Routes>
             </div>
       );
