@@ -14,14 +14,13 @@ interface StepBasicsProps {
 export default function StepBasics({ form, update }: StepBasicsProps) {
       const [stateOptions, setStateOptions] = useState<LocationOption[]>([]);
       const [cityOptions, setCityOptions] = useState<LocationOption[]>([]);
-      const [loadingStates, setLoadingStates] = useState(false);
-      const [loadingCities, setLoadingCities] = useState(false);
+      const [loadingStates, setLoadingStates] = useState(true);
+      const [loadedCitiesForState, setLoadedCitiesForState] = useState<string | null>(null);
       const [locationError, setLocationError] = useState<string | null>(null);
+      const loadingCities = Boolean(form.state && loadedCitiesForState !== form.state);
 
       useEffect(() => {
             let cancelled = false;
-            setLoadingStates(true);
-            setLocationError(null);
             fetchStates()
                   .then((states) => {
                         if (!cancelled) setStateOptions(states);
@@ -38,14 +37,11 @@ export default function StepBasics({ form, update }: StepBasicsProps) {
       }, []);
 
       useEffect(() => {
-            if (!form.state) {
-                  setCityOptions([]);
-                  return;
-            }
+            if (!form.state) return;
+
+            const state = form.state;
             let cancelled = false;
-            setLoadingCities(true);
-            setLocationError(null);
-            fetchCitiesByState(form.state)
+            fetchCitiesByState(state)
                   .then((cities) => {
                         if (!cancelled) setCityOptions(cities);
                   })
@@ -53,7 +49,7 @@ export default function StepBasics({ form, update }: StepBasicsProps) {
                         if (!cancelled) setLocationError("Couldn't load cities for this state.");
                   })
                   .finally(() => {
-                        if (!cancelled) setLoadingCities(false);
+                        if (!cancelled) setLoadedCitiesForState(state);
                   });
             return () => {
                   cancelled = true;
@@ -124,7 +120,6 @@ export default function StepBasics({ form, update }: StepBasicsProps) {
                                     onChange={(e) => update({ customCategory: e.target.value })}
                               />
                         )}
-                        <TextInput label="Start Date" required type="date" value={form.startDate} onChange={(e) => update({ startDate: e.target.value })} />
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
@@ -136,6 +131,8 @@ export default function StepBasics({ form, update }: StepBasicsProps) {
                               value={form.startDate}
                               onChange={(e) => update({ startDate: e.target.value })}
                         />
+
+                        <TextInput label="Start Time" required type="time" value={form.startTime} onChange={(e) => update({ startTime: e.target.value })} />
 
                         <TextInput
                               label="End Date (Optional)"
@@ -162,7 +159,12 @@ export default function StepBasics({ form, update }: StepBasicsProps) {
                               options={stateOptions}
                               value={form.state}
                               disabled={loadingStates}
-                              onChange={(e) => update({ state: e.target.value, city: "" })}
+                              onChange={(e) => {
+                                    setCityOptions([]);
+                                    setLoadedCitiesForState(null);
+                                    setLocationError(null);
+                                    update({ state: e.target.value, city: "" });
+                              }}
                         />
                         <Select
                               label="City"
