@@ -1,13 +1,8 @@
 import { useCallback, useEffect, useRef, useState, type ChangeEvent } from "react";
 import { Camera } from "lucide-react";
 import { Tabs, TextField, PasswordField, ToggleSwitch, SaveBar, initialsFrom, type TabKey, type StatusKind } from "./SettingsUI";
-
 import Loader from "@/components/layouts/Loader";
 import { getStoredAvatarUrl, storeAvatarUrl, uploadProfileImage } from "@/lib/api";
-
-// ============================================================
-// API — inlined here on purpose, no separate api file
-// ============================================================
 
 interface ProfileData {
       id: string;
@@ -18,16 +13,24 @@ interface ProfileData {
       phoneNumber: string;
       isActive: boolean;
       createdAt: string;
-      /** Not part of the current Swagger schema — kept local until the API supports it. */
       city?: string;
 }
 
+interface NotificationPreferences {
+      emailNotifications: boolean;
+      smsNotifications: boolean;
+      eventReminders?: boolean;
+      eventUpdates?: boolean;
+      promotionsAndOffers?: boolean;
+      newEvents?: boolean;
+}
+
 interface ApiResponse<T> {
-      status: number;
-      success: boolean;
-      message: string;
-      errors: string[];
-      data: T;
+      status?: number;
+      success?: boolean;
+      message?: string;
+      errors?: string[];
+      data?: T;
 }
 
 interface UpdateProfilePayload {
@@ -57,16 +60,16 @@ function authHeaders(token?: string): HeadersInit {
 
 async function parseOrThrow<T>(res: Response): Promise<T> {
       if (res.status === 404) {
-            throw new Error("Endpoint not found (404). Double-check the API path against the backend's Swagger docs — it may not be /api/Profile.");
+            throw new Error("Endpoint not found (404).");
       }
       if (res.status === 401) {
             throw new Error("Not logged in, or your session has expired.");
       }
       const body: ApiResponse<T> | null = await res.json().catch(() => null);
-      if (!res.ok || !body || body.success === false) {
+      if (!res.ok || (body && body.success === false)) {
             throw new Error(body?.message || body?.errors?.[0] || `Request failed (${res.status})`);
       }
-      return body.data;
+      return (body?.data !== undefined ? body.data : (body as unknown as T)) as T;
 }
 
 async function getProfile(token?: string): Promise<ProfileData> {
@@ -86,33 +89,56 @@ async function updateProfile(payload: UpdateProfilePayload, token?: string): Pro
       return parseOrThrow<ProfileData>(res);
 }
 
+async function getNotificationPreferences(token?: string): Promise<NotificationPreferences> {
+      const res = await fetch(`${API_BASE}/api/Notifications/preferences`, {
+            method: "GET",
+            headers: authHeaders(token),
+      });
+      return parseOrThrow<NotificationPreferences>(res);
+}
+
+async function updateNotificationPreferences(payload: Partial<NotificationPreferences>, token?: string): Promise<NotificationPreferences> {
+      const res = await fetch(`${API_BASE}/api/Notifications/preferences`, {
+            method: "PUT",
+            headers: authHeaders(token),
+            body: JSON.stringify(payload),
+      });
+      return parseOrThrow<NotificationPreferences>(res);
+}
+
 function useProfile(tokenProp?: string) {
       const token = tokenProp ?? getStoredToken();
 
       const [profile, setProfile] = useState<ProfileData | null>(null);
-      const [loadMsg, setLoadMsg] = useState("Loading profile…");
-      const [isLoading, setIsLoading] = useState(true);
+      const [loadMsg, setLoadMsg] = useState(() => (token ? "Loading profile…" : "You're not logged in — no auth token found."));
+      const [isLoading, setIsLoading] = useState(() => Boolean(token));
       const [saving, setSaving] = useState(false);
 
-      const load = useCallback(() => {
-            if (!token) {
-                  setLoadMsg("You're not logged in — no auth token found.");
-                  setIsLoading(false);
-                  return;
-            }
-            setLoadMsg("Loading profile…");
+      useEffect(() => {
+            let isMounted = true;
+
+            if (!token) return;
+
             getProfile(token)
                   .then((data) => {
+                        if (!isMounted) return;
                         setProfile(data);
                         setLoadMsg("Profile loaded.");
                   })
-                  .catch((err: Error) => setLoadMsg(`Could not load profile (${err.message}).`))
-                  .finally(() => setIsLoading(false));
-      }, [token]);
+                  .catch((err: Error) => {
+                        if (!isMounted) return;
+                        setLoadMsg(`Could not load profile (${err.message}).`);
+                  })
+                  .finally(() => {
+                        if (isMounted) {
+                              setIsLoading(false);
+                        }
+                  });
 
-      useEffect(() => {
-            load();
-      }, [load]);
+            return () => {
+                  isMounted = false;
+            };
+      }, [token]);
 
       const save = useCallback(
             async (payload: UpdateProfilePayload): Promise<{ ok: boolean; error?: string }> => {
@@ -134,10 +160,6 @@ function useProfile(tokenProp?: string) {
       return { profile, loadMsg, saving, isLoading, save };
 }
 
-// ============================================================
-// Tabs
-// ============================================================
-
 function ProfileInfoTab({
       profile,
       loadMsg,
@@ -149,22 +171,14 @@ function ProfileInfoTab({
       saving: boolean;
       onSave: (payload: UpdateProfilePayload) => Promise<{ ok: boolean; error?: string }>;
 }) {
-      const [fullName, setFullName] = useState("");
-      const [phoneNumber, setPhoneNumber] = useState("");
-      const [city, setCity] = useState("");
+      const [fullName, setFullName] = useState(() => profile?.fullName || [profile?.firstName, profile?.lastName].filter(Boolean).join(" ") || "");
+      const [phoneNumber, setPhoneNumber] = useState(() => profile?.phoneNumber || "");
+      const [city, setCity] = useState(() => profile?.city || "");
       const [avatarUrl, setAvatarUrl] = useState(() => getStoredAvatarUrl(profile?.email));
       const [status, setStatus] = useState("");
       const [statusKind, setStatusKind] = useState<StatusKind>("");
       const [isUploading, setIsUploading] = useState(false);
       const fileInputRef = useRef<HTMLInputElement>(null);
-
-      useEffect(() => {
-            if (!profile) return;
-            setFullName(profile.fullName || [profile.firstName, profile.lastName].filter(Boolean).join(" "));
-            setPhoneNumber(profile.phoneNumber || "");
-            setCity(profile.city || "");
-            setAvatarUrl(getStoredAvatarUrl(profile.email));
-      }, [profile]);
 
       async function handleSave() {
             setStatus("Saving…");
@@ -258,16 +272,72 @@ function ProfileInfoTab({
       );
 }
 
-function NotificationsTab() {
+function NotificationsTab({ token }: { token?: string }) {
       const [emailNotif, setEmailNotif] = useState(true);
-      const [smsNotif, setSmsNotif] = useState(true);
-      const [status, setStatus] = useState("No API endpoint provided yet — this tab is UI-only.");
+      const [smsNotif, setSmsNotif] = useState(false);
+      const [status, setStatus] = useState("");
       const [statusKind, setStatusKind] = useState<StatusKind>("");
+      const [saving, setSaving] = useState(false);
 
-      function handleSave() {
-            // TODO: call the real endpoint once notification preferences are exposed in Swagger.
-            setStatus("Saved locally (no API endpoint wired up yet).");
-            setStatusKind("ok");
+      useEffect(() => {
+            let isMounted = true;
+
+            if (!token) return;
+
+            getNotificationPreferences(token)
+                  .then((data) => {
+                        if (!isMounted) return;
+                        if (typeof data.emailNotifications === "boolean") {
+                              setEmailNotif(data.emailNotifications);
+                        }
+                        if (typeof data.smsNotifications === "boolean") {
+                              setSmsNotif(data.smsNotifications);
+                        }
+                  })
+                  .catch((err: Error) => {
+                        if (!isMounted) return;
+                        setStatus(`Could not load preferences (${err.message}).`);
+                        setStatusKind("err");
+                  });
+
+            return () => {
+                  isMounted = false;
+            };
+      }, [token]);
+
+      async function handleSave() {
+            if (!token) {
+                  setStatus("Not logged in.");
+                  setStatusKind("err");
+                  return;
+            }
+
+            setSaving(true);
+            setStatus("Saving…");
+            setStatusKind("pending");
+
+            try {
+                  const updated = await updateNotificationPreferences(
+                        {
+                              emailNotifications: emailNotif,
+                              smsNotifications: smsNotif,
+                        },
+                        token,
+                  );
+                  if (typeof updated.emailNotifications === "boolean") {
+                        setEmailNotif(updated.emailNotifications);
+                  }
+                  if (typeof updated.smsNotifications === "boolean") {
+                        setSmsNotif(updated.smsNotifications);
+                  }
+                  setStatus("Notification preferences saved successfully.");
+                  setStatusKind("ok");
+            } catch (err) {
+                  setStatus(err instanceof Error ? err.message : "Failed to update notification preferences.");
+                  setStatusKind("err");
+            } finally {
+                  setSaving(false);
+            }
       }
 
       return (
@@ -290,7 +360,7 @@ function NotificationsTab() {
                         <ToggleSwitch id="smsNotif" checked={smsNotif} onChange={setSmsNotif} />
                   </div>
 
-                  <SaveBar status={status} statusKind={statusKind} onSave={handleSave} />
+                  <SaveBar status={status} statusKind={statusKind} onSave={handleSave} saving={saving} />
             </div>
       );
 }
@@ -308,7 +378,6 @@ function SecurityTab({ email }: { email: string }) {
                   setStatusKind("err");
                   return;
             }
-            // TODO: call the real endpoint once password-change is exposed in Swagger.
             setStatus("No password-change endpoint provided yet — nothing was sent.");
             setStatusKind("pending");
       }
@@ -329,18 +398,14 @@ function SecurityTab({ email }: { email: string }) {
       );
 }
 
-// ============================================================
-// Page
-// ============================================================
-
 interface AccountSettingsPageProps {
-      /** Bearer token for the Profile API. Wire this up to your auth context. */
       token?: string;
 }
 
 export default function AccountSettingsPage({ token }: AccountSettingsPageProps) {
       const [activeTab, setActiveTab] = useState<TabKey>("profile");
-      const { profile, loadMsg, saving, isLoading, save } = useProfile(token);
+      const resolvedToken = token ?? getStoredToken();
+      const { profile, loadMsg, saving, isLoading, save } = useProfile(resolvedToken);
 
       if (isLoading) return <Loader />;
 
@@ -351,8 +416,16 @@ export default function AccountSettingsPage({ token }: AccountSettingsPageProps)
 
                         <Tabs active={activeTab} onChange={setActiveTab} />
 
-                        {activeTab === "profile" && <ProfileInfoTab profile={profile} loadMsg={loadMsg} saving={saving} onSave={save} />}
-                        {activeTab === "notifications" && <NotificationsTab />}
+                        {activeTab === "profile" && (
+                              <ProfileInfoTab
+                                    key={profile?.id ?? profile?.email ?? "profile-tab"}
+                                    profile={profile}
+                                    loadMsg={loadMsg}
+                                    saving={saving}
+                                    onSave={save}
+                              />
+                        )}
+                        {activeTab === "notifications" && <NotificationsTab token={resolvedToken} />}
                         {activeTab === "security" && <SecurityTab email={profile?.email || ""} />}
                   </div>
             </div>

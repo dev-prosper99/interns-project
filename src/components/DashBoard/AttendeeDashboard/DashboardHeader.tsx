@@ -1,29 +1,29 @@
-import { NotificationIcon, HambugerIcon } from "@/assets/icons";
+import { HambugerIcon } from "@/assets/icons";
+import NotificationBellDropdown from "@/components/Notifications/NotificationBellDropdown";
 
-type Props = {
+interface DashboardHeaderProps {
       onMenuClick?: () => void;
       title?: string;
-};
+}
 
-const DashboardHeader = ({ onMenuClick, title }: Props) => {
+export default function DashboardHeader({ onMenuClick, title = "Dashboard" }: DashboardHeaderProps) {
       return (
-            <div className="w-full h-24 bg-neutral-1000 flex items-center justify-between px-4">
+            <header className="w-full h-24 bg-neutral-1000 flex items-center justify-between px-4 md:px-8 border-b border-neutral-900">
                   <div className="flex items-center gap-4">
-                        <button className="lg:hidden p-2 rounded-md hover:bg-white/5" onClick={onMenuClick} aria-label="Open menu">
+                        <button
+                              type="button"
+                              className="lg:hidden p-2 rounded-xl text-neutral-400 hover:text-white hover:bg-white/5 transition-colors"
+                              onClick={onMenuClick}
+                              aria-label="Open sidebar menu"
+                        >
                               <HambugerIcon />
                         </button>
-
-                        <h1 className="text-2xl font-semibold text-white">{title}</h1>
+                        <h1 className="text-xl md:text-2xl font-bold font-jakarta text-white tracking-tight truncate max-w-[50vw]">{title}</h1>
                   </div>
 
-                  <div className="flex items-center justify-center p-2 rounded-lg hover:bg-white/5 cursor-pointer relative">
-                        <NotificationIcon />
-                        <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                              2
-                        </div>
+                  <div className="flex items-center gap-3">
+                        <NotificationBellDropdown />
                   </div>
-            </div>
+            </header>
       );
-};
-
-export default DashboardHeader;
+}

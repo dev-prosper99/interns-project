@@ -77,7 +77,7 @@ export default function GetTicketModal({ onClose, title, initialTicketQuantities
                                                 <div
                                                       key={step.key}
                                                       className={`min-h-17 px-4 py-3 flex items-center gap-3 border-r border-white/10 transition-colors last:border-r-0 ${
-                                                            state === "active" ? "bg-[#3b2466]" : state === "done" ? "bg-[#7c3aed]" : "bg-[#161616]"
+                                                            state === "active" ? "bg-[#3b2466]" : state === "done" ? "bg-purple-500" : "bg-[#161616]"
                                                       }`}
                                                 >
                                                       <span

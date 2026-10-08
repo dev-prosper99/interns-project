@@ -1,5 +1,3 @@
-"use client";
-
 import { LeftArrow, RightArrow } from "@/assets/icons";
 import { EventCard } from "@/components/cards/EventCard";
 import { useEffect, useRef, useState } from "react";
@@ -100,6 +98,23 @@ function SectionHeader({ title, subtitle, onScroll }: { title: string; subtitle:
       );
 }
 
+function EventCardSkeleton() {
+      return (
+            <div className="w-[calc(100vw-3rem)] min-w-[calc(100vw-3rem)] flex-none sm:w-80 sm:min-w-80 lg:w-88 lg:min-w-88 rounded-2xl bg-neutral-900/60 border border-neutral-800/80 overflow-hidden animate-pulse flex flex-col">
+                  <div className="w-full h-48 bg-neutral-800" />
+                  <div className="p-4 flex flex-col gap-3">
+                        <div className="h-4 w-20 bg-neutral-800 rounded-full" />
+                        <div className="h-5 w-4/5 bg-neutral-800 rounded" />
+                        <div className="h-4 w-3/5 bg-neutral-800 rounded" />
+                        <div className="mt-2 pt-3 border-t border-neutral-800/60 flex items-center justify-between">
+                              <div className="h-4 w-16 bg-neutral-800 rounded" />
+                              <div className="h-4 w-20 bg-neutral-800 rounded" />
+                        </div>
+                  </div>
+            </div>
+      );
+}
+
 async function fetchEventMinPrice(eventId: string, signal: AbortSignal): Promise<number | null> {
       try {
             const res = await fetch(`${API_BASE_URL}/api/Events/${eventId}`, {
@@ -177,7 +192,13 @@ export default function UpcomingEvents() {
             <div className="py-16 bg-neutral-950">
                   <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                         <SectionHeader title="Upcoming Events" subtitle="Don't miss upcoming events" onScroll={scrollEvents} />
-                        {isLoading && <p className="text-neutral-400 text-sm">Loading events...</p>}
+                        {isLoading && (
+                              <div className="flex w-full min-w-0 gap-6 overflow-hidden pb-2">
+                                    {Array.from({ length: 6 }).map((_, i) => (
+                                          <EventCardSkeleton key={i} />
+                                    ))}
+                              </div>
+                        )}
                         {error && !isLoading && <p className="text-red-400 text-sm">Error loading events. Please refresh</p>}
                         {!isLoading && !error && events.length === 0 && <p className="text-neutral-400 text-sm">No upcoming events yet.</p>}
                         {!isLoading && !error && events.length > 0 && (
