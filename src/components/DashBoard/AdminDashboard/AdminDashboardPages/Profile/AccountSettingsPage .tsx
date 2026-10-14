@@ -222,7 +222,7 @@ function ProfileInfoTab({
       }
 
       return (
-            <div className="flex min-h-85 flex-col rounded-xl border border-neutral-700 bg-neutral-1000 p-7 ">
+            <div className="flex min-h-[calc(100vh-220px)] flex-col rounded-2xl bg-neutral-1000 p-4 py-6 sm:p-6">
                   <div className="mb-6 text-base font-semibold">Profile Information</div>
                   <div className="pb-4 text-xs text-gray-400">{loadMsg}</div>
 
@@ -231,7 +231,7 @@ function ProfileInfoTab({
                               {avatarUrl ? (
                                     <img src={avatarUrl} alt="Profile" className="h-13 w-13 rounded-full object-cover" />
                               ) : (
-                                    <div className="flex h-13 w-13 items-center justify-center rounded-full bg-linear-to-br from-violet-500 to-fuchsia-400 text-base font-semibold text-white">
+                                    <div className="flex h-13 w-13 items-center justify-center rounded-full bg-purple-600 text-base font-semibold text-white">
                                           {initialsFrom(fullName)}
                                     </div>
                               )}
@@ -341,7 +341,7 @@ function NotificationsTab({ token }: { token?: string }) {
       }
 
       return (
-            <div className="flex min-h-85 flex-col rounded-xl border border-neutral-800 bg-neutral-900 p-7">
+            <div className="flex min-h-[calc(100vh-220px)] flex-col rounded-2xl border border-neutral-900 bg-neutral-1000 p-4 py-6 sm:p-8">
                   <div className="mb-6 text-base font-semibold">Notification Preferences</div>
 
                   <div className="flex items-start justify-between border-b border-neutral-800 py-4">
@@ -383,7 +383,7 @@ function SecurityTab({ email }: { email: string }) {
       }
 
       return (
-            <div className="flex min-h-85 flex-col rounded-xl border border-neutral-800 bg-neutral-900 p-7">
+            <div className="flex min-h-[calc(100vh-220px)] flex-col rounded-2xl bg-neutral-1000 p-4 py-6 sm:p-6">
                   <div className="mb-6 text-base font-semibold">Security</div>
 
                   <div className="grid grid-cols-1 gap-x-6 gap-y-5 sm:grid-cols-2">
@@ -410,24 +410,26 @@ export default function AccountSettingsPage({ token }: AccountSettingsPageProps)
       if (isLoading) return <Loader />;
 
       return (
-            <div className="min-w-0 bg-neutral-950 text-neutral-100">
-                  <div className="w-full px-5 py-8">
-                        <h1 className="mb-5 text-xl font-semibold">Manage your account and preferences</h1>
+            <div className="min-w-0 bg-neutral-925 pb-10 text-neutral-100">
+                  <main className="mx-auto w-full px-4 py-5">
+                        <p className="text-lg font-medium font-jakarta text-white sm:text-xl">Manage your account and preferences</p>
 
                         <Tabs active={activeTab} onChange={setActiveTab} />
 
-                        {activeTab === "profile" && (
-                              <ProfileInfoTab
-                                    key={profile?.id ?? profile?.email ?? "profile-tab"}
-                                    profile={profile}
-                                    loadMsg={loadMsg}
-                                    saving={saving}
-                                    onSave={save}
-                              />
-                        )}
-                        {activeTab === "notifications" && <NotificationsTab token={resolvedToken} />}
-                        {activeTab === "security" && <SecurityTab email={profile?.email || ""} />}
-                  </div>
+                        <div className="mt-5 w-full font-poppins">
+                              {activeTab === "profile" && (
+                                    <ProfileInfoTab
+                                          key={profile?.id ?? profile?.email ?? "profile-tab"}
+                                          profile={profile}
+                                          loadMsg={loadMsg}
+                                          saving={saving}
+                                          onSave={save}
+                                    />
+                              )}
+                              {activeTab === "notifications" && <NotificationsTab token={resolvedToken} />}
+                              {activeTab === "security" && <SecurityTab email={profile?.email || ""} />}
+                        </div>
+                  </main>
             </div>
       );
 }

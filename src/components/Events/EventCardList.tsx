@@ -11,8 +11,8 @@ interface EventCardListProps {
 
 export default function EventCardList({ events, onViewClick, onDeleteClick, onUnpublishClick, onEditClick }: EventCardListProps) {
       return (
-            <div className="md:hidden">
-                  <div className="flex items-center justify-between text-neutral-500 text-sm border-b border-neutral-800 py-3">
+            <div className="xl:hidden">
+                  <div className="flex items-center justify-between rounded-md bg-neutral-925 px-3 py-2.5 text-xs font-medium text-neutral-300">
                         <span>Event</span>
                         <span>Actions</span>
                   </div>

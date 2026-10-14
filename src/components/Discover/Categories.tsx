@@ -22,6 +22,8 @@ interface EventListItem {
       bannerUrl: string | null;
       status: string;
       organizerName: string;
+      numberAttending?: string | number;
+      NumberAttending?: string | number;
 }
 
 interface EventsApiResponse {
@@ -45,7 +47,16 @@ interface TicketType {
       name: string;
       description: string;
       price: number;
-      totalQuantity: number;
+      totalQuantity?: number;
+      TotalQuantity?: number;
+      soldCount?: number;
+      SoldCount?: number;
+      soldQuantity?: number;
+      SoldQuantity?: number;
+      availableQuantity?: number;
+      AvailableQuantity?: number;
+      remainingQuantity?: number;
+      RemainingQuantity?: number;
 }
 
 interface EventDetail {
@@ -62,6 +73,8 @@ interface EventDetail {
       availabilityEnd: string;
       status: string;
       organizerName: string;
+      numberAttending?: string | number;
+      NumberAttending?: string | number;
       ticketTypes: TicketType[];
 }
 
@@ -76,6 +89,40 @@ interface EventDetailApiResponse {
 interface EventWithPrice extends EventListItem {
       minPrice: number | null;
       priceLoading: boolean;
+      numberAttending: number;
+      soldPercentage: number | null;
+      ticketsLeft: number | null;
+}
+
+function getTicketAvailability(ticketTypes: TicketType[]) {
+      let total = 0;
+      let sold = 0;
+      let remaining = 0;
+
+      for (const ticket of ticketTypes) {
+            const ticketTotal = Number(ticket.totalQuantity ?? ticket.TotalQuantity ?? 0);
+            const soldValue = ticket.soldCount ?? ticket.SoldCount ?? ticket.soldQuantity ?? ticket.SoldQuantity;
+            const remainingValue = ticket.availableQuantity ?? ticket.AvailableQuantity ?? ticket.remainingQuantity ?? ticket.RemainingQuantity;
+            const rawRemaining = Number(remainingValue ?? ticketTotal - Number(soldValue ?? 0));
+            const ticketRemaining = Math.min(Math.max(0, ticketTotal), Math.max(0, rawRemaining));
+            const ticketSold = remainingValue !== undefined ? ticketTotal - ticketRemaining : Number(soldValue ?? 0);
+
+            if (!Number.isFinite(ticketTotal) || !Number.isFinite(ticketSold) || !Number.isFinite(rawRemaining)) continue;
+
+            total += Math.max(0, ticketTotal);
+            sold += Math.min(Math.max(0, ticketTotal), Math.max(0, ticketSold));
+            remaining += ticketRemaining;
+      }
+
+      return {
+            soldPercentage: total > 0 ? Math.min(100, Math.round((sold / total) * 100)) : null,
+            ticketsLeft: total > 0 ? remaining : null,
+      };
+}
+
+function getAttendeeCount(...values: (string | number | undefined)[]): number {
+      const count = values.map(Number).find((value) => Number.isFinite(value) && value >= 0);
+      return count ?? 0;
 }
 
 const filterCategories = [
@@ -174,20 +221,29 @@ export default function Categories({ search, city, price, date }: CategoriesProp
                                           const detailResponse = await fetch(`${API_BASE_URL}/api/Events/${event.id}`);
 
                                           const detailData: EventDetailApiResponse = await detailResponse.json();
-
-                                          const minPrice =
-                                                detailData.data.ticketTypes.length > 0 ? Math.min(...detailData.data.ticketTypes.map((t) => t.price)) : 0;
+                                          const ticketTypes = detailData.data.ticketTypes ?? [];
+                                          const minPrice = ticketTypes.length > 0 ? Math.min(...ticketTypes.map((t) => t.price)) : 0;
 
                                           return {
                                                 ...event,
                                                 minPrice,
                                                 priceLoading: false,
+                                                numberAttending: getAttendeeCount(
+                                                      detailData.data.numberAttending,
+                                                      detailData.data.NumberAttending,
+                                                      event.numberAttending,
+                                                      event.NumberAttending,
+                                                ),
+                                                ...getTicketAvailability(ticketTypes),
                                           };
                                     } catch {
                                           return {
                                                 ...event,
                                                 minPrice: null,
                                                 priceLoading: false,
+                                                numberAttending: getAttendeeCount(event.numberAttending, event.NumberAttending),
+                                                soldPercentage: null,
+                                                ticketsLeft: null,
                                           };
                                     }
                               }),
@@ -221,6 +277,46 @@ export default function Categories({ search, city, price, date }: CategoriesProp
 
       const totalPages = Math.max(1, Math.ceil(filteredEvents.length / PAGE_SIZE));
       const paginatedEvents = filteredEvents.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+      const visibleEventIds = paginatedEvents.map((event) => event.id).join(",");
+
+      useEffect(() => {
+            if (!visibleEventIds) return;
+
+            const refreshAvailability = async () => {
+                  const ids = visibleEventIds.split(",");
+                  const updates = await Promise.all(
+                        ids.map(async (id) => {
+                              try {
+                                    const response = await fetch(`${API_BASE_URL}/api/Events/${encodeURIComponent(id)}`);
+                                    if (!response.ok) return null;
+                                    const result: EventDetailApiResponse = await response.json();
+                                    if (!result.success) return null;
+
+                                    return {
+                                          id,
+                                          numberAttending:
+                                                result.data.numberAttending !== undefined || result.data.NumberAttending !== undefined
+                                                      ? getAttendeeCount(result.data.numberAttending, result.data.NumberAttending)
+                                                      : undefined,
+                                          ...getTicketAvailability(result.data.ticketTypes ?? []),
+                                    };
+                              } catch {
+                                    return null;
+                              }
+                        }),
+                  );
+
+                  setEvents((currentEvents) =>
+                        currentEvents.map((event) => {
+                              const update = updates.find((item) => item?.id === event.id);
+                              return update ? { ...event, ...update, numberAttending: update.numberAttending ?? event.numberAttending } : event;
+                        }),
+                  );
+            };
+
+            const intervalId = window.setInterval(() => void refreshAvailability(), 30_000);
+            return () => window.clearInterval(intervalId);
+      }, [visibleEventIds]);
 
       const handleCategorySelect = (value: string) => {
             setSelectedCategory(value);
@@ -270,10 +366,12 @@ export default function Categories({ search, city, price, date }: CategoriesProp
                                                 eventTitle={event.title}
                                                 eventCategory=""
                                                 venue={`${event.venue}, ${event.city}`}
-                                                numberAttending={event.organizerName}
+                                                numberAttending={event.numberAttending.toLocaleString()}
                                                 startDate={eventDate.toLocaleDateString()}
                                                 startTime={eventDate.toLocaleTimeString()}
                                                 ticketPrice={event.minPrice !== null ? String(event.minPrice) : ""}
+                                                soldPercentage={event.soldPercentage ?? undefined}
+                                                ticketsLeft={event.ticketsLeft ?? undefined}
                                           />
                                     );
                               })}

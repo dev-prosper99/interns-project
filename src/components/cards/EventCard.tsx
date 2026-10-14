@@ -24,8 +24,8 @@ export const EventCard = ({
       startDate,
       startTime,
       ticketPrice,
-      soldPercentage = 0,
-      ticketsLeft = 1000,
+      soldPercentage,
+      ticketsLeft,
 }: EventCardProps) => {
       const navigate = useNavigate();
 
@@ -75,20 +75,22 @@ export const EventCard = ({
                         </div>
 
                         {/* Progress bar */}
-                        <div className="flex flex-col gap-1.5">
-                              <div className="flex justify-between text-xs text-neutral-400">
-                                    <span>{soldPercentage}% sold</span>
-                                    <span>{ticketsLeft.toLocaleString()} left</span>
+                        {soldPercentage !== undefined && ticketsLeft !== undefined && (
+                              <div className="flex flex-col gap-1.5">
+                                    <div className="flex justify-between text-xs text-neutral-400">
+                                          <span>{soldPercentage}% sold</span>
+                                          <span>{ticketsLeft.toLocaleString()} left</span>
+                                    </div>
+                                    <div className="w-full h-1.5 rounded-full bg-neutral-800">
+                                          <div
+                                                className="h-full rounded-full bg-orange-600"
+                                                style={{
+                                                      width: `${soldPercentage}%`,
+                                                }}
+                                          />
+                                    </div>
                               </div>
-                              <div className="w-full h-1.5 rounded-full bg-neutral-800">
-                                    <div
-                                          className="h-full rounded-full bg-orange-600"
-                                          style={{
-                                                width: `${soldPercentage}%`,
-                                          }}
-                                    />
-                              </div>
-                        </div>
+                        )}
 
                         {/* Price + CTA */}
                         <div className="flex items-center justify-between mt-6">

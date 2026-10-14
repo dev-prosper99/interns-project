@@ -1,11 +1,9 @@
 import { useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
-import { HeartIcon, MailCheck } from "lucide-react";
+import { HeartIcon } from "lucide-react";
 import { DashboardIcon, EventIcon, SettingsIcon, TicketIcon, AnalyticsIcon, TransactionIcon, AttendeeIcon } from "@/assets/icons";
 import Sidebar, { type SidebarItem } from "./Sidebar";
 import DashboardHeader from "@/components/DashBoard/AttendeeDashboard/DashboardHeader";
-
-const DeliveryLogsIcon: SidebarItem["icon"] = (props) => <MailCheck {...props} />;
 
 const attendeeItems: SidebarItem[] = [
       { label: "Dashboard", path: "/dashboard/attendee", icon: DashboardIcon },
@@ -22,7 +20,6 @@ const organizerItems: SidebarItem[] = [
       { label: "Analytics", path: "/dashboard/organizer/analytics", icon: AnalyticsIcon },
       { label: "Transactions", path: "/dashboard/organizer/transactions", icon: TransactionIcon },
       { label: "Attendees", path: "/dashboard/organizer/attendees", icon: AttendeeIcon },
-      { label: "Delivery Logs", path: "/dashboard/organizer/delivery-logs", icon: DeliveryLogsIcon },
       { label: "Settings", path: "/dashboard/organizer/settings", icon: SettingsIcon },
 ];
 
@@ -38,7 +35,6 @@ const pageTitles: Record<string, string> = {
       "/dashboard/organizer/analytics": "Analytics",
       "/dashboard/organizer/transactions": "Transactions",
       "/dashboard/organizer/attendees": "Attendees",
-      "/dashboard/organizer/delivery-logs": "Delivery Logs",
       "/dashboard/organizer/settings": "Settings",
 };
 

@@ -23,6 +23,8 @@ interface EventApiResponse {
 
 export default function EventsPage() {
       const [search, setSearch] = useState("");
+      const [categoryFilter, setCategoryFilter] = useState("all");
+      const [statusFilter, setStatusFilter] = useState("all");
       const [rows, setRows] = useState<EventRowData[]>([]);
       const [isLoading, setIsLoading] = useState(true);
       const [error, setError] = useState<string | null>(null);
@@ -89,11 +91,11 @@ export default function EventsPage() {
                               venue: [venueName, cityName].filter(Boolean).join(", ") || "No venue set",
                               date: isValidDate ? eventDateObj.toLocaleDateString() : "TBD",
                               time: isValidDate ? eventDateObj.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "TBD",
-                              category: event.eventCategory || event.category || "Event",
+                              category: event.eventCategory || event.EventCategory || event.category || event.Category || "Event",
                               image: event.bannerUrl || event.image || "",
                               bannerUrl: event.bannerUrl || event.image || null,
                               revenue: "₦0.00",
-                              status: statusOverrides[realId] ?? event.status ?? "Draft",
+                              status: statusOverrides[realId] ?? event.status ?? event.Status ?? "Draft",
                         };
                   });
                   setRows(mappedEvents);
@@ -136,6 +138,14 @@ export default function EventsPage() {
                         const rawDate = event.eventDate || event.EventDate || event.availabilityStart;
                         const startDate = rawDate ? new Date(rawDate) : null;
                         const isValidDate = startDate && !Number.isNaN(startDate.getTime());
+                        const rawEndTime = event.availabilityEnd || event.AvailabilityEnd || event.endTime || event.EndTime;
+                        const endTimeDate = rawEndTime ? new Date(String(rawEndTime)) : null;
+                        const endTime =
+                              typeof rawEndTime === "string" && /^\d{1,2}:\d{2}/.test(rawEndTime)
+                                    ? rawEndTime.slice(0, 5)
+                                    : endTimeDate && !Number.isNaN(endTimeDate.getTime())
+                                      ? endTimeDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+                                      : "TBD";
 
                         if (cancelled) return;
 
@@ -178,12 +188,13 @@ export default function EventsPage() {
                               id: currentId,
                               status: statusOverrides[currentId] ?? event.status ?? "Draft",
                               title: event.title ?? event.Title ?? "Untitled Event",
-                              category: event.eventCategory || event.category || "Event",
+                              category: event.eventCategory || event.EventCategory || event.category || event.Category || "Event",
                               venue: event.venue ?? event.Venue ?? "No venue specified",
                               state: event.state ?? event.State ?? "",
                               numberAttending: String(event.numberAttending ?? event.NumberAttending ?? 0),
                               startDate: isValidDate ? startDate.toLocaleDateString() : "TBD",
                               startTime: isValidDate ? startDate.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "TBD",
+                              endTime,
                               bannerUrl: event.bannerUrl || event.BannerUrl || "",
                               promoCode: resolvedPromoCode,
                               promoDiscount: resolvedPromoDiscount,
@@ -246,19 +257,36 @@ export default function EventsPage() {
 
       const filteredRows = useMemo(() => {
             const query = search.toLowerCase().trim();
-            if (!query) return rows;
-            return rows.filter((event) => [event.title, event.venue, event.category, event.status].some((field) => field?.toLowerCase().includes(query)));
-      }, [rows, search]);
+            return rows.filter((event) => {
+                  const matchesSearch =
+                        !query || [event.title, event.venue, event.category, event.status].some((field) => field?.toLowerCase().includes(query));
+                  const matchesCategory = categoryFilter === "all" || event.category.toLowerCase() === categoryFilter.toLowerCase();
+                  const matchesStatus = statusFilter === "all" || event.status.toLowerCase() === statusFilter.toLowerCase();
+                  return matchesSearch && matchesCategory && matchesStatus;
+            });
+      }, [rows, search, categoryFilter, statusFilter]);
+
+      const categories = useMemo(() => Array.from(new Set(rows.map((event) => event.category).filter(Boolean))).sort(), [rows]);
+      const statuses = useMemo(() => Array.from(new Set(rows.map((event) => event.status).filter(Boolean))).sort(), [rows]);
 
       if (isLoading) return <Loader />;
 
       return (
-            <div className="min-w-0 min-h-dvh bg-neutral-950 text-white flex flex-col">
+            <div className="min-w-0 min-h-dvh bg-neutral-925 text-white flex flex-col">
                   <main className="min-w-0 flex-1 flex flex-col">
-                        <div className="bg-neutral-950 p-4 md:p-8 flex-1 flex flex-col">
+                        <div className="bg-neutral-925 p-4 md:p-8 flex-1 flex flex-col">
                               <EventsPageHeader onCreateClick={() => setIsCreateModalOpen(true)} />
-                              <div className="rounded-2xl p-4 md:p-8 flex-1 flex flex-col border border-white/5" style={{ backgroundColor: "#111213" }}>
-                                    <SearchFilterBar search={search} onSearchChange={setSearch} />
+                              <div className="rounded-xl p-4 flex-1 flex flex-col border border-white/5 bg-neutral-1000">
+                                    <SearchFilterBar
+                                          search={search}
+                                          onSearchChange={setSearch}
+                                          categories={categories}
+                                          statuses={statuses}
+                                          category={categoryFilter}
+                                          onCategoryChange={setCategoryFilter}
+                                          status={statusFilter}
+                                          onStatusChange={setStatusFilter}
+                                    />
                                     {error && !isLoading && (
                                           <div className="flex-1 flex flex-col items-center justify-center py-16 text-center">
                                                 <p className="text-red-400 text-sm mb-4">Error loading events. please try again</p>
@@ -291,7 +319,7 @@ export default function EventsPage() {
                                                 {filteredRows.length > 0 && (
                                                       <>
                                                             <div className="flex-1 flex flex-col">
-                                                                  <div className="hidden md:block">
+                                                                  <div className="hidden xl:block">
                                                                         <EventsTable
                                                                               events={filteredRows}
                                                                               onViewClick={(row) => setViewTargetId(row.id)}
@@ -300,7 +328,7 @@ export default function EventsPage() {
                                                                               onEditClick={(row) => setEditTarget(row)}
                                                                         />
                                                                   </div>
-                                                                  <div className="block md:hidden">
+                                                                  <div className="block xl:hidden">
                                                                         <EventCardList
                                                                               events={filteredRows}
                                                                               onViewClick={(row) => setViewTargetId(row.id)}

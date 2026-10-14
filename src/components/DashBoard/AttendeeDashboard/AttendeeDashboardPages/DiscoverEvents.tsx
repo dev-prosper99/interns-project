@@ -32,6 +32,8 @@ interface EventListItem {
       bannerUrl: string | null;
       status: string;
       organizerName: string;
+      numberAttending?: string | number;
+      NumberAttending?: string | number;
       category?: string;
       eventCategory?: string;
 }
@@ -413,7 +415,7 @@ export default function DiscoverEvents() {
                                                                         eventTitle={item.title}
                                                                         eventCategory={item.category || item.eventCategory || item.status || "Event"}
                                                                         venue={[item.venue, item.city].filter(Boolean).join(", ") || "Lagos, Nigeria"}
-                                                                        numberAttending={item.organizerName || "TixO"}
+                                                                        numberAttending={String(item.numberAttending ?? item.NumberAttending ?? 0)}
                                                                         startDate={validDate ? date.toLocaleDateString() : "TBD"}
                                                                         startTime={
                                                                               validDate
