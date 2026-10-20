@@ -68,6 +68,7 @@ export const emptyForm: EventFormData = {
       startDate: "",
       endDate: "",
       startTime: "",
+      endTime: "",
       venue: "",
       state: "",
       city: "",

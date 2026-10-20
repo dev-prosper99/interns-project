@@ -101,7 +101,7 @@ export default function StepBasics({ form, update }: StepBasicsProps) {
                         hint={`${form.description.length}/1000 characters`}
                   />
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                         <Select
                               label="Category"
                               required
@@ -111,36 +111,57 @@ export default function StepBasics({ form, update }: StepBasicsProps) {
                               onChange={(e) => update({ category: e.target.value })}
                         />
 
-                        {form.category === "Other" && (
-                              <TextInput
-                                    label="Custom Category"
-                                    required
-                                    placeholder="Enter category"
-                                    value={form.customCategory ?? ""}
-                                    onChange={(e) => update({ customCategory: e.target.value })}
-                              />
-                        )}
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
                         <TextInput
                               label="Start Date"
                               required
                               type="date"
+                              className="event-date-time-control has-[input:not(:placeholder-shown)]:border-neutral-925"
+                              style={{ colorScheme: "dark" }}
                               max="9999-12-31"
                               value={form.startDate}
                               onChange={(e) => update({ startDate: e.target.value })}
                         />
 
-                        <TextInput label="Start Time" required type="time" value={form.startTime} onChange={(e) => update({ startTime: e.target.value })} />
-
                         <TextInput
                               label="End Date (Optional)"
                               type="date"
+                              className="event-date-time-control has-[input:not(:placeholder-shown)]:border-neutral-925"
+                              style={{ colorScheme: "dark" }}
                               max="9999-12-31"
                               value={form.endDate}
                               onChange={(e) => update({ endDate: e.target.value })}
                         />
+
+                        <TextInput
+                              label="Start Time"
+                              required
+                              type="time"
+                              className="event-date-time-control has-[input:not(:placeholder-shown)]:border-neutral-925"
+                              style={{ colorScheme: "dark" }}
+                              value={form.startTime}
+                              onChange={(e) => update({ startTime: e.target.value })}
+                        />
+
+                        <TextInput
+                              label="End Time (Optional)"
+                              type="time"
+                              className="event-date-time-control has-[input:not(:placeholder-shown)]:border-neutral-925"
+                              style={{ colorScheme: "dark" }}
+                              value={form.endTime}
+                              onChange={(e) => update({ endTime: e.target.value })}
+                        />
+
+                        {form.category === "Other" && (
+                              <div className="sm:col-span-2">
+                                    <TextInput
+                                          label="Custom Category"
+                                          required
+                                          placeholder="Enter category"
+                                          value={form.customCategory ?? ""}
+                                          onChange={(e) => update({ customCategory: e.target.value })}
+                                    />
+                              </div>
+                        )}
                   </div>
 
                   <TextInput

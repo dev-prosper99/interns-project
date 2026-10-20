@@ -104,7 +104,7 @@ const CreateEventModal = ({ isOpen, onClose, eventId, initialData }: CreateEvent
                   try {
                         const cached = localStorage.getItem(`event_cache_${eventId}`);
                         if (cached) {
-                              return JSON.parse(cached) as EventFormData;
+                              return { ...emptyForm, ...(JSON.parse(cached) as Partial<EventFormData>) };
                         }
                   } catch {
                         console.error();
@@ -114,6 +114,7 @@ const CreateEventModal = ({ isOpen, onClose, eventId, initialData }: CreateEvent
                         const rawDate = initialData.startDate || initialData.date;
                         const rawTime = initialData.startTime || initialData.time;
                         const rawEndDate = initialData.endDate;
+                        const rawEndTime = initialData.endTime;
                         return {
                               ...emptyForm,
                               title: initialData.title ?? "",
@@ -125,6 +126,7 @@ const CreateEventModal = ({ isOpen, onClose, eventId, initialData }: CreateEvent
                               startDate: parseDateToYMD(rawDate),
                               startTime: parseTimeToHM(rawTime),
                               endDate: parseDateToYMD(rawEndDate),
+                              endTime: parseTimeToHM(rawEndTime),
                               bannerUrl: initialData.image || (initialData.bannerUrl ? String(initialData.bannerUrl) : ""),
                               bannerPreview: initialData.image || (initialData.bannerUrl ? String(initialData.bannerUrl) : ""),
                         };
@@ -133,7 +135,7 @@ const CreateEventModal = ({ isOpen, onClose, eventId, initialData }: CreateEvent
             }
             try {
                   const savedForm = localStorage.getItem(STORAGE_KEY_FORM);
-                  return savedForm ? (JSON.parse(savedForm) as EventFormData) : emptyForm;
+                  return savedForm ? { ...emptyForm, ...(JSON.parse(savedForm) as Partial<EventFormData>) } : emptyForm;
             } catch {
                   console.error();
                   return emptyForm;
@@ -158,6 +160,8 @@ const CreateEventModal = ({ isOpen, onClose, eventId, initialData }: CreateEvent
 
       const [alert, setAlert] = useState<AlertState | null>(null);
       const [isSubmitting, setIsSubmitting] = useState(false);
+      const [eventStatus, setEventStatus] = useState(String(initialData?.status ?? ""));
+      const [existingTicketIds, setExistingTicketIds] = useState<Set<string>>(() => new Set());
 
       useEffect(() => {
             if (!isOpen || eventId) return;
@@ -207,6 +211,7 @@ const CreateEventModal = ({ isOpen, onClose, eventId, initialData }: CreateEvent
                         }
 
                         const source = event || savedMeta || (initialData as ApiEventPayload) || {};
+                        setEventStatus(String(source.status ?? source.Status ?? initialData?.status ?? ""));
 
                         const rawEventDate =
                               source.eventDate ||
@@ -221,6 +226,8 @@ const CreateEventModal = ({ isOpen, onClose, eventId, initialData }: CreateEvent
 
                         const endSource = source.availabilityEnd || source.AvailabilityEnd || source.endDate || source.EndDate;
                         const endDateStr = parseDateToYMD(endSource);
+                        const rawEndTime = source.endTime || source.EndTime;
+                        const endTimeStr = parseTimeToHM(endSource) || (typeof rawEndTime === "string" ? parseTimeToHM(rawEndTime) : "");
 
                         const rawCat = (source.eventCategory || source.EventCategory || source.category || source.Category || "") as string;
                         let resolvedCategory = "";
@@ -270,6 +277,16 @@ const CreateEventModal = ({ isOpen, onClose, eventId, initialData }: CreateEvent
                                             quantity: String(ticket.totalQuantity ?? ticket.TotalQuantity ?? ticket.quantity ?? ticket.Quantity ?? 0),
                                       }))
                                     : [emptyTier()];
+                        setExistingTicketIds(
+                              new Set(
+                                    Array.isArray(rawTiers)
+                                          ? rawTiers
+                                                  .map((ticket) => ticket.id ?? ticket.Id)
+                                                  .filter((id): id is string | number => id != null)
+                                                  .map(String)
+                                          : [],
+                              ),
+                        );
 
                         const promoCodeVal = String(source.promoCode || source.PromoCode || source.promo_code || savedMeta?.promoCode || "");
                         const discountVal =
@@ -308,6 +325,7 @@ const CreateEventModal = ({ isOpen, onClose, eventId, initialData }: CreateEvent
                               startDate: startDateStr || prev.startDate,
                               startTime: startTimeStr || prev.startTime,
                               endDate: endDateStr || prev.endDate,
+                              endTime: endTimeStr || prev.endTime,
                               promoCode: promoCodeVal,
                               discount: discountVal,
                               tiers: loadedTiers.length > 0 ? loadedTiers : prev.tiers,
@@ -418,15 +436,17 @@ const CreateEventModal = ({ isOpen, onClose, eventId, initialData }: CreateEvent
                   bannerUrl: form.bannerUrl || "",
                   eventPolicy: form.refundPolicy,
                   availabilityStart: toIsoDateTime(form.startDate, form.startTime),
-                  availabilityEnd: toIsoDateTime(form.endDate || form.startDate, form.startTime),
+                  availabilityEnd: toIsoDateTime(form.endDate || form.startDate, form.endTime || form.startTime),
                   promoCode: form.promoCode || null,
                   discount: Number(form.discount) || 0,
                   ticketTypes: form.tiers.map((tier: Tier) => ({
+                        ...(isEditing && existingTicketIds.has(tier.id) ? { id: tier.id } : {}),
                         name: tier.name,
                         description: tier.description,
                         price: Number(tier.price) || 0,
                         totalQuantity: Number(tier.quantity) || 0,
                   })),
+                  ...(isEditing && eventStatus ? { status: eventStatus } : {}),
                   category: formattedCategory,
                   categoryOther: formattedCategory === "other" ? form.customCategory || "" : "",
             };
@@ -450,7 +470,7 @@ const CreateEventModal = ({ isOpen, onClose, eventId, initialData }: CreateEvent
                   const responseText = await response.text();
                   const responseBody = responseText ? (JSON.parse(responseText) as Record<string, unknown>) : null;
 
-                  if (!response.ok) {
+                  if (!response.ok || responseBody?.success === false) {
                         const message = (responseBody?.message as string) || (responseBody?.error as string) || `Request failed with status ${response.status}`;
                         throw new Error(message);
                   }
@@ -542,7 +562,7 @@ const CreateEventModal = ({ isOpen, onClose, eventId, initialData }: CreateEvent
 
                         <Stepper currentIndex={stepIndex} />
 
-                        <div className="max-h-[55vh] overflow-y-auto pr-1 -mr-1">{renderStep()}</div>
+                        <div className="max-h-[55vh] overflow-y-auto pr-4 -mr-4">{renderStep()}</div>
 
                         <div className="flex gap-3 mt-7">
                               <Button

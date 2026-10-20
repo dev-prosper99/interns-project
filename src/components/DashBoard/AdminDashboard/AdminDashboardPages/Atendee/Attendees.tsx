@@ -80,11 +80,11 @@ function AttendeeDetailsModal({ attendee, onClose }: { attendee: Attendee; onClo
                         </dl>
 
                         <div className="mt-6 flex gap-3">
-                              <Button variant="primary" className="flex-1">
+                              <Button variant="secondary" className="flex-1">
                                     <MailIcon />
                                     Send Reminder
                               </Button>
-                              <Button variant="yellow">Mark Checked-in</Button>
+                              <Button variant="yellow">Mark Checked In</Button>
                         </div>
                   </div>
             </div>
@@ -103,12 +103,24 @@ function Field({ label, value, valueClass }: { label: string; value: string; val
 export default function AttendeesPage() {
       const [search, setSearch] = useState("");
       const [selected, setSelected] = useState<Attendee | null>(null);
+      const [eventFilter, setEventFilter] = useState("all");
+      const [statusFilter, setStatusFilter] = useState("all");
+      const events = useMemo(() => Array.from(new Set(ATTENDEES.map((attendee) => attendee.event))).sort(), []);
+      const statuses: Status[] = ["Confirmed", "Pending", "Cancelled", "Checked-in"];
 
       const filtered = useMemo(() => {
             const q = search.trim().toLowerCase();
-            if (!q) return ATTENDEES;
-            return ATTENDEES.filter((a) => a.name.toLowerCase().includes(q) || a.email.toLowerCase().includes(q) || a.ticketNo.toLowerCase().includes(q));
-      }, [search]);
+            return ATTENDEES.filter((attendee) => {
+                  const matchesSearch =
+                        !q ||
+                        attendee.name.toLowerCase().includes(q) ||
+                        attendee.email.toLowerCase().includes(q) ||
+                        attendee.ticketNo.toLowerCase().includes(q);
+                  const matchesEvent = eventFilter === "all" || attendee.event === eventFilter;
+                  const matchesStatus = statusFilter === "all" || attendee.status === statusFilter;
+                  return matchesSearch && matchesEvent && matchesStatus;
+            });
+      }, [search, eventFilter, statusFilter]);
 
       return (
             <div className="min-w-0 bg-neutral-950">
@@ -136,29 +148,32 @@ export default function AttendeesPage() {
                                           />
                                     </div>
                                     <div className="flex items-center gap-4">
-                                          <Select defaultValue="All events">
+                                          <Select value={eventFilter} onValueChange={(value) => setEventFilter(value ?? "all")}>
                                                 <SelectTrigger className="border-white/10 bg-neutral-900 text-neutral-300 min-w-35">
-                                                      <SelectValue placeholder="Select Event" />
+                                                      <SelectValue placeholder="All Events" />
                                                 </SelectTrigger>
                                                 <SelectContent>
-                                                      <SelectItem value="all-events">All Events</SelectItem>
-                                                      <SelectItem value="upcoming">Upcoming Events</SelectItem>
-                                                      <SelectItem value="past">Past Events</SelectItem>
-                                                      <SelectItem value="drafts">Drafts</SelectItem>
-                                                      <SelectItem value="cancelled">Cancelled</SelectItem>
+                                                      <SelectItem value="all">All Events</SelectItem>
+                                                      {events.map((event) => (
+                                                            <SelectItem key={event} value={event}>
+                                                                  {event}
+                                                            </SelectItem>
+                                                      ))}
                                                 </SelectContent>
                                           </Select>
 
                                           {/* Status Select */}
-                                          <Select defaultValue="All status">
-                                                <SelectTrigger className="border-white/10 bg-neutral-900 text-neutral-300 min-w-35]">
-                                                      <SelectValue placeholder="Select Status" />
+                                          <Select value={statusFilter} onValueChange={(value) => setStatusFilter(value ?? "all")}>
+                                                <SelectTrigger className="border-white/10 bg-neutral-900 text-neutral-300 min-w-35">
+                                                      <SelectValue placeholder="All Statuses" />
                                                 </SelectTrigger>
                                                 <SelectContent>
-                                                      <SelectItem value="all-status">All Status</SelectItem>
-                                                      <SelectItem value="active">Confirmed</SelectItem>
-                                                      <SelectItem value="inactive">Cancelled</SelectItem>
-                                                      <SelectItem value="inactive">Checked in</SelectItem>
+                                                      <SelectItem value="all">All Statuses</SelectItem>
+                                                      {statuses.map((status) => (
+                                                            <SelectItem key={status} value={status}>
+                                                                  {status === "Checked-in" ? "Checked in" : status}
+                                                            </SelectItem>
+                                                      ))}
                                                 </SelectContent>
                                           </Select>
                                     </div>
@@ -172,20 +187,20 @@ export default function AttendeesPage() {
                                                             <table className="w-full min-w-225 text-left text-sm">
                                                                   <thead>
                                                                         <tr className="border-b border-white/10 text-xs uppercase tracking-wide text-neutral-500">
-                                                                              <th className="px-4 py-3 font-medium">Attendee</th>
-                                                                              <th className="px-4 py-3 font-medium">Event</th>
-                                                                              <th className="px-4 py-3 font-medium">Ticket Tier</th>
-                                                                              <th className="px-4 py-3 font-medium">Tickets</th>
-                                                                              <th className="px-4 py-3 font-medium">Amount Paid</th>
-                                                                              <th className="px-4 py-3 font-medium">Purchase Date</th>
-                                                                              <th className="px-4 py-3 font-medium">Status</th>
-                                                                              <th className="px-4 py-3 font-medium">Action</th>
+                                                                              <th className="px-3 py-3 font-medium">Attendee</th>
+                                                                              <th className="px-3 py-3 font-medium">Event</th>
+                                                                              <th className="px-3 py-3 font-medium">Ticket Tier</th>
+                                                                              <th className="px-3 py-3 font-medium">Tickets</th>
+                                                                              <th className="px-3 py-3 font-medium">Amount Paid</th>
+                                                                              <th className="px-3 py-3 font-medium">Purchase Date</th>
+                                                                              <th className="px-3 py-3 font-medium">Status</th>
+                                                                              <th className="min-w-36 whitespace-nowrap px-2 py-3 font-medium">Action</th>
                                                                         </tr>
                                                                   </thead>
                                                                   <tbody>
                                                                         {paginated.map((a) => (
                                                                               <tr key={a.id} className="border-b border-white/5 last:border-0 hover:bg-white/">
-                                                                                    <td className="px-4 py-3">
+                                                                                    <td className="px-3 py-3">
                                                                                           <div className="flex items-center gap-3">
                                                                                                 <Avatar name={a.name} color={a.avatarColor} />
                                                                                                 <div className="min-w-0">
@@ -198,31 +213,33 @@ export default function AttendeesPage() {
                                                                                                 </div>
                                                                                           </div>
                                                                                     </td>
-                                                                                    <td className="px-4 py-3 text-neutral-200">{a.event}</td>
-                                                                                    <td className="px-4 py-3">
+                                                                                    <td className="px-3 py-3 text-neutral-200">{a.event}</td>
+                                                                                    <td className="px-3 py-3">
                                                                                           <TierCell attendee={a} />
                                                                                     </td>
-                                                                                    <td className="px-4 py-3 text-neutral-300">{a.tickets}</td>
+                                                                                    <td className="px-3 py-3 text-neutral-300">{a.tickets}</td>
                                                                                     <td
-                                                                                          className={`px-4 py-3 ${a.amountPaid === "Free" ? "text-emerald-400" : "text-neutral-300"}`}
+                                                                                          className={`px-3 py-3 ${a.amountPaid === "Free" ? "text-emerald-400" : "text-neutral-300"}`}
                                                                                     >
                                                                                           {formatAmount(a.amountPaid)}
                                                                                     </td>
-                                                                                    <td className="px-4 py-3 text-neutral-400">{a.purchaseDate}</td>
-                                                                                    <td className="px-4 py-3">
+                                                                                    <td className="px-3 py-3 text-neutral-400">{a.purchaseDate}</td>
+                                                                                    <td className="px-3 py-3">
                                                                                           <span
                                                                                                 className={`inline-flex rounded-md px-2.5 py-1 text-xs font-medium ${STATUS_STYLES[a.status]}`}
                                                                                           >
                                                                                                 {a.status}
                                                                                           </span>
                                                                                     </td>
-                                                                                    <td className="px-4 py-3">
+                                                                                    <td className="whitespace-nowrap px-2 py-3">
                                                                                           <div
                                                                                                 onClick={() => setSelected(a)}
-                                                                                                className="flex items-center gap-2 cursor-pointer text-sm font-medium"
+                                                                                                className="inline-flex w-max flex-nowrap items-center gap-2 cursor-pointer text-sm font-medium whitespace-nowrap"
                                                                                           >
-                                                                                                <EyeIcon />{" "}
-                                                                                                <p className="text-purple-500 cursor-pointer">View details</p>
+                                                                                                <EyeIcon />
+                                                                                                <p className="whitespace-nowrap text-purple-500 cursor-pointer">
+                                                                                                      View Details
+                                                                                                </p>
                                                                                           </div>
                                                                                     </td>
                                                                               </tr>

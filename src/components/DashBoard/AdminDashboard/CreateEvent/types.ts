@@ -17,6 +17,8 @@ export interface ApiEventPayload {
       [key: string]: unknown;
       id?: string | number;
       Id?: string | number;
+      status?: string;
+      Status?: string;
       title?: string;
       Title?: string;
       description?: string;
@@ -41,6 +43,8 @@ export interface ApiEventPayload {
       endDate?: string;
       EndDate?: string;
       startTime?: string;
+      endTime?: string;
+      EndTime?: string;
       time?: string;
       eventCategory?: string;
       EventCategory?: string;
@@ -87,6 +91,7 @@ export interface EventFormData {
       startDate: string;
       endDate: string;
       startTime: string;
+      endTime: string;
       venue: string;
       state: string;
       city: string;

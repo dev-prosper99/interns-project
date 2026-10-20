@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 // ============================================================
 // Shared UI primitives
@@ -23,19 +24,23 @@ export const STATUS_COLOR: Record<StatusKind, string> = {
 
 export function Tabs({ active, onChange }: { active: TabKey; onChange: (t: TabKey) => void }) {
       return (
-            <div className="mb-6 flex gap-2">
-                  {TAB_ITEMS.map((tab) => (
-                        <button
-                              key={tab.key}
-                              type="button"
-                              onClick={() => onChange(tab.key)}
-                              className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-                                    active === tab.key ? "bg-violet-500 text-white" : "text-gray-400 hover:text-white"
-                              }`}
-                        >
-                              {tab.label}
-                        </button>
-                  ))}
+            <div className="mb-3 mt-6 flex flex-wrap gap-2">
+                  {TAB_ITEMS.map((tab) => {
+                        const isActiveTab = active === tab.key;
+
+                        return (
+                              <Button
+                                    key={tab.key}
+                                    type="button"
+                                    variant={isActiveTab ? "primary" : "neutral"}
+                                    size="sm"
+                                    onClick={() => onChange(tab.key)}
+                                    className={`border text-white ${isActiveTab ? "bg-purple-600/24 text-purple-600 border-purple-600/24" : "bg-none border-neutral-600"}`}
+                              >
+                                    {tab.label}
+                              </Button>
+                        );
+                  })}
             </div>
       );
 }
@@ -63,7 +68,7 @@ export function TextField({
                         value={value}
                         disabled={disabled}
                         onChange={(e) => onChange?.(e.target.value)}
-                        className="w-full rounded-lg border border-neutral-700 bg-neutral-800 px-3 py-2.5 text-sm text-neutral-100 outline-none focus:border-violet-500 disabled:cursor-not-allowed disabled:text-gray-400"
+                        className="w-full rounded-lg border border-neutral-925 bg-neutral-900 px-3 py-2.5 text-sm text-neutral-100 outline-none focus:border-purple-500 disabled:cursor-not-allowed disabled:text-gray-400"
                   />
             </div>
       );
@@ -83,7 +88,7 @@ export function PasswordField({ id, label, value, onChange }: { id: string; labe
                               value={value}
                               placeholder="••••••••"
                               onChange={(e) => onChange(e.target.value)}
-                              className="w-full rounded-lg border border-neutral-700 bg-neutral-800 px-3 py-2.5 pr-10 text-sm text-neutral-100 outline-none focus:border-violet-500"
+                              className="w-full rounded-lg border border-neutral-925 bg-neutral-900 px-3 py-2.5 pr-10 text-sm text-neutral-100 outline-none focus:border-purple-500"
                         />
                         <button
                               type="button"
@@ -112,14 +117,9 @@ export function SaveBar({ status, statusKind = "", onSave, saving }: { status: s
       return (
             <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-6">
                   <div className={`min-h-4 text-xs ${STATUS_COLOR[statusKind]}`}>{status}</div>
-                  <button
-                        type="button"
-                        onClick={onSave}
-                        disabled={saving}
-                        className="rounded-lg bg-linear-to-r from-violet-500 to-fuchsia-400 px-5 py-2.5 text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-45"
-                  >
+                  <Button variant="neutral" size="lg" type="button" onClick={onSave} disabled={saving} className="w-full md:w-fit">
                         {saving ? "Saving…" : "Save Changes"}
-                  </button>
+                  </Button>
             </div>
       );
 }

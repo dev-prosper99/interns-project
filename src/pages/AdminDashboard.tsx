@@ -30,9 +30,9 @@ const AdminDashboard = () => {
                               ))}
                         </div>
 
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6 items-stretch">
-                              <RevenueChart />
-                              <CategoryChart />
+                        <div className="grid grid-cols-1 lg:grid-cols-[65fr_35fr] gap-6 mt-6 items-stretch">
+                              <div className="min-w-0"><RevenueChart /></div>
+                              <div className="min-w-0"><CategoryChart /></div>
                         </div>
                   </div>
 
