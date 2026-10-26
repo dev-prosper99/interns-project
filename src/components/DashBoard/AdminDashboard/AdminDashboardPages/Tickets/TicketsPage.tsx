@@ -357,7 +357,7 @@ export default function TicketsPage() {
 
                                           <Select value={eventFilter} onValueChange={(v) => setEventFilter(v ?? "all")}>
                                                 <SelectTrigger className="h-9 w-full border-white/5 bg-[#1b1c1e] text-xs text-neutral-300">
-                                                      <SelectValue placeholder="All Events" />
+                                                      <SelectValue>{eventFilter === "all" ? "All Events" : eventFilter}</SelectValue>
                                                 </SelectTrigger>
                                                 <SelectContent className="border-neutral-800 bg-neutral-900 text-white">
                                                       <SelectItem value="all">All Events</SelectItem>
@@ -371,7 +371,7 @@ export default function TicketsPage() {
 
                                           <Select value={typeFilter} onValueChange={(v) => setTypeFilter(v ?? "all")}>
                                                 <SelectTrigger className="h-9 w-full border-white/5 bg-[#1b1c1e] text-xs text-neutral-300">
-                                                      <SelectValue placeholder="All Types" />
+                                                      <SelectValue>{typeFilter === "all" ? "All Types" : typeFilter}</SelectValue>
                                                 </SelectTrigger>
                                                 <SelectContent className="border-neutral-800 bg-neutral-900 text-white">
                                                       <SelectItem value="all">All Types</SelectItem>
@@ -385,7 +385,7 @@ export default function TicketsPage() {
 
                                           <Select value={statusFilter} onValueChange={(value) => setStatusFilter((value as TicketStatus | null) ?? "all")}>
                                                 <SelectTrigger className="h-9 w-full border-white/5 bg-[#1b1c1e] text-xs text-neutral-300">
-                                                      <SelectValue placeholder="All Status" />
+                                                      <SelectValue>{statusFilter === "all" ? "All Status" : statusFilter}</SelectValue>
                                                 </SelectTrigger>
                                                 <SelectContent className="border-neutral-800 bg-neutral-900 text-white">
                                                       <SelectItem value="all">All Status</SelectItem>
