@@ -32,12 +32,18 @@ type ApiTicketType = {
 type ApiEvent = {
       id?: string;
       title: string;
+      status?: string;
+      Status?: string;
       description?: string;
       venue: string;
       city?: string;
       eventDate: string;
       bannerUrl?: string;
       organizerName?: string;
+      eventCategory?: string;
+      EventCategory?: string;
+      category?: string;
+      Category?: string;
       ticketTypes?: ApiTicketType[];
 };
 
@@ -56,7 +62,7 @@ type ApiEventListResponse = {
       success: boolean;
       message?: string;
       data: {
-            items: Array<{ id: string; title: string }>;
+            items: Array<{ id: string; title: string; status?: string; Status?: string }>;
       };
 };
 
@@ -73,7 +79,7 @@ function toDisplayEvent(apiEvent: ApiEvent): DisplayEvent {
       return {
             imageUrl: apiEvent.bannerUrl || "",
             eventTitle: apiEvent.title,
-            eventCategory: "Event",
+            eventCategory: apiEvent.eventCategory || apiEvent.EventCategory || apiEvent.category || apiEvent.Category || "Event",
             venue: [apiEvent.venue, apiEvent.city].filter(Boolean).join(", "),
             numberAttending: "0",
             startDate: date.toLocaleDateString(),
@@ -92,7 +98,6 @@ const DiscoverEventsDetails = () => {
       const location = useLocation();
       const { title } = useParams<{ title: string }>();
       const locationState = location.state as EventDetailLocationState | null;
-      const localEvent: DisplayEvent | undefined = Events.find((item) => toEventSlug(item.eventTitle) === title?.toLowerCase());
       const [apiEvent, setApiEvent] = useState<DisplayEvent | null>(null);
       const [isLoading, setIsLoading] = useState(true);
       const [selectedTicket, setSelectedTicket] = useState<TicketType | null>(null);
@@ -110,7 +115,10 @@ const DiscoverEventsDetails = () => {
                         if (!response.ok) throw new Error(`Request failed (${response.status})`);
                         const result: ApiEventListResponse = await response.json();
                         if (!result.success) throw new Error(result.message || "Failed to load event");
-                        const matchingEvent = result.data.items.find((item) => toEventSlug(item.title) === title?.toLowerCase());
+                        const matchingEvent = result.data.items.find(
+                              (item) =>
+                                    toEventSlug(item.title) === title?.toLowerCase() && (item.status ?? item.Status ?? "").trim().toLowerCase() === "published",
+                        );
                         if (!matchingEvent) return;
 
                         const detailResponse = await fetch(`${API_BASE_URL}/api/Events/${encodeURIComponent(matchingEvent.id)}`, {
@@ -121,6 +129,8 @@ const DiscoverEventsDetails = () => {
 
                         const detailResult: ApiEventResponse = await detailResponse.json();
                         if (!detailResult.success) throw new Error(detailResult.message || "Failed to load event details");
+                        const detailStatus = detailResult.data.status ?? detailResult.data.Status;
+                        if (detailStatus && detailStatus.trim().toLowerCase() !== "published") return;
                         setApiEvent(toDisplayEvent(detailResult.data));
                   })
                   .catch((error: unknown) => {
@@ -140,7 +150,7 @@ const DiscoverEventsDetails = () => {
             setTicketQuantities((current) => ({ ...current, [ticket]: Math.max(0, Math.min(limit, quantity)) }));
       };
 
-      const event = apiEvent ?? localEvent;
+      const event = apiEvent;
 
       const totalTicketAmount =
             ticketQuantities.regular * Number(event?.regular_ticketPrice ?? 0) +
@@ -154,6 +164,20 @@ const DiscoverEventsDetails = () => {
             : "Please log in as an attendee to proceed to checkout.";
 
       if (isLoading) return <Loader />;
+
+      if (!event) {
+            return (
+                  <div className="flex min-h-screen items-center justify-center bg-neutral-925 px-4 text-center text-white">
+                        <div>
+                              <h1 className="text-xl font-semibold">Event unavailable</h1>
+                              <p className="mt-2 text-sm text-neutral-400">This event is unpublished or no longer available.</p>
+                              <Button type="button" className="mt-5" onClick={() => navigate("/dashboard/attendee/events")}>
+                                    Back to Discover Events
+                              </Button>
+                        </div>
+                  </div>
+            );
+      }
 
       return (
             <div className="flex ">

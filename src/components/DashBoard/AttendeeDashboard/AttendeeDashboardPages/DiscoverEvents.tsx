@@ -7,7 +7,7 @@ import { ChevronDown, Search, CalendarX } from "lucide-react";
 import Loader from "@/components/layouts/Loader";
 
 const API_BASE_URL = "https://peacemaker001-001-site1.ltempurl.com";
-const PAGE_SIZE = 9;
+const PAGE_SIZE = 6;
 
 const PRICE_RANGES = [
       { label: "Free", value: "free" },
@@ -30,7 +30,8 @@ interface EventListItem {
       city: string;
       eventDate: string;
       bannerUrl: string | null;
-      status: string;
+      status?: string;
+      Status?: string;
       organizerName: string;
       numberAttending?: string | number;
       NumberAttending?: string | number;
@@ -182,7 +183,7 @@ export default function DiscoverEvents() {
                         }
 
                         if (!isMounted) return;
-                        setEvents(result.data.items);
+                        setEvents(result.data.items.filter((event) => (event.status ?? event.Status ?? "").trim().toLowerCase() === "published"));
                   } catch (err: unknown) {
                         if ((err as Error).name !== "AbortError" && isMounted) {
                               setError((err as Error).message || "Unable to fetch events.");
@@ -466,7 +467,7 @@ export default function DiscoverEvents() {
                                                                   Next
                                                             </button>
                                                       </div>
-                                                      <span>9 per page</span>
+                                                      <span>6 per page</span>
                                                 </div>
                                           )}
                                     </>
