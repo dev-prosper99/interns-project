@@ -150,7 +150,7 @@ export default function AttendeesPage() {
                                     <div className="flex items-center gap-4">
                                           <Select value={eventFilter} onValueChange={(value) => setEventFilter(value ?? "all")}>
                                                 <SelectTrigger className="border-white/10 bg-neutral-900 text-neutral-300 min-w-35">
-                                                      <SelectValue placeholder="All Events" />
+                                                      <SelectValue>{eventFilter === "all" ? "All Events" : eventFilter}</SelectValue>
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                       <SelectItem value="all">All Events</SelectItem>
@@ -165,7 +165,13 @@ export default function AttendeesPage() {
                                           {/* Status Select */}
                                           <Select value={statusFilter} onValueChange={(value) => setStatusFilter(value ?? "all")}>
                                                 <SelectTrigger className="border-white/10 bg-neutral-900 text-neutral-300 min-w-35">
-                                                      <SelectValue placeholder="All Statuses" />
+                                                      <SelectValue>
+                                                            {statusFilter === "all"
+                                                                  ? "All Statuses"
+                                                                  : statusFilter === "Checked-in"
+                                                                    ? "Checked in"
+                                                                    : statusFilter}
+                                                      </SelectValue>
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                       <SelectItem value="all">All Statuses</SelectItem>

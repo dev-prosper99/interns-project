@@ -14,42 +14,35 @@ interface EventItem {
 
 const RecentEvents = () => {
       const [recentEvents, setRecentEvents] = useState<EventItem[]>([]);
-      
-useEffect(() => {
-  const fetchEvents = async () => {
-    try {
-      const userId = localStorage.getItem("userId");
 
-      if (!userId) {
-        console.error("User ID not found");
-        return;
-      }
+      useEffect(() => {
+            const fetchEvents = async () => {
+                  try {
+                        const userId = localStorage.getItem("userId");
 
-      
+                        if (!userId) {
+                              console.error("User ID not found");
+                              return;
+                        }
 
-      const response = await fetch(
-        `https://peacemaker001-001-site1.ltempurl.com/api/Events/my-events/${userId}`
-      );
+                        const response = await fetch(`https://peacemaker001-001-site1.ltempurl.com/api/Events/my-events/${userId}`);
 
-     
+                        const data = await response.json();
 
-      const data = await response.json();
+                        setRecentEvents(data.data.items || []);
+                  } catch (error) {
+                        console.error("Failed to fetch events:", error);
+                  }
+            };
 
-
-      setRecentEvents(data.data.items || []);
-    } catch (error) {
-      console.error("Failed to fetch events:", error);
-    }
-  };
-
-  fetchEvents();
-}, []);
+            fetchEvents();
+      }, []);
       return (
             <div className="bg-neutral-1000 rounded-2xl p-6 h-full flex flex-col">
                   <h2 className="text-2xl font-semibold text-white mb-6">Recent Events</h2>
 
                   <div className="divide-y divide-[#252525] flex-1 overflow-auto">
-                        {recentEvents.map((event) => (
+                        {recentEvents.slice(0, 3).map((event) => (
                               <div key={event.id} className="flex items-center justify-between py-5">
                                     <div className="flex items-center gap-4">
                                           <img src={event.bannerUrl} alt={event.title} className="w-14 h-14 rounded-full object-cover" />
