@@ -27,6 +27,7 @@ export interface UpdateProfilePayload {
       firstName: string;
       lastName: string;
       phoneNumber: string;
+      city: string;
 }
 
 export function getStoredAvatarUrl(email?: string): string {

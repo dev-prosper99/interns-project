@@ -48,6 +48,7 @@ export default function Profile() {
                         firstName: nameParts[0] || "",
                         lastName: nameParts.slice(1).join(" "),
                         phoneNumber: phoneNumber.trim(),
+                        city: city.trim(),
                   });
                   setFullName(updatedProfile.fullName || fullName);
                   setEmail(updatedProfile.email || email);
