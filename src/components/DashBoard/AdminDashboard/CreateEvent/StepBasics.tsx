@@ -9,15 +9,34 @@ import type { EventFormData, FormUpdater } from "./types";
 interface StepBasicsProps {
       form: EventFormData;
       update: FormUpdater;
+      isEditing: boolean;
+      scheduleError: string;
 }
 
-export default function StepBasics({ form, update }: StepBasicsProps) {
+export default function StepBasics({ form, update, isEditing, scheduleError }: StepBasicsProps) {
       const [stateOptions, setStateOptions] = useState<LocationOption[]>([]);
       const [cityOptions, setCityOptions] = useState<LocationOption[]>([]);
       const [loadingStates, setLoadingStates] = useState(true);
       const [loadedCitiesForState, setLoadedCitiesForState] = useState<string | null>(null);
       const [locationError, setLocationError] = useState<string | null>(null);
       const loadingCities = Boolean(form.state && loadedCitiesForState !== form.state);
+      const [clock, setClock] = useState(() => new Date());
+
+      useEffect(() => {
+            const interval = window.setInterval(() => setClock(new Date()), 15000);
+            return () => window.clearInterval(interval);
+      }, []);
+
+      const minimumScheduleTime = new Date(clock);
+      minimumScheduleTime.setMinutes(minimumScheduleTime.getMinutes() + 1, 0, 0);
+      const minimumStartDate = `${minimumScheduleTime.getFullYear()}-${String(minimumScheduleTime.getMonth() + 1).padStart(2, "0")}-${String(minimumScheduleTime.getDate()).padStart(2, "0")}`;
+      const minimumTime = `${String(minimumScheduleTime.getHours()).padStart(2, "0")}:${String(minimumScheduleTime.getMinutes()).padStart(2, "0")}`;
+      const endDateMin = form.startDate && form.startDate > minimumStartDate ? form.startDate : minimumStartDate;
+      const effectiveEndDate = form.endDate || form.startDate;
+      const endTimeMinCandidates = [effectiveEndDate === minimumStartDate ? minimumTime : "", effectiveEndDate === form.startDate ? form.startTime : ""]
+            .filter(Boolean)
+            .sort();
+      const endTimeMin = endTimeMinCandidates[endTimeMinCandidates.length - 1];
 
       useEffect(() => {
             let cancelled = false;
@@ -118,6 +137,7 @@ export default function StepBasics({ form, update }: StepBasicsProps) {
                               className="event-date-time-control has-[input:not(:placeholder-shown)]:border-neutral-925"
                               style={{ colorScheme: "dark" }}
                               max="9999-12-31"
+                              min={!isEditing ? minimumStartDate : undefined}
                               value={form.startDate}
                               onChange={(e) => update({ startDate: e.target.value })}
                         />
@@ -128,6 +148,7 @@ export default function StepBasics({ form, update }: StepBasicsProps) {
                               className="event-date-time-control has-[input:not(:placeholder-shown)]:border-neutral-925"
                               style={{ colorScheme: "dark" }}
                               max="9999-12-31"
+                              min={!isEditing ? endDateMin : undefined}
                               value={form.endDate}
                               onChange={(e) => update({ endDate: e.target.value })}
                         />
@@ -138,6 +159,7 @@ export default function StepBasics({ form, update }: StepBasicsProps) {
                               type="time"
                               className="event-date-time-control has-[input:not(:placeholder-shown)]:border-neutral-925"
                               style={{ colorScheme: "dark" }}
+                              min={!isEditing && form.startDate === minimumStartDate ? minimumTime : undefined}
                               value={form.startTime}
                               onChange={(e) => update({ startTime: e.target.value })}
                         />
@@ -147,9 +169,16 @@ export default function StepBasics({ form, update }: StepBasicsProps) {
                               type="time"
                               className="event-date-time-control has-[input:not(:placeholder-shown)]:border-neutral-925"
                               style={{ colorScheme: "dark" }}
+                              min={!isEditing ? endTimeMin : undefined}
                               value={form.endTime}
                               onChange={(e) => update({ endTime: e.target.value })}
                         />
+
+                        {scheduleError && (
+                              <p className="text-xs text-red-400 sm:col-span-2" role="alert">
+                                    {scheduleError}
+                              </p>
+                        )}
 
                         {form.category === "Other" && (
                               <div className="sm:col-span-2">

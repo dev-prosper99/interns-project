@@ -88,6 +88,22 @@ const toIsoDateTime = (date: string, time: string): string => {
       return `${date}T${timePart}`;
 };
 
+const getEventScheduleError = (form: EventFormData, isEditing: boolean): string => {
+      if (isEditing || !form.startDate || !form.startTime) return "";
+
+      const start = new Date(`${form.startDate}T${form.startTime}:00`);
+      if (Number.isNaN(start.getTime())) return "Enter a valid event start date and time.";
+      if (start.getTime() <= Date.now()) return "The event must start at a future date and time.";
+
+      const endDate = form.endDate || form.startDate;
+      const endTime = form.endTime || form.startTime;
+      const end = new Date(`${endDate}T${endTime}:00`);
+      if (Number.isNaN(end.getTime())) return "Enter a valid event end date and time.";
+      if (end < start) return "The event end date and time cannot be before its start.";
+
+      return "";
+};
+
 interface CreateEventModalProps {
       isOpen: boolean;
       onClose?: () => void;
@@ -162,6 +178,7 @@ const CreateEventModal = ({ isOpen, onClose, eventId, initialData }: CreateEvent
       const [isSubmitting, setIsSubmitting] = useState(false);
       const [eventStatus, setEventStatus] = useState(String(initialData?.status ?? ""));
       const [existingTicketIds, setExistingTicketIds] = useState<Set<string>>(() => new Set());
+      const scheduleError = getEventScheduleError(form, isEditing);
 
       useEffect(() => {
             if (!isOpen || eventId) return;
@@ -371,6 +388,10 @@ const CreateEventModal = ({ isOpen, onClose, eventId, initialData }: CreateEvent
                         showAlert("error", "Missing Details", "Please enter your custom category before proceeding.");
                         return false;
                   }
+                  if (scheduleError) {
+                        showAlert("error", "Invalid Event Schedule", scheduleError);
+                        return false;
+                  }
             } else if (currentStepKey === "tickets") {
                   if (!form.tiers || form.tiers.length === 0) {
                         showAlert("error", "Missing Details", "Please add at least one ticket tier.");
@@ -421,6 +442,10 @@ const CreateEventModal = ({ isOpen, onClose, eventId, initialData }: CreateEvent
       const handlePublish = async () => {
             if (!form.title || !form.description || !form.venue || !form.state || !form.city || !form.startDate || !form.startTime) {
                   showAlert("error", "Missing details", "Fill the required event fields before publishing.");
+                  return;
+            }
+            if (scheduleError) {
+                  showAlert("error", "Invalid Event Schedule", scheduleError);
                   return;
             }
 
@@ -521,7 +546,7 @@ const CreateEventModal = ({ isOpen, onClose, eventId, initialData }: CreateEvent
       const renderStep = () => {
             switch (STEPS[stepIndex].key) {
                   case "basics":
-                        return <StepBasics form={form} update={update} />;
+                        return <StepBasics form={form} update={update} isEditing={isEditing} scheduleError={scheduleError} />;
                   case "tickets":
                         return <StepTickets form={form} update={update} />;
                   case "settings":
