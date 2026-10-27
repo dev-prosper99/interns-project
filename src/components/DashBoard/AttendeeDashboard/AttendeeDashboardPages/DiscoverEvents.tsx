@@ -14,6 +14,7 @@ const PRICE_RANGES = [
       { label: "Under ₦5,000", value: "under-5000" },
       { label: "₦5,000 - ₦10,000", value: "5000-10000" },
       { label: "Above ₦10,000", value: "above-10000" },
+      { label: "Custom Price Range", value: "custom" },
 ];
 
 const DATE_OPTIONS = [
@@ -21,6 +22,7 @@ const DATE_OPTIONS = [
       { label: "Tomorrow", value: "tomorrow" },
       { label: "This Week", value: "this-week" },
       { label: "This Month", value: "this-month" },
+      { label: "Custom Date Range", value: "custom" },
 ];
 
 interface EventListItem {
@@ -97,10 +99,16 @@ function FilterSelect({ placeholder, options, value, onChange }: FilterSelectPro
       );
 }
 
-function matchesDate(dateStr: string, filter: string): boolean {
+function matchesDate(dateStr: string, filter: string, startDate: string, endDate: string): boolean {
       if (!filter || filter === "all") return true;
       const d = new Date(dateStr);
       if (Number.isNaN(d.getTime())) return true;
+
+      if (filter === "custom") {
+            const start = startDate ? new Date(`${startDate}T00:00:00`) : null;
+            const end = endDate ? new Date(`${endDate}T23:59:59.999`) : null;
+            return (!start || d >= start) && (!end || d <= end);
+      }
 
       const eventDay = new Date(d.getFullYear(), d.getMonth(), d.getDate());
       const now = new Date();
@@ -126,9 +134,13 @@ function matchesDate(dateStr: string, filter: string): boolean {
       }
 }
 
-function matchesPrice(minPrice: number | null, filter: string): boolean {
+function matchesPrice(minPrice: number | null, filter: string, customMin: number | null, customMax: number | null): boolean {
       if (!filter || filter === "all") return true;
       if (minPrice === null) return true;
+
+      if (filter === "custom") {
+            return (customMin === null || minPrice >= customMin) && (customMax === null || minPrice <= customMax);
+      }
 
       switch (filter) {
             case "free":
@@ -158,6 +170,10 @@ export default function DiscoverEvents() {
       const [city, setCity] = useState("all");
       const [priceRange, setPriceRange] = useState("all");
       const [dateFilter, setDateFilter] = useState("all");
+      const [customMinPrice, setCustomMinPrice] = useState("");
+      const [customMaxPrice, setCustomMaxPrice] = useState("");
+      const [customStartDate, setCustomStartDate] = useState("");
+      const [customEndDate, setCustomEndDate] = useState("");
       const [currentPage, setCurrentPage] = useState(1);
 
       useEffect(() => {
@@ -233,6 +249,21 @@ export default function DiscoverEvents() {
             }));
       }, [events]);
 
+      const parsedMinPrice = customMinPrice === "" ? null : Number(customMinPrice);
+      const parsedMaxPrice = customMaxPrice === "" ? null : Number(customMaxPrice);
+      const customPriceError =
+            priceRange === "custom"
+                  ? parsedMinPrice !== null && parsedMinPrice < 0
+                        ? "Minimum price cannot be negative."
+                        : parsedMaxPrice !== null && parsedMaxPrice < 0
+                          ? "Maximum price cannot be negative."
+                          : parsedMinPrice !== null && parsedMaxPrice !== null && parsedMinPrice > parsedMaxPrice
+                            ? "Minimum price cannot exceed maximum price."
+                            : ""
+                  : "";
+      const customDateError =
+            dateFilter === "custom" && customStartDate && customEndDate && customEndDate < customStartDate ? "End date cannot be before start date." : "";
+
       const filteredEvents = useMemo(() => {
             return events.filter((event) => {
                   const q = search.trim().toLowerCase();
@@ -250,13 +281,27 @@ export default function DiscoverEvents() {
                   const matchesCityFilter = city === "all" || eventCity.includes(city.toLowerCase());
 
                   const minPrice = priceMap[event.id] ?? null;
-                  const matchesPriceFilter = matchesPrice(minPrice, priceRange);
+                  const matchesPriceFilter = customPriceError ? true : matchesPrice(minPrice, priceRange, parsedMinPrice, parsedMaxPrice);
 
-                  const matchesDateFilter = matchesDate(event.eventDate, dateFilter);
+                  const matchesDateFilter = customDateError ? true : matchesDate(event.eventDate, dateFilter, customStartDate, customEndDate);
 
                   return matchesSearch && matchesCat && matchesCityFilter && matchesPriceFilter && matchesDateFilter;
             });
-      }, [events, search, category, city, priceRange, dateFilter, priceMap]);
+      }, [
+            events,
+            search,
+            category,
+            city,
+            priceRange,
+            dateFilter,
+            priceMap,
+            parsedMinPrice,
+            parsedMaxPrice,
+            customStartDate,
+            customEndDate,
+            customPriceError,
+            customDateError,
+      ]);
 
       const totalPages = Math.max(1, Math.ceil(filteredEvents.length / PAGE_SIZE));
       const activePage = Math.min(currentPage, totalPages);
@@ -309,6 +354,10 @@ export default function DiscoverEvents() {
             setCity("all");
             setPriceRange("all");
             setDateFilter("all");
+            setCustomMinPrice("");
+            setCustomMaxPrice("");
+            setCustomStartDate("");
+            setCustomEndDate("");
             setCurrentPage(1);
       };
 
@@ -376,6 +425,91 @@ export default function DiscoverEvents() {
                                           }}
                                     />
                               </div>
+
+                              {(priceRange === "custom" || dateFilter === "custom") && (
+                                    <div className="grid grid-cols-1 gap-4 rounded-lg border border-neutral-900 bg-neutral-925 p-4 sm:grid-cols-2">
+                                          {priceRange === "custom" && (
+                                                <div className="space-y-3">
+                                                      <p className="text-sm font-medium text-neutral-200">Custom Price Range</p>
+                                                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                                                            <label className="space-y-1 text-xs text-neutral-400">
+                                                                  <span>Minimum price (₦)</span>
+                                                                  <input
+                                                                        type="number"
+                                                                        min="0"
+                                                                        step="1"
+                                                                        inputMode="numeric"
+                                                                        value={customMinPrice}
+                                                                        onChange={(event) => {
+                                                                              setCustomMinPrice(event.target.value);
+                                                                              setCurrentPage(1);
+                                                                        }}
+                                                                        placeholder="No minimum"
+                                                                        className="w-full rounded-lg border border-neutral-800 bg-neutral-1000 px-3 py-2 text-sm text-white outline-none focus:border-purple-500"
+                                                                  />
+                                                            </label>
+                                                            <label className="space-y-1 text-xs text-neutral-400">
+                                                                  <span>Maximum price (₦)</span>
+                                                                  <input
+                                                                        type="number"
+                                                                        min="0"
+                                                                        step="1"
+                                                                        inputMode="numeric"
+                                                                        value={customMaxPrice}
+                                                                        onChange={(event) => {
+                                                                              setCustomMaxPrice(event.target.value);
+                                                                              setCurrentPage(1);
+                                                                        }}
+                                                                        placeholder="No maximum"
+                                                                        className="w-full rounded-lg border border-neutral-800 bg-neutral-1000 px-3 py-2 text-sm text-white outline-none focus:border-purple-500"
+                                                                  />
+                                                            </label>
+                                                      </div>
+                                                      {customPriceError && (
+                                                            <p className="text-xs text-red-400" role="alert">
+                                                                  {customPriceError}
+                                                            </p>
+                                                      )}
+                                                </div>
+                                          )}
+                                          {dateFilter === "custom" && (
+                                                <div className="space-y-3">
+                                                      <p className="text-sm font-medium text-neutral-200">Custom Date Range</p>
+                                                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                                                            <label className="space-y-1 text-xs text-neutral-400">
+                                                                  <span>Start date</span>
+                                                                  <input
+                                                                        type="date"
+                                                                        value={customStartDate}
+                                                                        onChange={(event) => {
+                                                                              setCustomStartDate(event.target.value);
+                                                                              setCurrentPage(1);
+                                                                        }}
+                                                                        className="w-full rounded-lg border border-neutral-800 bg-neutral-1000 px-3 py-2 text-sm text-white outline-none focus:border-purple-500"
+                                                                  />
+                                                            </label>
+                                                            <label className="space-y-1 text-xs text-neutral-400">
+                                                                  <span>End date</span>
+                                                                  <input
+                                                                        type="date"
+                                                                        value={customEndDate}
+                                                                        onChange={(event) => {
+                                                                              setCustomEndDate(event.target.value);
+                                                                              setCurrentPage(1);
+                                                                        }}
+                                                                        className="w-full rounded-lg border border-neutral-800 bg-neutral-1000 px-3 py-2 text-sm text-white outline-none focus:border-purple-500"
+                                                                  />
+                                                            </label>
+                                                      </div>
+                                                      {customDateError && (
+                                                            <p className="text-xs text-red-400" role="alert">
+                                                                  {customDateError}
+                                                            </p>
+                                                      )}
+                                                </div>
+                                          )}
+                                    </div>
+                              )}
 
                               {error && <div className="rounded-xl border border-red-500/20 bg-red-950/20 p-6 text-center text-sm text-red-400">{error}</div>}
 
