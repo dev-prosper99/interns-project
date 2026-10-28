@@ -10,6 +10,7 @@ import CreateEventModal from "@/components/DashBoard/AdminDashboard/CreateEvent/
 
 const AdminDashboard = () => {
       const [isCreateEventOpen, setIsCreateEventOpen] = useState(false); // NEW
+      const [recentEventsRefreshKey, setRecentEventsRefreshKey] = useState(0);
 
       const firstName = (localStorage.getItem("firstName") || "there").trim().replace(/\s+/g, " ") || "there";
 
@@ -31,21 +32,31 @@ const AdminDashboard = () => {
                         </div>
 
                         <div className="grid grid-cols-1 lg:grid-cols-[65fr_35fr] gap-6 mt-6 items-stretch">
-                              <div className="min-w-0"><RevenueChart /></div>
-                              <div className="min-w-0"><CategoryChart /></div>
+                              <div className="min-w-0">
+                                    <RevenueChart />
+                              </div>
+                              <div className="min-w-0">
+                                    <CategoryChart />
+                              </div>
                         </div>
                   </div>
 
                   <div className="p-4 md:p-6">
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
-                              <RecentEvents />
+                              <RecentEvents refreshKey={recentEventsRefreshKey} />
                               <RecentTransactions />
                         </div>
                   </div>
                   {/* NEW: overlay + centered modal */}
                   {isCreateEventOpen && (
                         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-                              <CreateEventModal isOpen={isCreateEventOpen} onClose={() => setIsCreateEventOpen(false)} />
+                              <CreateEventModal
+                                    isOpen={isCreateEventOpen}
+                                    onClose={() => {
+                                          setIsCreateEventOpen(false);
+                                          setRecentEventsRefreshKey((key) => key + 1);
+                                    }}
+                              />
                         </div>
                   )}
             </div>

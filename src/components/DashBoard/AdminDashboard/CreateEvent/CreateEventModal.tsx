@@ -480,6 +480,9 @@ const CreateEventModal = ({ isOpen, onClose, eventId, initialData }: CreateEvent
                   setIsSubmitting(true);
                   const token = getStoredToken();
                   const cleanToken = token.startsWith("Bearer ") ? token.slice(7) : token;
+                  if (!cleanToken.trim()) {
+                        throw new Error("Your login session is missing. Please log in again before publishing an event.");
+                  }
                   const url = isEditing ? `${API_URL}/${eventId}` : API_URL;
                   const method = isEditing ? "PUT" : "POST";
 
@@ -493,7 +496,19 @@ const CreateEventModal = ({ isOpen, onClose, eventId, initialData }: CreateEvent
                   });
 
                   const responseText = await response.text();
-                  const responseBody = responseText ? (JSON.parse(responseText) as Record<string, unknown>) : null;
+                  let responseBody: Record<string, unknown> | null = null;
+                  try {
+                        responseBody = responseText ? (JSON.parse(responseText) as Record<string, unknown>) : null;
+                  } catch {
+                        responseBody = null;
+                  }
+
+                  if (response.status === 401) {
+                        throw new Error("Your login session may have expired. Please log in again, then retry publishing.");
+                  }
+                  if (response.status === 403) {
+                        throw new Error("Your account is not authorized to publish this event. Refresh the page or log in again.");
+                  }
 
                   if (!response.ok || responseBody?.success === false) {
                         const message = (responseBody?.message as string) || (responseBody?.error as string) || `Request failed with status ${response.status}`;
@@ -536,7 +551,11 @@ const CreateEventModal = ({ isOpen, onClose, eventId, initialData }: CreateEvent
                   showAlert(
                         "error",
                         isEditing ? "Update failed" : "Publish failed",
-                        err instanceof Error ? err.message : `Unable to ${isEditing ? "update" : "create"} the event.`,
+                        err instanceof TypeError
+                              ? "The server connection was interrupted. Refresh the page and try again. If it continues, log out and log in again."
+                              : err instanceof Error
+                                ? err.message
+                                : `Unable to ${isEditing ? "update" : "create"} the event.`,
                   );
             } finally {
                   setIsSubmitting(false);
