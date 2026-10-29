@@ -173,9 +173,9 @@ function matchesDateFilter(eventDateStr: string, dateFilter?: string): boolean {
       }
 }
 
-function matchesPriceFilter(minPrice: number | null, priceFilter?: string): boolean {
+function matchesPriceFilter(minPrice: number | null, priceFilter?: string, priceLoading = false): boolean {
       if (!priceFilter) return true;
-      if (minPrice === null) return false;
+      if (minPrice === null) return priceLoading;
 
       switch (priceFilter) {
             case "Free":
@@ -203,11 +203,14 @@ export default function Categories({ search, city, price, date }: CategoriesProp
       const [page, setPage] = useState(1);
 
       useEffect(() => {
+            const controller = new AbortController();
+            let cancelled = false;
+
             const fetchEvents = async () => {
                   try {
                         setLoading(true);
 
-                        const response = await fetch(`${API_BASE_URL}/api/Events?page=1&pageSize=100`);
+                        const response = await fetch(`${API_BASE_URL}/api/Events?page=1&pageSize=100`, { signal: controller.signal });
 
                         const result: EventsApiResponse = await response.json();
 
@@ -215,49 +218,73 @@ export default function Categories({ search, city, price, date }: CategoriesProp
                               throw new Error(result.message);
                         }
 
-                        const eventsWithPrices: EventWithPrice[] = await Promise.all(
-                              result.data.items.map(async (event) => {
-                                    try {
-                                          const detailResponse = await fetch(`${API_BASE_URL}/api/Events/${event.id}`);
-
-                                          const detailData: EventDetailApiResponse = await detailResponse.json();
-                                          const ticketTypes = detailData.data.ticketTypes ?? [];
-                                          const minPrice = ticketTypes.length > 0 ? Math.min(...ticketTypes.map((t) => t.price)) : 0;
-
-                                          return {
-                                                ...event,
-                                                minPrice,
-                                                priceLoading: false,
-                                                numberAttending: getAttendeeCount(
-                                                      detailData.data.numberAttending,
-                                                      detailData.data.NumberAttending,
-                                                      event.numberAttending,
-                                                      event.NumberAttending,
-                                                ),
-                                                ...getTicketAvailability(ticketTypes),
-                                          };
-                                    } catch {
-                                          return {
-                                                ...event,
-                                                minPrice: null,
-                                                priceLoading: false,
-                                                numberAttending: getAttendeeCount(event.numberAttending, event.NumberAttending),
-                                                soldPercentage: null,
-                                                ticketsLeft: null,
-                                          };
-                                    }
-                              }),
-                        );
-
-                        setEvents(eventsWithPrices);
-                  } catch (error) {
-                        console.error("Failed to fetch events", error);
-                  } finally {
+                        if (cancelled) return;
+                        const eventPlaceholders: EventWithPrice[] = result.data.items.map((event) => ({
+                              ...event,
+                              minPrice: null,
+                              priceLoading: true,
+                              numberAttending: getAttendeeCount(event.numberAttending, event.NumberAttending),
+                              soldPercentage: null,
+                              ticketsLeft: null,
+                        }));
+                        setEvents(eventPlaceholders);
                         setLoading(false);
+
+                        const batchSize = 6;
+                        for (let index = 0; index < eventPlaceholders.length; index += batchSize) {
+                              const batch = eventPlaceholders.slice(index, index + batchSize);
+                              const updates = await Promise.all(
+                                    batch.map(async (event) => {
+                                          try {
+                                                const detailResponse = await fetch(`${API_BASE_URL}/api/Events/${encodeURIComponent(event.id)}`, {
+                                                      signal: controller.signal,
+                                                });
+                                                if (!detailResponse.ok) throw new Error("Failed to load event details");
+
+                                                const detailData: EventDetailApiResponse = await detailResponse.json();
+                                                if (!detailData.success) throw new Error("Failed to load event details");
+
+                                                const ticketTypes = detailData.data.ticketTypes ?? [];
+                                                const minPrice = ticketTypes.length > 0 ? Math.min(...ticketTypes.map((ticket) => Number(ticket.price))) : 0;
+                                                return {
+                                                      ...event,
+                                                      minPrice,
+                                                      priceLoading: false,
+                                                      numberAttending: getAttendeeCount(
+                                                            detailData.data.numberAttending,
+                                                            detailData.data.NumberAttending,
+                                                            event.numberAttending,
+                                                      ),
+                                                      ...getTicketAvailability(ticketTypes),
+                                                };
+                                          } catch {
+                                                return {
+                                                      ...event,
+                                                      priceLoading: false,
+                                                      soldPercentage: null,
+                                                      ticketsLeft: null,
+                                                };
+                                          }
+                                    }),
+                              );
+
+                              if (cancelled) return;
+                              setEvents((currentEvents) => currentEvents.map((event) => updates.find((update) => update.id === event.id) ?? event));
+                        }
+                  } catch (error) {
+                        if (!cancelled && (error as Error).name !== "AbortError") {
+                              console.error("Failed to fetch events", error);
+                        }
+                  } finally {
+                        if (!cancelled) setLoading(false);
                   }
             };
 
-            fetchEvents();
+            void fetchEvents();
+            return () => {
+                  cancelled = true;
+                  controller.abort();
+            };
       }, []);
 
       const filteredEvents = events.filter((event) => {
@@ -269,7 +296,7 @@ export default function Categories({ search, city, price, date }: CategoriesProp
 
             const matchesCity = !city || event.venue.toLowerCase().includes(city.toLowerCase());
 
-            const matchesPrice = matchesPriceFilter(event.minPrice, price);
+            const matchesPrice = matchesPriceFilter(event.minPrice, price, event.priceLoading);
             const matchesDate = matchesDateFilter(event.eventDate, date);
 
             return matchesCategory && matchesSearch && matchesCity && matchesPrice && matchesDate;
