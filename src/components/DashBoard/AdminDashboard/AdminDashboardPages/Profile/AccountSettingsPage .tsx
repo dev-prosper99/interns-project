@@ -38,6 +38,7 @@ interface UpdateProfilePayload {
       firstName: string;
       lastName: string;
       phoneNumber: string;
+      city: string;
 }
 
 const API_BASE = "https://peacemaker001-001-site1.ltempurl.com";
@@ -189,6 +190,7 @@ function ProfileInfoTab({
                   firstName: firstName || "",
                   lastName: rest.join(" "),
                   phoneNumber,
+                  city: city.trim(),
             });
             if (result.ok) {
                   setStatus("Saved successfully.");

@@ -14,17 +14,37 @@ import { DEFAULT_REFUND_POLICY, DEFAULT_DESCRIPTION, type EventDetailData } from
 import type { RawApiEvent, RawApiTicket } from "./Types";
 
 const API_BASE_URL = "https://peacemaker001-001-site1.ltempurl.com";
+const PAGE_SIZE = 10;
+
+interface EventPageData {
+      items?: RawApiEvent[];
+      totalCount?: number;
+      TotalCount?: number;
+      totalPages?: number;
+      TotalPages?: number;
+      pageSize?: number;
+      PageSize?: number;
+}
 
 interface EventApiResponse {
       success?: boolean;
       message?: string;
-      data?: RawApiEvent | RawApiEvent[] | { items?: RawApiEvent[] };
+      data?: RawApiEvent | RawApiEvent[] | EventPageData;
+}
+
+function getEventPageItems(data: EventApiResponse["data"]): RawApiEvent[] {
+      if (Array.isArray(data)) return data;
+      if (data && typeof data === "object" && "items" in data && Array.isArray(data.items)) {
+            return data.items as RawApiEvent[];
+      }
+      return [];
 }
 
 export default function EventsPage() {
       const [search, setSearch] = useState("");
       const [categoryFilter, setCategoryFilter] = useState("all");
       const [statusFilter, setStatusFilter] = useState("all");
+      const [currentPage, setCurrentPage] = useState(1);
       const [rows, setRows] = useState<EventRowData[]>([]);
       const [isLoading, setIsLoading] = useState(true);
       const [error, setError] = useState<string | null>(null);
@@ -50,33 +70,45 @@ export default function EventsPage() {
                         return;
                   }
 
-                  const queryParams = new URLSearchParams({
-                        Page: "1",
-                        PageSize: "50",
-                  });
-                  const response = await fetch(`${API_BASE_URL}/api/Events/my-events/${userId}?${queryParams.toString()}`, {
-                        method: "GET",
-                        headers: {
-                              ...(cleanToken ? { Authorization: `Bearer ${cleanToken}` } : {}),
-                              Accept: "application/json",
-                        },
-                  });
+                  const pageSize = 100;
+                  const headers = {
+                        ...(cleanToken ? { Authorization: `Bearer ${cleanToken}` } : {}),
+                        Accept: "application/json",
+                  };
+                  const fetchPage = async (page: number): Promise<EventApiResponse> => {
+                        const queryParams = new URLSearchParams({ Page: String(page), PageSize: String(pageSize) });
+                        const response = await fetch(`${API_BASE_URL}/api/Events/my-events/${userId}?${queryParams.toString()}`, {
+                              method: "GET",
+                              headers,
+                        });
+                        if (!response.ok) throw new Error(`Request failed with status ${response.status}`);
+                        return (await response.json()) as EventApiResponse;
+                  };
 
-                  if (!response.ok) {
-                        throw new Error(`Request failed with status ${response.status}`);
+                  const result = await fetchPage(1);
+                  if (!result.success) throw new Error(result.message || "Failed to load events");
+
+                  const firstPageData = result.data;
+                  const firstPage = getEventPageItems(firstPageData);
+                  const pageData = !Array.isArray(firstPageData) && firstPageData && typeof firstPageData === "object" ? (firstPageData as EventPageData) : {};
+                  const totalCount = Number(pageData.totalCount ?? pageData.TotalCount);
+                  const responsePageSize = Number(pageData.pageSize ?? pageData.PageSize) || firstPage.length || pageSize;
+                  const reportedTotalPages = Number(pageData.totalPages ?? pageData.TotalPages);
+                  const totalApiPages =
+                        reportedTotalPages > 0
+                              ? reportedTotalPages
+                              : Number.isFinite(totalCount) && totalCount > 0
+                                ? Math.ceil(totalCount / responsePageSize)
+                                : 1;
+                  const rawItems: RawApiEvent[] = [...firstPage];
+
+                  for (let page = 2; page <= totalApiPages; page += 1) {
+                        const pageResult = await fetchPage(page);
+                        if (!pageResult.success) throw new Error(pageResult.message || "Failed to load events");
+                        const pageItems = getEventPageItems(pageResult.data);
+                        if (pageItems.length === 0) break;
+                        rawItems.push(...pageItems);
                   }
-
-                  const result = (await response.json()) as EventApiResponse;
-                  if (!result.success) {
-                        throw new Error(result.message || "Failed to load events");
-                  }
-
-                  const rawData = result.data;
-                  const rawItems: RawApiEvent[] = Array.isArray(rawData)
-                        ? rawData
-                        : rawData && typeof rawData === "object" && "items" in rawData && Array.isArray(rawData.items)
-                          ? rawData.items
-                          : [];
 
                   const mappedEvents: EventRowData[] = rawItems.map((event: RawApiEvent) => {
                         const rawDate = event.eventDate || event.EventDate || event.availabilityStart;
@@ -268,6 +300,9 @@ export default function EventsPage() {
 
       const categories = useMemo(() => Array.from(new Set(rows.map((event) => event.category).filter(Boolean))).sort(), [rows]);
       const statuses = useMemo(() => Array.from(new Set(rows.map((event) => event.status).filter(Boolean))).sort(), [rows]);
+      const totalPages = Math.max(1, Math.ceil(filteredRows.length / PAGE_SIZE));
+      const activePage = Math.min(currentPage, totalPages);
+      const paginatedRows = useMemo(() => filteredRows.slice((activePage - 1) * PAGE_SIZE, activePage * PAGE_SIZE), [filteredRows, activePage]);
 
       if (isLoading) return <Loader />;
 
@@ -279,13 +314,22 @@ export default function EventsPage() {
                               <div className="rounded-xl p-4 flex-1 flex flex-col border border-white/5 bg-neutral-1000">
                                     <SearchFilterBar
                                           search={search}
-                                          onSearchChange={setSearch}
+                                          onSearchChange={(value) => {
+                                                setSearch(value);
+                                                setCurrentPage(1);
+                                          }}
                                           categories={categories}
                                           statuses={statuses}
                                           category={categoryFilter}
-                                          onCategoryChange={setCategoryFilter}
+                                          onCategoryChange={(value) => {
+                                                setCategoryFilter(value);
+                                                setCurrentPage(1);
+                                          }}
                                           status={statusFilter}
-                                          onStatusChange={setStatusFilter}
+                                          onStatusChange={(value) => {
+                                                setStatusFilter(value);
+                                                setCurrentPage(1);
+                                          }}
                                     />
                                     {error && !isLoading && (
                                           <div className="flex-1 flex flex-col items-center justify-center py-16 text-center">
@@ -321,7 +365,7 @@ export default function EventsPage() {
                                                             <div className="flex-1 flex flex-col">
                                                                   <div className="hidden xl:block">
                                                                         <EventsTable
-                                                                              events={filteredRows}
+                                                                              events={paginatedRows}
                                                                               onViewClick={(row) => setViewTargetId(row.id)}
                                                                               onDeleteClick={(row) => setDeleteTarget(row)}
                                                                               onUnpublishClick={(row) => setUnpublishTarget(row)}
@@ -330,7 +374,7 @@ export default function EventsPage() {
                                                                   </div>
                                                                   <div className="block xl:hidden">
                                                                         <EventCardList
-                                                                              events={filteredRows}
+                                                                              events={paginatedRows}
                                                                               onViewClick={(row) => setViewTargetId(row.id)}
                                                                               onDeleteClick={(row) => setDeleteTarget(row)}
                                                                               onUnpublishClick={(row) => setUnpublishTarget(row)}
@@ -338,7 +382,12 @@ export default function EventsPage() {
                                                                         />
                                                                   </div>
                                                             </div>
-                                                            <EventsPagination className="mt-auto" />
+                                                            <EventsPagination
+                                                                  className="mt-auto"
+                                                                  currentPage={activePage}
+                                                                  totalPages={totalPages}
+                                                                  onPageChange={setCurrentPage}
+                                                            />
                                                       </>
                                                 )}
                                           </>

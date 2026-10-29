@@ -88,6 +88,22 @@ const toIsoDateTime = (date: string, time: string): string => {
       return `${date}T${timePart}`;
 };
 
+const getEventScheduleError = (form: EventFormData, isEditing: boolean): string => {
+      if (isEditing || !form.startDate || !form.startTime) return "";
+
+      const start = new Date(`${form.startDate}T${form.startTime}:00`);
+      if (Number.isNaN(start.getTime())) return "Enter a valid event start date and time.";
+      if (start.getTime() <= Date.now()) return "The event must start at a future date and time.";
+
+      const endDate = form.endDate || form.startDate;
+      const endTime = form.endTime || form.startTime;
+      const end = new Date(`${endDate}T${endTime}:00`);
+      if (Number.isNaN(end.getTime())) return "Enter a valid event end date and time.";
+      if (end < start) return "The event end date and time cannot be before its start.";
+
+      return "";
+};
+
 interface CreateEventModalProps {
       isOpen: boolean;
       onClose?: () => void;
@@ -162,6 +178,7 @@ const CreateEventModal = ({ isOpen, onClose, eventId, initialData }: CreateEvent
       const [isSubmitting, setIsSubmitting] = useState(false);
       const [eventStatus, setEventStatus] = useState(String(initialData?.status ?? ""));
       const [existingTicketIds, setExistingTicketIds] = useState<Set<string>>(() => new Set());
+      const scheduleError = getEventScheduleError(form, isEditing);
 
       useEffect(() => {
             if (!isOpen || eventId) return;
@@ -371,6 +388,10 @@ const CreateEventModal = ({ isOpen, onClose, eventId, initialData }: CreateEvent
                         showAlert("error", "Missing Details", "Please enter your custom category before proceeding.");
                         return false;
                   }
+                  if (scheduleError) {
+                        showAlert("error", "Invalid Event Schedule", scheduleError);
+                        return false;
+                  }
             } else if (currentStepKey === "tickets") {
                   if (!form.tiers || form.tiers.length === 0) {
                         showAlert("error", "Missing Details", "Please add at least one ticket tier.");
@@ -423,6 +444,10 @@ const CreateEventModal = ({ isOpen, onClose, eventId, initialData }: CreateEvent
                   showAlert("error", "Missing details", "Fill the required event fields before publishing.");
                   return;
             }
+            if (scheduleError) {
+                  showAlert("error", "Invalid Event Schedule", scheduleError);
+                  return;
+            }
 
             const formattedCategory = form.category ? form.category.toLowerCase() : "";
 
@@ -455,6 +480,9 @@ const CreateEventModal = ({ isOpen, onClose, eventId, initialData }: CreateEvent
                   setIsSubmitting(true);
                   const token = getStoredToken();
                   const cleanToken = token.startsWith("Bearer ") ? token.slice(7) : token;
+                  if (!cleanToken.trim()) {
+                        throw new Error("Your login session is missing. Please log in again before publishing an event.");
+                  }
                   const url = isEditing ? `${API_URL}/${eventId}` : API_URL;
                   const method = isEditing ? "PUT" : "POST";
 
@@ -468,7 +496,19 @@ const CreateEventModal = ({ isOpen, onClose, eventId, initialData }: CreateEvent
                   });
 
                   const responseText = await response.text();
-                  const responseBody = responseText ? (JSON.parse(responseText) as Record<string, unknown>) : null;
+                  let responseBody: Record<string, unknown> | null = null;
+                  try {
+                        responseBody = responseText ? (JSON.parse(responseText) as Record<string, unknown>) : null;
+                  } catch {
+                        responseBody = null;
+                  }
+
+                  if (response.status === 401) {
+                        throw new Error("Your login session may have expired. Please log in again, then retry publishing.");
+                  }
+                  if (response.status === 403) {
+                        throw new Error("Your account is not authorized to publish this event. Refresh the page or log in again.");
+                  }
 
                   if (!response.ok || responseBody?.success === false) {
                         const message = (responseBody?.message as string) || (responseBody?.error as string) || `Request failed with status ${response.status}`;
@@ -511,7 +551,11 @@ const CreateEventModal = ({ isOpen, onClose, eventId, initialData }: CreateEvent
                   showAlert(
                         "error",
                         isEditing ? "Update failed" : "Publish failed",
-                        err instanceof Error ? err.message : `Unable to ${isEditing ? "update" : "create"} the event.`,
+                        err instanceof TypeError
+                              ? "The server connection was interrupted. Refresh the page and try again. If it continues, log out and log in again."
+                              : err instanceof Error
+                                ? err.message
+                                : `Unable to ${isEditing ? "update" : "create"} the event.`,
                   );
             } finally {
                   setIsSubmitting(false);
@@ -521,7 +565,7 @@ const CreateEventModal = ({ isOpen, onClose, eventId, initialData }: CreateEvent
       const renderStep = () => {
             switch (STEPS[stepIndex].key) {
                   case "basics":
-                        return <StepBasics form={form} update={update} />;
+                        return <StepBasics form={form} update={update} isEditing={isEditing} scheduleError={scheduleError} />;
                   case "tickets":
                         return <StepTickets form={form} update={update} />;
                   case "settings":

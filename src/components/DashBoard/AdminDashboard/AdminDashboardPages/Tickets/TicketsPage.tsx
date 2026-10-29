@@ -159,6 +159,10 @@ export default function TicketsPage() {
       const [dialogOpen, setDialogOpen] = useState(false);
 
       const events = useMemo(() => Array.from(new Set(tickets.map((t) => t.event))), [tickets]);
+      const visibleEvents = useMemo(() => {
+            const query = search.trim().toLowerCase();
+            return query ? events.filter((event) => event.toLowerCase().includes(query)) : events;
+      }, [events, search]);
       useEffect(() => {
             let cancelled = false;
 
@@ -255,7 +259,10 @@ export default function TicketsPage() {
                   cancelled = true;
             };
       }, []);
-      const types = useMemo(() => Array.from(new Set(tickets.map((t) => t.ticketTier))), [tickets]);
+      const types = useMemo(
+            () => Array.from(new Set(tickets.filter((ticket) => eventFilter === "all" || ticket.event === eventFilter).map((ticket) => ticket.ticketTier))),
+            [tickets, eventFilter],
+      );
       const statuses: TicketStatus[] = ["Confirmed", "Sold Out", "Low Stock"];
 
       const filteredTickets = tickets.filter((ticket) => {
@@ -355,13 +362,19 @@ export default function TicketsPage() {
                                                 />
                                           </div>
 
-                                          <Select value={eventFilter} onValueChange={(v) => setEventFilter(v ?? "all")}>
+                                          <Select
+                                                value={eventFilter}
+                                                onValueChange={(value) => {
+                                                      setEventFilter(value ?? "all");
+                                                      setTypeFilter("all");
+                                                }}
+                                          >
                                                 <SelectTrigger className="h-9 w-full border-white/5 bg-[#1b1c1e] text-xs text-neutral-300">
-                                                      <SelectValue placeholder="All Events" />
+                                                      <SelectValue>{eventFilter === "all" ? "All Events" : eventFilter}</SelectValue>
                                                 </SelectTrigger>
                                                 <SelectContent className="border-neutral-800 bg-neutral-900 text-white">
                                                       <SelectItem value="all">All Events</SelectItem>
-                                                      {events.map((event) => (
+                                                      {visibleEvents.map((event) => (
                                                             <SelectItem key={event} value={event}>
                                                                   {event}
                                                             </SelectItem>
@@ -371,7 +384,7 @@ export default function TicketsPage() {
 
                                           <Select value={typeFilter} onValueChange={(v) => setTypeFilter(v ?? "all")}>
                                                 <SelectTrigger className="h-9 w-full border-white/5 bg-[#1b1c1e] text-xs text-neutral-300">
-                                                      <SelectValue placeholder="All Types" />
+                                                      <SelectValue>{typeFilter === "all" ? "All Types" : typeFilter}</SelectValue>
                                                 </SelectTrigger>
                                                 <SelectContent className="border-neutral-800 bg-neutral-900 text-white">
                                                       <SelectItem value="all">All Types</SelectItem>
@@ -385,7 +398,7 @@ export default function TicketsPage() {
 
                                           <Select value={statusFilter} onValueChange={(value) => setStatusFilter((value as TicketStatus | null) ?? "all")}>
                                                 <SelectTrigger className="h-9 w-full border-white/5 bg-[#1b1c1e] text-xs text-neutral-300">
-                                                      <SelectValue placeholder="All Status" />
+                                                      <SelectValue>{statusFilter === "all" ? "All Status" : statusFilter}</SelectValue>
                                                 </SelectTrigger>
                                                 <SelectContent className="border-neutral-800 bg-neutral-900 text-white">
                                                       <SelectItem value="all">All Status</SelectItem>
